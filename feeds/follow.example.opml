@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Medical News Radar RSS Example</title>
+  </head>
+  <body>
+    <outline text="Official Health Agencies">
+      <outline
+        text="WHO Newsroom"
+        title="WHO Newsroom"
+        type="rss"
+        xmlUrl="https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml"
+        htmlUrl="https://www.who.int/news-room"
+      />
+      <outline
+        text="CDC Newsroom"
+        title="CDC Newsroom"
+        type="rss"
+        xmlUrl="https://tools.cdc.gov/podcasts/feed.asp?feedid=183"
+        htmlUrl="https://www.cdc.gov/media/"
+      />
+      <outline
+        text="FDA News & Events"
+        title="FDA News & Events"
+        type="rss"
+        xmlUrl="https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds"
+        htmlUrl="https://www.fda.gov/news-events"
+      />
+      <outline
+        text="NIH News Releases"
+        title="NIH News Releases"
+        type="rss"
+        xmlUrl="https://www.nih.gov/news-events/news-releases/rss.xml"
+        htmlUrl="https://www.nih.gov/news-events/news-releases"
+      />
+    </outline>
+    <outline text="Medical Journals">
+      <outline
+        text="NEJM"
+        title="NEJM"
+        type="rss"
+        xmlUrl="https://www.nejm.org/medical-articles/rss"
+        htmlUrl="https://www.nejm.org/"
+      />
+      <outline
+        text="The Lancet"
+        title="The Lancet"
+        type="rss"
+        xmlUrl="https://www.thelancet.com/rss"
+        htmlUrl="https://www.thelancet.com/"
+      />
+      <outline
+        text="JAMA Network"
+        title="JAMA Network"
+        type="rss"
+        xmlUrl="https://jamanetwork.com/rss"
+        htmlUrl="https://jamanetwork.com/"
+      />
+      <outline
+        text="BMJ"
+        title="BMJ"
+        type="rss"
+        xmlUrl="https://www.bmj.com/rss"
+        htmlUrl="https://www.bmj.com/"
+      />
+    </outline>
+    <outline text="Medical Media">
+      <outline
+        text="Medscape"
+        title="Medscape"
+        type="rss"
+        xmlUrl="https://www.medscape.com/rss"
+        htmlUrl="https://www.medscape.com/"
+      />
+      <outline
+        text="Healthcare IT News"
+        title="Healthcare IT News"
+        type="rss"
+        xmlUrl="https://www.healthcareitnews.com/rss"
+        htmlUrl="https://www.healthcareitnews.com/"
+      />
+      <outline
+        text="HIMSS"
+        title="HIMSS"
+        type="rss"
+        xmlUrl="https://www.himss.org/rss.xml"
+        htmlUrl="https://www.himss.org/"
+      />
+    </outline>
+    <outline text="Chinese Medical Media">
+      <outline
+        text="丁香园"
+        title="丁香园"
+        type="rss"
+        xmlUrl="https://www.dxy.cn/rss"
+        htmlUrl="https://www.dxy.cn/"
+      />
+      <outline
+        text="医学界"
+        title="医学界"
+        type="rss"
+        xmlUrl="https://www.yxj.org.cn/rss"
+        htmlUrl="https://www.yxj.org.cn/"
+      />
+      <outline
+        text="动脉网"
+        title="动脉网"
+        type="rss"
+        xmlUrl="https://www.vbdata.cn/rss"
+        htmlUrl="https://www.vbdata.cn/"
+      />
+    </outline>
+  </body>
+</opml>

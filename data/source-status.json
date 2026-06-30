@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-06-30T14:54:34.096163Z",
+  "sites": [
+    {
+      "site_id": "official_health",
+      "site_name": "Official Health Updates",
+      "ok": true,
+      "item_count": 20,
+      "duration_ms": 7300,
+      "error": null
+    },
+    {
+      "site_id": "medical_journals",
+      "site_name": "Medical Journals",
+      "ok": true,
+      "item_count": 18,
+      "duration_ms": 4864,
+      "error": null
+    },
+    {
+      "site_id": "medical_media",
+      "site_name": "Medical Media",
+      "ok": true,
+      "item_count": 5,
+      "duration_ms": 8196,
+      "error": null
+    }
+  ],
+  "successful_sites": 3,
+  "failed_sites": [],
+  "zero_item_sites": [],
+  "empty_advanced_sources": [],
+  "fetched_raw_items": 43,
+  "items_before_topic_filter": 4,
+  "items_in_24h": 4,
+  "rss_opml": {
+    "enabled": false,
+    "path": null,
+    "feed_total": 0,
+    "effective_feed_total": 0,
+    "ok_feeds": 0,
+    "failed_feeds": [],
+    "zero_item_feeds": [],
+    "skipped_feeds": [],
+    "replaced_feeds": [],
+    "feeds": []
+  }
+}

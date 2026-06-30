@@ -1,0 +1,20 @@
+{
+  "name": "medical-news-radar",
+  "owner": { "name": "Your Handle", "url": "https://github.com/your-handle" },
+  "metadata": { "description": "Marketplace hosting Medical News Radar — 24h 医疗情报雷达：医疗雷达Skill（medical-radar，零API中文医疗资讯查询）+ 医源Skill（medical-news-radar，仓库维护与信源选源）。" },
+  "plugins": [
+    {
+      "name": "medical-news-radar",
+      "description": "24小时医疗情报雷达。医疗雷达Skill（medical-radar）让Agent零API读取GitHub Pages公开JSON，回答\"今天医疗圈有什么\"；医源Skill（medical-news-radar）帮你维护信源、抓取脚本、Pages部署。",
+      "version": "1.0.0",
+      "author": { "name": "Your Handle", "url": "https://github.com/your-handle" },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/your-handle/medical-news-radar",
+      "skills": [
+        "./skills/medical-radar",
+        "./skills/medical-news-radar"
+      ]
+    }
+  ]
+}

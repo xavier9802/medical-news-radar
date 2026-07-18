@@ -1,0 +1,119 @@
+name: 推荐新信源
+description: 推荐公开、合法且适合医疗行业情报聚合的信源
+title: "[信源推荐] "
+labels:
+  - source-request
+body:
+  - type: input
+    id: source_name
+    attributes:
+      label: 信源名称
+      description: 请填写机构、媒体、期刊或网站的公开名称。
+      placeholder: 例如：国家卫生健康委员会
+    validations:
+      required: true
+
+  - type: input
+    id: homepage_url
+    attributes:
+      label: 信源主页地址
+      description: 只接受无需登录即可访问的 HTTP/HTTPS 地址。
+      placeholder: https://example.com/
+    validations:
+      required: true
+
+  - type: input
+    id: feed_url
+    attributes:
+      label: RSS / Atom / JSON 地址
+      description: 如果已知机器可读地址，请填写；不知道可留空。
+      placeholder: https://example.com/feed.xml
+    validations:
+      required: false
+
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: 信源类型
+      options:
+        - 自动识别
+        - RSS / Atom
+        - 官方政策列表页
+        - 普通静态网页
+        - JSON API
+        - 医学期刊
+        - 企业官网
+        - Newsletter
+        - 社交观察源
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source_category
+    attributes:
+      label: 建议栏目
+      options:
+        - 政策监管
+        - 医疗AI
+        - 基层医疗
+        - 医保合规
+        - 医疗信息化
+        - 医药器械
+        - 企业动态
+        - 海外前沿
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source_tier
+    attributes:
+      label: 建议等级
+      options:
+        - S级官方来源
+        - A级权威来源
+        - B级补充来源
+        - C级观察来源
+        - 不确定
+    validations:
+      required: true
+
+  - type: dropdown
+    id: update_frequency
+    attributes:
+      label: 更新频率
+      options:
+        - 每小时
+        - 每天
+        - 每周
+        - 不确定
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 推荐理由
+      description: 请说明信源的权威性、医疗相关性、覆盖范围和使用价值。
+      placeholder: 这个信源适合纳入系统，因为……
+    validations:
+      required: true
+
+  - type: input
+    id: example_url
+    attributes:
+      label: 示例内容链接
+      description: 可填写一篇公开内容，帮助维护者判断质量和栏目。
+      placeholder: https://example.com/news/example
+    validations:
+      required: false
+
+  - type: dropdown
+    id: requires_login
+    attributes:
+      label: 是否需要登录
+      options:
+        - 不需要
+        - 需要
+        - 不确定
+    validations:
+      required: true

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import socket
 
 import pytest
 import requests
+import yaml
 
 from scripts.source_probe import (
     ProbeLimits,
@@ -192,3 +194,32 @@ def test_timeout_becomes_structured_error_without_secret_text():
     assert result["errors"] == ["timeout"]
     assert "secret query value" not in rendered
     assert "secret-query-value" not in rendered
+
+
+def test_issue_form_and_workflow_yaml_contracts():
+    issue_path = Path(".github/ISSUE_TEMPLATE/source-request.yml")
+    workflow_path = Path(".github/workflows/source-check.yml")
+    issue = yaml.safe_load(issue_path.read_text(encoding="utf-8"))
+    workflow = yaml.safe_load(workflow_path.read_text(encoding="utf-8"))
+    triggers = workflow.get("on") or workflow.get(True)
+
+    assert len(issue["body"]) >= 10
+    assert {row.get("id") for row in issue["body"]} >= {
+        "source_name",
+        "homepage_url",
+        "feed_url",
+        "source_type",
+        "source_category",
+        "source_tier",
+        "update_frequency",
+        "reason",
+        "example_url",
+        "requires_login",
+    }
+    assert triggers["workflow_dispatch"]["inputs"]["source_url"]["required"] is True
+    assert set(triggers["issues"]["types"]) == {"opened", "edited"}
+    assert workflow["permissions"] == {"contents": "read", "issues": "read"}
+    workflow_text = workflow_path.read_text(encoding="utf-8")
+    assert "OWNER" in workflow_text and "MEMBER" in workflow_text and "COLLABORATOR" in workflow_text
+    assert "eval " not in workflow_text
+    assert "pull_request_target" not in workflow_text

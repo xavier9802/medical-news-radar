@@ -10,6 +10,7 @@ const state = {
   allDataLoaded: false,
   allDataUrl: "data/latest-24h-all.json",
   allDataPromise: null,
+  newsDataUrl: "data/latest-24h.json",
   siteFilter: "",
   query: "",
   mode: "ai",
@@ -18,7 +19,7 @@ const state = {
   dailyBrief: null,
   storiesMerged: null,
   storiesDataUrl: "data/stories-merged.json",
-  activeSection: "hot",
+  activeSection: "all",
   boleView: "timeline",
   boleExpanded: false,
   listSort: "priority",
@@ -26,6 +27,16 @@ const state = {
   signalLevelFilter: "",
   siteGroupsExpanded: false,
 };
+
+const runtimeOptions = window.MedicalRadarRuntime?.current
+  || window.MedicalRadarRuntime?.parseRuntimeOptions(window.location.href, window.location.origin)
+  || { view: "auto", dataUrl: "data/latest-24h.json" };
+state.newsDataUrl = runtimeOptions.dataUrl;
+
+function cacheBustedUrl(url) {
+  const separator = String(url).includes("?") ? "&" : "?";
+  return `${url}${separator}t=${Date.now()}`;
+}
 
 const statsEl = document.getElementById("stats");
 const siteSelectEl = document.getElementById("siteSelect");
@@ -75,15 +86,15 @@ const SOURCE_KINDS = {
 };
 
 const SECTION_DEFS = [
-  { id: "hot", label: "热点", short: "热点", description: "跨来源聚合后的优先阅读列表" },
-  { id: "drug_trial", label: "药物/临床", short: "药物", description: "药物研发、临床试验、上市与审评动态" },
-  { id: "medical_device", label: "医疗器械", short: "器械", description: "医疗器械、诊断设备、可穿戴与数字疗法" },
-  { id: "hospital_digital", label: "医院/数字医疗", short: "数字医疗", description: "医院信息化、电子病历、远程医疗与医疗 AI" },
-  { id: "public_health", label: "公共卫生", short: "公卫", description: "疫情、疫苗、流行病学与全球卫生动态" },
-  { id: "regulatory_policy", label: "监管政策", short: "监管", description: "FDA、WHO、NMPA 等监管政策与指南" },
-  { id: "research_paper", label: "研究论文", short: "研究", description: "NEJM、Lancet、JAMA、BMJ 等期刊研究" },
-  { id: "industry_business", label: "行业动态", short: "行业", description: "融资、并购、合作与公司战略" },
-  { id: "community", label: "社区/媒体", short: "社区", description: "中文医疗社区、公众号与媒体信号" },
+  { id: "all", label: "全部", short: "全部", description: "过去 24 小时的全部医疗行业信号" },
+  { id: "policy", label: "政策监管", short: "政策", description: "医疗政策、监管文件、征求意见、司法案例与行政处罚" },
+  { id: "medical_ai", label: "医疗AI", short: "医疗AI", description: "医疗大模型、临床决策支持、AI诊疗、医学影像AI与智能体" },
+  { id: "primary_care", label: "基层医疗", short: "基层医疗", description: "诊所、社区卫生、乡镇卫生院、家庭医生与中医馆" },
+  { id: "insurance_compliance", label: "医保合规", short: "医保合规", description: "医保支付、飞行检查、基金监管、追溯码与收费合规" },
+  { id: "health_it", label: "医疗信息化", short: "信息化", description: "HIS、EMR、电子病历、互联网医院、数据治理与信息安全" },
+  { id: "pharma_device", label: "医药器械", short: "医药器械", description: "药品、医疗器械、临床试验、审评审批与药品追溯" },
+  { id: "company_market", label: "企业动态", short: "企业", description: "融资、并购、企业合作、产品发布、经营数据与行业竞争" },
+  { id: "global_healthtech", label: "海外前沿", short: "海外", description: "海外医疗科技、数字疗法、远程医疗、国际医疗AI与监管" },
 ];
 
 const SECTION_BY_ID = Object.fromEntries(SECTION_DEFS.map((section) => [section.id, section]));
@@ -184,7 +195,7 @@ function renderSourceStatusPill(errorMessage = "") {
 function renderStickySummary() {
   if (!stickySummaryTextEl) return;
   const filteredCount = getFilteredItems().length;
-  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.hot;
+  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.all;
   const query = state.query.trim();
   const site = state.siteFilter
     ? (currentSiteStats().find((row) => row.site_id === state.siteFilter)?.site_name || state.siteFilter)
@@ -192,7 +203,7 @@ function renderStickySummary() {
   const sourceType = sourceTypeSelectEl?.selectedOptions?.[0]?.textContent || "";
   const signalLevel = signalLevelSelectEl?.selectedOptions?.[0]?.textContent || "";
   const filters = [
-    state.activeSection === "hot" ? "" : section.label,
+    state.activeSection === "all" ? "" : section.label,
     site,
     state.sourceTypeFilter ? sourceType : "",
     state.signalLevelFilter ? signalLevel : "",
@@ -362,13 +373,13 @@ function isHighPriorityItem(item) {
 }
 
 function isCuratedItem(item) {
-  return item.site_id === "official_health" || item.site_id === "healthtech_hub" || item.source_tier === "official" || item.source_tier === "curated";
+  return item.site_id === "official_health" || item.site_id === "healthtech_hub" || ["s", "a", "official", "curated"].includes(item.source_tier);
 }
 
 function itemSourceType(item) {
   const siteId = item.site_id || "";
   const tier = item.source_tier || "";
-  if (siteId === "official_health" || tier === "official") return "official";
+  if (siteId === "official_health" || tier === "official" || tier === "s") return "official";
   if (siteId === "medical_journals" || siteId === "medical_media") return "media";
   if (siteId === "healthtech_hub") return "hot";
   if (siteId === "opmlrss" || tier === "user_opml") return "rss";
@@ -444,12 +455,12 @@ function renderSectionFilterSelect() {
 
 function renderSectionSummary(filteredItems = null) {
   if (!sectionSummaryEl) return;
-  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.hot;
+  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.all;
   const items = filteredItems || getFilteredItems();
   const highCount = items.filter((item) => isHighPriorityItem(item)).length;
   const sources = new Set(items.map((item) => item.source || item.site_name || item.site_id).filter(Boolean));
   const modeText = state.mode === "all" ? (state.allDedup ? "全量去重" : "全量原始") : "医疗强相关";
-  sectionSummaryEl.textContent = `过去 24 小时 · ${fmtNumber(items.length)} 条${section.id === "hot" ? "" : ` ${section.label}`}信号 · ${fmtNumber(highCount)} 条高优先级 · ${fmtNumber(sources.size)} 个来源 · ${modeText}`;
+  sectionSummaryEl.textContent = `过去 24 小时 · ${fmtNumber(items.length)} 条${section.id === "all" ? "" : ` ${section.label}`}信号 · ${fmtNumber(highCount)} 条高优先级 · ${fmtNumber(sources.size)} 个来源 · ${modeText}`;
   renderStickySummary();
 }
 
@@ -526,11 +537,11 @@ function renderModeSwitch() {
 }
 
 function listTitleText() {
-  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.hot;
+  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.all;
   const pool = state.mode === "all"
     ? (state.allDedup ? "情报流 · 全量去重" : "情报流 · 全量原始")
     : "情报流";
-  return state.activeSection === "hot" ? pool : `${section.label} · ${pool}`;
+  return state.activeSection === "all" ? pool : `${section.label} · ${pool}`;
 }
 
 function renderListSortTools() {
@@ -589,7 +600,7 @@ function modeItems() {
 
 function sectionItems(items = modeItems(), sectionId = state.activeSection) {
   const source = Array.isArray(items) ? items : [];
-  if (sectionId === "hot") {
+  if (sectionId === "all") {
     return [...source].sort((a, b) => itemPriorityScore(b) - itemPriorityScore(a) || timelineMs(b) - timelineMs(a));
   }
   return source.filter((item) => itemMatchesSection(item, sectionId));
@@ -631,32 +642,24 @@ function scoreTone(score) {
 }
 
 function itemLabelTone(item) {
-  const label = item.medical_label || "";
-  if (item.site_id === "official_health") return "official";
-  if (item.site_id === "healthtech_hub" || label === "curated_hotlist") return "hot";
-  if (label === "regulatory_policy") return "official";
-  if (label === "drug_trial" || label === "medical_device") return "strong";
-  if (label === "public_health") return "community";
-  if (label === "hospital_digital" || label === "ai_healthcare" || label === "health_tech") return "products";
-  if (label === "research_paper") return "research";
-  if (label === "industry_business") return "industry";
-  if (itemSections(item).has("community")) return "community";
+  const category = Array.from(itemSections(item))[0];
+  if (item.is_official || item.site_id === "official_health" || category === "policy") return "official";
+  if (category === "medical_ai" || category === "health_it") return "products";
+  if (category === "pharma_device") return "strong";
+  if (category === "global_healthtech" || category === "primary_care") return "community";
+  if (category === "company_market") return "industry";
   return "default";
 }
 
 function itemTagTone(label) {
   const text = String(label || "");
   if (text.includes("多源")) return "strong";
-  if (text.includes("官方")) return "official";
+  if (text.includes("官方") || text.includes("政策") || text.includes("医保合规")) return "official";
   if (text.includes("精选") || text.includes("热点")) return "hot";
-  if (text.includes("药物") || text.includes("临床")) return "strong";
-  if (text.includes("器械")) return "strong";
-  if (text.includes("公卫") || text.includes("公共卫生")) return "community";
-  if (text.includes("监管")) return "official";
-  if (text.includes("数字医疗") || text.includes("医院")) return "products";
-  if (text.includes("研究")) return "research";
-  if (text.includes("行业")) return "industry";
-  if (text.includes("社区")) return "community";
+  if (text.includes("医药") || text.includes("器械")) return "strong";
+  if (text.includes("医疗AI") || text.includes("信息化")) return "products";
+  if (text.includes("基层") || text.includes("海外")) return "community";
+  if (text.includes("企业")) return "industry";
   return "default";
 }
 
@@ -681,6 +684,9 @@ function setSourceBadge(el, label, tone = "default", title = "") {
 }
 
 function sourceTierPercent(item) {
+  const configured = { s: 100, a: 82, b: 62, c: 38 };
+  const tier = String(item.source_tier || "").toLowerCase();
+  if (configured[tier] != null) return configured[tier];
   if (item.site_id === "official_health") return 100;
   if (item.site_id === "healthtech_hub") return 90;
   const rank = Number(item.source_tier_rank);
@@ -714,6 +720,9 @@ function itemPriorityScore(item) {
 }
 
 function labelText(item) {
+  const configuredCategory = Array.from(itemSections(item))[0];
+  if (item.category_label) return String(item.category_label);
+  if (SECTION_BY_ID[configuredCategory]) return SECTION_BY_ID[configuredCategory].label;
   const labels = {
     drug_trial: "药物/临床",
     medical_device: "医疗器械",
@@ -739,7 +748,10 @@ function itemHaystack(item) {
     item.source,
     item.site_name,
     item.site_id,
+    item.category,
+    item.category_label,
     item.medical_label,
+    ...(Array.isArray(item.matched_keywords) ? item.matched_keywords : []),
     ...(Array.isArray(item.medical_signals) ? item.medical_signals : []),
   ].filter(Boolean).join(" ").toLowerCase();
 }
@@ -750,64 +762,46 @@ function matchesAny(text, patterns) {
 
 function itemSections(item) {
   const hay = itemHaystack(item);
-  const contentHay = [
-    item.title,
-    item.title_zh,
-    item.title_en,
-    item.title_original,
-    item.source,
-    item.site_name,
-    item.site_id,
-    ...(Array.isArray(item.medical_signals) ? item.medical_signals : []),
-  ].filter(Boolean).join(" ").toLowerCase();
-  const sections = new Set();
+  const configuredCategory = String(item.category || "");
+  if (configuredCategory !== "all" && SECTION_BY_ID[configuredCategory]) {
+    return new Set([configuredCategory]);
+  }
   const label = item.medical_label || "";
-  const source = `${item.source || ""} ${item.site_name || ""}`.toLowerCase();
-
-  if (label === "drug_trial" || matchesAny(hay, [/drug|pharma|clinical trial|therapy|药物|药企|制药|临床|试验|上市|审评|适应症|ndc|fda approval/])) {
-    sections.add("drug_trial");
+  if (matchesAny(hay, [/医保基金|医保支付|飞行检查|飞检|基金监管|追溯码|处方合规|收费合规|medical insurance|reimbursement/])) {
+    return new Set(["insurance_compliance"]);
   }
-  if (label === "medical_device" || matchesAny(hay, [/device|wearable|diagnostic|器械|诊断|可穿戴|数字疗法|影像|监护|ivd|medical device/])) {
-    sections.add("medical_device");
+  if (label === "regulatory_policy" || matchesAny(hay, [/政策|监管|征求意见|行政处罚|司法案例|regulation|regulatory|guideline|policy/])) {
+    return new Set(["policy"]);
   }
-  if (label === "public_health" || matchesAny(hay, [/epidemic|vaccine|pandemic|outbreak|who|cdc|疫情|疫苗|流行病|公卫|免疫接种|传染病/])) {
-    sections.add("public_health");
+  if (label === "ai_healthcare" || matchesAny(hay, [/医疗\s*ai|医疗人工智能|医疗大模型|临床决策支持|辅助诊疗|ai诊疗|医学影像ai|医疗智能体|clinical decision support|medical ai/])) {
+    return new Set(["medical_ai"]);
   }
-  if (label === "regulatory_policy" || matchesAny(hay, [/fda|nmpa|ema|who|regulation|guideline|approval|监管|指南|审批|政策|合规|gmp/])) {
-    sections.add("regulatory_policy");
+  if (matchesAny(hay, [/基层医疗|家庭医生|社区卫生|乡镇卫生院|中医馆|基层医生|primary care|family doctor|community health/])) {
+    return new Set(["primary_care"]);
   }
-  if (label === "hospital_digital" || label === "ai_healthcare" || matchesAny(hay, [/ehr|emr|telemedicine|digital health|hospital|医院信息化|电子病历|远程医疗|医疗 ai|智慧医院|his/])) {
-    sections.add("hospital_digital");
+  if (label === "hospital_digital" || label === "health_tech" || matchesAny(hay, [/his|ehr|emr|电子病历|互联网医院|医院信息化|智慧医院|数据治理|医疗信息安全|telemedicine|health it/])) {
+    return new Set(["health_it"]);
   }
-  if (label === "research_paper" || matchesAny(hay, [/nejm|lancet|jama|bmj|nature medicine|paper|study|论文|研究|期刊|发表|trial results/])) {
-    sections.add("research_paper");
+  if (["drug_trial", "medical_device", "research_paper"].includes(label) || matchesAny(hay, [/drug|pharma|clinical trial|medical device|fda|nmpa|药品|制药|临床试验|医疗器械|药品追溯|审评|审批|ivd/])) {
+    return new Set(["pharma_device"]);
   }
-  if (label === "industry_business" || matchesAny(hay, [/funding|raised|ipo|acquire|acquisition|partnership|融资|并购|收购|合作|估值|战略|投资/])) {
-    sections.add("industry_business");
+  if (label === "public_health" || matchesAny(hay, [/global health|digital therapeutics|overseas|who|cdc|ema|疫情|疫苗|全球卫生|海外医疗|数字疗法|远程医疗/])) {
+    return new Set(["global_healthtech"]);
   }
-  if (label === "curated_hotlist") {
-    sections.add("hot");
+  if (label === "industry_business" || label === "curated_hotlist" || matchesAny(hay, [/funding|raised|ipo|acquire|acquisition|partnership|融资|并购|收购|企业合作|产品发布|经营数据|估值|投资/])) {
+    return new Set(["company_market"]);
   }
-  if (
-    item.site_id === "community" ||
-    source.includes("丁香园") ||
-    source.includes("医学界") ||
-    source.includes("动脉网") ||
-    source.includes("奇点网") ||
-    source.includes("生物探索") ||
-    source.includes("医脉通") ||
-    source.includes("公众号") ||
-    matchesAny(hay, [/丁香园|医学界|动脉网|奇点网|生物探索|医脉通|社区|公众号/])
-  ) {
-    sections.add("community");
-  }
-
-  if (!sections.size) sections.add("industry_business");
-  return sections;
+  return new Set(["company_market"]);
 }
 
+function sourceTierLabel(item) {
+  const tier = String(item.source_tier || "").toLowerCase();
+  if (["s", "a", "b", "c"].includes(tier)) return `${tier.toUpperCase()}级`;
+  if (item.source_tier_label) return String(item.source_tier_label);
+  return "";
+}
 function itemMatchesSection(item, sectionId) {
-  return sectionId === "hot" || itemSections(item).has(sectionId);
+  return sectionId === "all" || itemSections(item).has(sectionId);
 }
 
 function sectionBadgeLabel(sectionId) {
@@ -815,6 +809,7 @@ function sectionBadgeLabel(sectionId) {
 }
 
 function reasonText(item) {
+  if (item.recommendation_reason) return String(item.recommendation_reason);
   const signals = Array.isArray(item.medical_signals) ? item.medical_signals.filter(Boolean).slice(0, 3) : [];
   if (signals.length) return `命中方向：${signals.join(" / ")}`;
   if (item.medical_relevance_reason) return String(item.medical_relevance_reason).replaceAll("_", " ");
@@ -1382,7 +1377,7 @@ function renderBoleFallback(picks) {
 
 function storyMatchesFilteredItems(story, filteredItems) {
   if (
-    state.activeSection === "hot" &&
+    state.activeSection === "all" &&
     !state.siteFilter &&
     !state.sourceTypeFilter &&
     !state.signalLevelFilter &&
@@ -1644,7 +1639,7 @@ function renderBolePicks() {
   if (boleViewToggleEl) boleViewToggleEl.hidden = true;
   if (bolePicksWrapEl) bolePicksWrapEl.hidden = false;
 
-  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.hot;
+  const section = SECTION_BY_ID[state.activeSection] || SECTION_BY_ID.all;
   const filtered = getFilteredItems();
   const storyPools = currentStoryPools(filtered);
   const availableStoryPool = storyPools.brief.length
@@ -1662,7 +1657,7 @@ function renderBolePicks() {
     : rankedFallbackRows(filtered).slice(0, defaultLimit);
   const top = rows.slice(0, 3);
   const remainingCount = Math.max(0, rows.length - top.length);
-  if (topStoriesTitleEl) topStoriesTitleEl.textContent = state.activeSection === "hot" ? "今日重点信号" : `${section.label}重点信号`;
+  if (topStoriesTitleEl) topStoriesTitleEl.textContent = state.activeSection === "all" ? "今日重点信号" : `${section.label}重点信号`;
   const storyMeta = usesStories
     ? `展示池：热点 ${fmtNumber(candidateCounts.hot)}/${fmtNumber(candidateCounts.hotTotal)} · 时间线 ${fmtNumber(candidateCounts.timeline)}/${fmtNumber(candidateCounts.timelineTotal)}`
     : `展示池：${fmtNumber(rows.length)} 条`;
@@ -1726,19 +1721,11 @@ function pickTopHeadlineClusters(clusters, limit = 3) {
 
 function itemTagLabels(item, row = null) {
   const tags = [];
-  const sections = itemSections(item);
-  if (state.activeSection !== "hot") tags.push(sectionBadgeLabel(state.activeSection));
+  const category = Array.from(itemSections(item))[0];
+  tags.push(sectionBadgeLabel(category));
   if (row && (row.sourceCount > 1 || row.mergedCount > 1)) tags.push("多源验证");
-  if (item.site_id === "official_health") tags.push("官方");
-  if (item.site_id === "healthtech_hub") tags.push("热点");
-  if (sections.has("drug_trial")) tags.push("药物/临床");
-  if (sections.has("medical_device")) tags.push("医疗器械");
-  if (sections.has("public_health")) tags.push("公共卫生");
-  if (sections.has("regulatory_policy")) tags.push("监管政策");
-  if (sections.has("hospital_digital")) tags.push("数字医疗");
-  if (sections.has("research_paper")) tags.push("研究论文");
-  if (sections.has("industry_business")) tags.push("行业动态");
-  if (sections.has("community")) tags.push("社区");
+  if (item.is_official || item.site_id === "official_health" || item.source_tier === "s") tags.push("官方");
+  if (item.is_policy) tags.push("政策");
   return Array.from(new Set(tags)).slice(0, 3);
 }
 
@@ -1804,44 +1791,28 @@ function whyImportantText(row) {
   if (reasons.includes("official_source") && reasons.includes("multi_source")) {
     return "一手来源和聚合来源同时出现，说明它既有事实起点，也正在被外部信息流放大。";
   }
-  if (sections.has("drug_trial")) {
-    return "药物与临床试验进展直接影响治疗方案、审评进度和患者可及性。";
-  }
-  if (sections.has("medical_device")) {
-    return "医疗器械与诊断设备变化会影响临床实践和患者监测方式。";
-  }
-  if (sections.has("public_health")) {
-    return "疫情、疫苗和流行病学动态对人群健康防控策略有直接影响。";
-  }
-  if (sections.has("regulatory_policy")) {
-    return "监管机构（FDA/WHO/NMPA 等）的政策与指南会改变上市路径和市场准入。";
-  }
-  if (sections.has("hospital_digital")) {
-    return "医院信息化、电子病历、远程医疗与医疗 AI 进展会改变医疗服务交付方式。";
-  }
-  if (sections.has("research_paper")) {
-    return "顶级期刊研究可能催生新的诊疗标准、靶点或临床指南。";
-  }
-  if (sections.has("industry_business")) {
-    return "融资、并购与合作动态反映医疗产业资源流向和战略重心。";
-  }
-  if (sections.has("community")) {
-    return "中文医疗社区与媒体的集中讨论可作为趋势和市场情绪的验证入口。";
-  }
+  if (sections.has("policy")) return "政策监管变化需要回到官方原文，核对适用对象、生效时间和执行边界。";
+  if (sections.has("medical_ai")) return "医疗AI进展可能影响临床决策支持、诊疗工作流与产品合规边界。";
+  if (sections.has("primary_care")) return "基层医疗变化会影响诊所、社区卫生、家庭医生和基层服务能力。";
+  if (sections.has("insurance_compliance")) return "医保支付和基金监管变化会直接影响医疗机构的运营与合规流程。";
+  if (sections.has("health_it")) return "医疗信息化变化可能影响HIS、EMR、数据治理和机构协同方式。";
+  if (sections.has("pharma_device")) return "医药器械与临床试验进展需要核对审评状态、证据等级和适用范围。";
+  if (sections.has("global_healthtech")) return "海外医疗科技信号可用于观察国际产品、监管和服务模式的变化。";
+  if (sections.has("company_market")) return "企业、融资与合作动态反映医疗产业资源流向和竞争重点。";
   return "它在当前 24 小时窗口里同时具备相关度、新鲜度和来源权重，值得先读原文确认。";
 }
 
 function impactLabels(item) {
   const sections = itemSections(item);
   const labels = [];
-  if (sections.has("drug_trial")) labels.push("药企 / 临床");
-  if (sections.has("medical_device")) labels.push("器械 / 诊断");
-  if (sections.has("public_health")) labels.push("公共卫生");
-  if (sections.has("regulatory_policy")) labels.push("监管 / 政策");
-  if (sections.has("hospital_digital")) labels.push("医院 / 数字医疗");
-  if (sections.has("research_paper")) labels.push("研究人员");
-  if (sections.has("industry_business")) labels.push("投资 / 企业");
-  if (sections.has("community")) labels.push("社区 / 媒体");
+  if (sections.has("policy")) labels.push("监管 / 政策");
+  if (sections.has("medical_ai")) labels.push("医疗AI / 产品");
+  if (sections.has("primary_care")) labels.push("基层机构 / 医生");
+  if (sections.has("insurance_compliance")) labels.push("医保 / 合规");
+  if (sections.has("health_it")) labels.push("医院 / 信息化");
+  if (sections.has("pharma_device")) labels.push("药企 / 器械");
+  if (sections.has("company_market")) labels.push("企业 / 市场");
+  if (sections.has("global_healthtech")) labels.push("海外 / 前沿");
   return labels.slice(0, 3).length ? labels.slice(0, 3) : ["医疗观察者"];
 }
 
@@ -1977,12 +1948,12 @@ function renderItemNode(item, context = {}) {
   }
   const kind = sourceKind(item.site_id);
   const categoryEl = node.querySelector(".category");
-  categoryEl.textContent = kind.label;
-  categoryEl.classList.add(`kind-${kind.tone}`);
+  categoryEl.textContent = labelText(item);
+  categoryEl.classList.add(`tone-${itemLabelTone(item)}`);
   const score = scorePercent(item);
   const tagEl = document.createElement("span");
   tagEl.className = `ai-tag tone-${itemLabelTone(item)}`;
-  tagEl.textContent = `${labelText(item)} · ${score || "?"}分`;
+  tagEl.textContent = `相关度 ${score || "?"}分`;
   categoryEl.insertAdjacentElement("afterend", tagEl);
 
   const sourceEl = node.querySelector(".source");
@@ -1999,6 +1970,15 @@ function renderItemNode(item, context = {}) {
     .forEach((label) => {
       metaRow.insertBefore(itemTagChip(label), sourceEl);
     });
+
+  const tierLabel = sourceTierLabel(item);
+  if (tierLabel) {
+    const tierEl = document.createElement("span");
+    tierEl.className = "tier-meta";
+    tierEl.textContent = tierLabel;
+    tierEl.title = "来源等级";
+    metaRow.insertBefore(tierEl, node.querySelector(".time"));
+  }
 
   node.querySelector(".time").textContent = fmtTime(item.published_at || item.first_seen_at);
 
@@ -2470,7 +2450,7 @@ function renderSourceHealth(errorMessage = "") {
 }
 
 async function loadNewsData() {
-  const res = await fetch(`./data/latest-24h.json?t=${Date.now()}`);
+  const res = await fetch(cacheBustedUrl(state.newsDataUrl));
   if (!res.ok) throw new Error(`加载 latest-24h.json 失败: ${res.status}`);
   return res.json();
 }
@@ -2478,7 +2458,7 @@ async function loadNewsData() {
 async function loadAllModeData() {
   if (state.allDataLoaded) return;
   if (!state.allDataPromise) {
-    state.allDataPromise = fetch(`./${state.allDataUrl}?t=${Date.now()}`)
+    state.allDataPromise = fetch(cacheBustedUrl(state.allDataUrl))
       .then((res) => {
         if (!res.ok) throw new Error(`加载 latest-24h-all.json 失败: ${res.status}`);
         return res.json();
@@ -2511,7 +2491,7 @@ async function loadDailyBriefData() {
 }
 
 async function loadStoriesData() {
-  const res = await fetch(`./${state.storiesDataUrl}?t=${Date.now()}`);
+  const res = await fetch(cacheBustedUrl(state.storiesDataUrl));
   if (!res.ok) throw new Error(`加载 stories-merged.json 失败: ${res.status}`);
   return res.json();
 }
@@ -2601,7 +2581,7 @@ siteSelectEl.addEventListener("change", (e) => {
 
 if (sectionSelectEl) {
   sectionSelectEl.addEventListener("change", (e) => {
-    state.activeSection = e.target.value || "hot";
+    state.activeSection = e.target.value || "all";
     rerenderCurrentView();
   });
 }

@@ -2172,6 +2172,26 @@ summary:focus-visible {
   color: var(--accent);
 }
 
+.category.tone-official {
+  border-color: rgba(31, 122, 77, 0.32);
+  color: var(--good);
+}
+
+.category.tone-products {
+  border-color: rgba(18, 106, 115, 0.28);
+  color: var(--accent);
+}
+
+.category.tone-strong {
+  border-color: rgba(181, 82, 49, 0.28);
+  color: var(--accent-warm);
+}
+
+.category.tone-community,
+.category.tone-industry {
+  color: var(--muted);
+}
+
 .category.kind-aggregate,
 .category.kind-blogs {
   color: var(--muted);
@@ -2208,6 +2228,12 @@ summary:focus-visible {
 
 .time {
   margin-left: auto;
+}
+
+.tier-meta {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 720;
 }
 
 .title {
@@ -2781,4 +2807,57 @@ summary:focus-visible {
   .coverage-card:hover {
     box-shadow: none;
   }
+}
+
+/* Explicit preview modes used by ?view=mobile|classic. Auto keeps media queries. */
+.view-mobile .shell {
+  max-width: 720px;
+  padding: 18px 12px 36px;
+}
+
+.view-mobile .hero,
+.view-mobile .primary-controls,
+.view-mobile .advanced-controls {
+  grid-template-columns: 1fr;
+}
+
+.view-mobile .hero-meta {
+  justify-items: start;
+  text-align: left;
+}
+
+.view-mobile .hero-links {
+  justify-content: flex-start;
+}
+
+.view-mobile .top-stories-grid,
+.view-mobile .coverage-strip {
+  grid-template-columns: 1fr;
+}
+
+.view-mobile button,
+.view-mobile input,
+.view-mobile select,
+.view-mobile .hero-link {
+  min-height: 44px;
+}
+
+.view-mobile .news-list {
+  padding: 10px 12px 12px;
+}
+
+.view-classic body {
+  overflow-x: auto;
+}
+
+.view-classic .shell {
+  width: 1120px;
+  min-width: 980px;
+  max-width: none;
+  padding-top: 24px;
+}
+
+.view-classic .news-card {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

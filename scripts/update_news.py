@@ -44,6 +44,11 @@ except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_
     from build_source_registry import write_source_registry
 
 try:
+    from scripts.persona_score import apply_persona_scores
+except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_news.py`
+    from persona_score import apply_persona_scores
+
+try:
     import feedparser
 except ModuleNotFoundError:
     feedparser = None
@@ -1936,7 +1941,7 @@ def add_medical_intelligence_fields(
     out["recommendation_reason"] = (
         f"{category_label}：命中 {' / '.join(signals)}" if signals else f"{category_label}：通过医疗相关性规则筛选"
     )
-    return out
+    return apply_persona_scores(out)
 
 
 def source_tier_sort_key(record: dict[str, Any]) -> tuple[int, float, str]:
@@ -2492,6 +2497,9 @@ def story_item_link(item: dict[str, Any]) -> dict[str, Any]:
         "is_policy": item.get("is_policy"),
         "importance_score": item.get("importance_score"),
         "recommendation_reason": item.get("recommendation_reason"),
+        "persona_scores": item.get("persona_scores"),
+        "topic_value": item.get("topic_value"),
+        "content_angles": item.get("content_angles"),
     }
 
 
@@ -2553,6 +2561,9 @@ def build_story_record(
         "is_official": primary.get("is_official"),
         "is_policy": primary.get("is_policy"),
         "recommendation_reason": primary.get("recommendation_reason"),
+        "persona_scores": primary.get("persona_scores"),
+        "topic_value": primary.get("topic_value"),
+        "content_angles": primary.get("content_angles"),
         "reasons": story_reasons(primary, score, len(sorted_items)),
         "earliest_at": iso(min(times)) if times else None,
         "latest_at": iso(max(times)) if times else None,
@@ -2568,6 +2579,9 @@ def build_story_record(
             "is_official": primary.get("is_official"),
             "is_policy": primary.get("is_policy"),
             "recommendation_reason": primary.get("recommendation_reason"),
+            "persona_scores": primary.get("persona_scores"),
+            "topic_value": primary.get("topic_value"),
+            "content_angles": primary.get("content_angles"),
         },
     }
 

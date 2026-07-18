@@ -1,0 +1,19 @@
+weights:
+  authority: 0.30
+  medical_relevance: 0.25
+  impact: 0.20
+  recency: 0.15
+  multi_source_heat: 0.10
+
+thresholds:
+  selected: 0.72
+  relevant: 0.45
+  minimum: 0.25
+
+bonuses:
+  official_policy: 0.15
+  effective_date_present: 0.05
+  national_level: 0.08
+  primary_care_impact: 0.08
+  insurance_compliance_impact: 0.08
+  multi_source: 0.05

@@ -1,0 +1,89 @@
+strong_keywords:
+  - {term: 医疗人工智能, weight: 1.0, categories: [medical_ai], enabled: true}
+  - {term: 医疗AI, weight: 1.0, categories: [medical_ai], enabled: true}
+  - {term: 临床决策支持, weight: 0.95, categories: [medical_ai, health_it], enabled: true}
+  - {term: AI诊疗, weight: 1.0, categories: [medical_ai], enabled: true}
+  - {term: 智慧医疗, weight: 0.85, categories: [medical_ai, health_it], enabled: true}
+  - {term: 医疗大模型, weight: 1.0, categories: [medical_ai], enabled: true}
+  - {term: 生成式人工智能, weight: 0.8, categories: [medical_ai], enabled: true}
+  - {term: 医保基金, weight: 1.0, categories: [insurance_compliance], enabled: true}
+  - {term: 医保支付, weight: 0.95, categories: [insurance_compliance], enabled: true}
+  - {term: 医保飞检, weight: 1.0, categories: [insurance_compliance], enabled: true}
+  - {term: 基层医疗, weight: 1.0, categories: [primary_care], enabled: true}
+  - {term: 家庭医生, weight: 0.9, categories: [primary_care], enabled: true}
+  - {term: 电子病历, weight: 0.95, categories: [health_it], enabled: true}
+  - {term: 医疗信息化, weight: 1.0, categories: [health_it], enabled: true}
+  - {term: 数字疗法, weight: 0.95, categories: [health_it, global_healthtech], enabled: true}
+  - {term: 药品追溯, weight: 0.9, categories: [pharma_device, insurance_compliance], enabled: true}
+  - {term: 临床试验, weight: 0.9, categories: [pharma_device], enabled: true}
+  - {term: 医疗器械, weight: 1.0, categories: [pharma_device], enabled: true}
+  - {term: 医师执业, weight: 0.85, categories: [policy, primary_care], enabled: true}
+  - {term: medical AI, weight: 1.0, categories: [medical_ai], enabled: true}
+  - {term: AI in healthcare, weight: 1.0, categories: [medical_ai], enabled: true}
+  - {term: clinical decision support, weight: 0.95, categories: [medical_ai, health_it], enabled: true}
+  - {term: diagnostic AI, weight: 0.95, categories: [medical_ai], enabled: true}
+  - {term: generative AI in medicine, weight: 0.9, categories: [medical_ai], enabled: true}
+  - {term: health insurance payment, weight: 0.9, categories: [insurance_compliance], enabled: true}
+  - {term: primary care, weight: 0.9, categories: [primary_care], enabled: true}
+  - {term: electronic medical record, weight: 0.9, categories: [health_it], enabled: true}
+  - {term: digital therapeutics, weight: 0.95, categories: [health_it, global_healthtech], enabled: true}
+  - {term: clinical trial, weight: 0.9, categories: [pharma_device], enabled: true}
+  - {term: medical device, weight: 0.95, categories: [pharma_device], enabled: true}
+
+medium_keywords:
+  - {term: 医院, weight: 0.45, categories: [health_it], enabled: true}
+  - {term: 诊所, weight: 0.65, categories: [primary_care], enabled: true}
+  - {term: 中医馆, weight: 0.65, categories: [primary_care], enabled: true}
+  - {term: 社区卫生, weight: 0.75, categories: [primary_care], enabled: true}
+  - {term: 乡镇卫生院, weight: 0.8, categories: [primary_care], enabled: true}
+  - {term: 处方, weight: 0.55, categories: [insurance_compliance, pharma_device], enabled: true}
+  - {term: 病历, weight: 0.55, categories: [health_it], enabled: true}
+  - {term: 互联网医院, weight: 0.75, categories: [health_it], enabled: true}
+  - {term: 健康管理, weight: 0.45, categories: [primary_care], enabled: true}
+  - {term: FDA, weight: 0.7, categories: [pharma_device, global_healthtech], enabled: true}
+  - {term: NMPA, weight: 0.75, categories: [pharma_device, policy], enabled: true}
+  - {term: 医药, weight: 0.5, categories: [pharma_device], enabled: true}
+  - {term: 医生, weight: 0.45, categories: [primary_care], enabled: true}
+  - {term: 患者, weight: 0.4, categories: [primary_care], enabled: true}
+  - {term: 卫生健康, weight: 0.55, categories: [policy], enabled: true}
+  - {term: hospital, weight: 0.45, categories: [health_it], enabled: true}
+  - {term: clinic, weight: 0.6, categories: [primary_care], enabled: true}
+  - {term: physician, weight: 0.45, categories: [primary_care], enabled: true}
+  - {term: patient, weight: 0.4, categories: [primary_care], enabled: true}
+  - {term: telemedicine, weight: 0.7, categories: [health_it, global_healthtech], enabled: true}
+  - {term: digital health, weight: 0.7, categories: [health_it, global_healthtech], enabled: true}
+  - {term: health data, weight: 0.6, categories: [health_it], enabled: true}
+
+policy_keywords:
+  - {term: 征求意见, weight: 0.95, categories: [policy], enabled: true}
+  - {term: 通知, weight: 0.55, categories: [policy], enabled: true}
+  - {term: 办法, weight: 0.65, categories: [policy], enabled: true}
+  - {term: 规定, weight: 0.65, categories: [policy], enabled: true}
+  - {term: 行政处罚, weight: 0.9, categories: [policy, insurance_compliance], enabled: true}
+  - {term: 监管, weight: 0.65, categories: [policy], enabled: true}
+  - {term: regulation, weight: 0.7, categories: [policy, global_healthtech], enabled: true}
+  - {term: guideline, weight: 0.6, categories: [policy, global_healthtech], enabled: true}
+
+company_keywords:
+  - {term: 融资, weight: 0.9, categories: [company_market], enabled: true}
+  - {term: 并购, weight: 0.9, categories: [company_market], enabled: true}
+  - {term: 收购, weight: 0.85, categories: [company_market], enabled: true}
+  - {term: 企业合作, weight: 0.75, categories: [company_market], enabled: true}
+  - {term: 产品发布, weight: 0.7, categories: [company_market], enabled: true}
+  - {term: funding, weight: 0.85, categories: [company_market, global_healthtech], enabled: true}
+  - {term: acquisition, weight: 0.85, categories: [company_market, global_healthtech], enabled: true}
+  - {term: partnership, weight: 0.7, categories: [company_market, global_healthtech], enabled: true}
+
+noise_keywords:
+  - {term: 明星健康, weight: 0.85, categories: [], enabled: true}
+  - {term: 养生偏方, weight: 0.95, categories: [], enabled: true}
+  - {term: 医美八卦, weight: 0.9, categories: [], enabled: true}
+  - {term: 保健品带货, weight: 1.0, categories: [], enabled: true}
+  - {term: 减肥产品, weight: 0.85, categories: [], enabled: true}
+  - {term: 电商促销, weight: 0.9, categories: [], enabled: true}
+  - {term: 星座健康, weight: 0.9, categories: [], enabled: true}
+  - {term: 未经证实的民间疗法, weight: 1.0, categories: [], enabled: true}
+  - {term: celebrity health, weight: 0.85, categories: [], enabled: true}
+  - {term: miracle cure, weight: 1.0, categories: [], enabled: true}
+  - {term: supplement promotion, weight: 0.9, categories: [], enabled: true}
+  - {term: shopping discount, weight: 0.85, categories: [], enabled: true}

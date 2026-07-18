@@ -1,108 +1,175 @@
-# Medical News Radar｜24 小时医疗情报雷达
+# Medical News Radar｜医疗行业情报雷达
 
-自动更新的 24 小时医疗健康情报雷达。
+一个完全运行在 GitHub 上的医疗行业信源、政策、技术与选题情报系统。GitHub Actions 定时采集并生成 `data/*.json`，GitHub Pages 直接展示静态网页；不需要 PHP、数据库、登录系统或长期运行的服务器。
 
-- **普通读者**：直接打开网页，看最近 24 小时医疗、公共卫生、临床研究、监管政策和行业动态。
-- **开发者/机构**：fork 本仓库，接入自己的医学 RSS/OPML、期刊 feed、公开 API，部署为独立的医疗情报站点。
-- **Agent 用户**：可通过项目内置 Skill 继续维护信源、判断新来源质量、部署 GitHub Pages。
+- 情报首页：`/index.html`
+- 信源管理：`/sources.html`
+- 在线站点：[xavier9802.github.io/medical-news-radar](https://xavier9802.github.io/medical-news-radar/)
+
+本项目面向医疗内容运营、医疗 AI 产品、政策研究、基层医疗和医疗信息化从业者。它延续原有抓取、标准化、去重、多来源故事合并、健康监测和静态发布管线，并把分类、关键词、评分与信源逐步迁移为可维护配置。
+
+## 核心能力
+
+- 八大医疗栏目：政策监管、医疗AI、基层医疗、医保合规、医疗信息化、医药器械、企业动态、海外前沿
+- 保留全部、精选、全量、当前热点、搜索、时间排序和多来源折叠
+- 基于来源权威性、医疗相关性、影响、时效与多源热度的可解释评分
+- S/A/B/C 四级信源和静态信源注册表
+- GitHub Issue Form 推荐信源，受限的 Actions 安全检测
+- 医疗行业内容主编、医疗政策分析师、医疗 AI 产品负责人三类 Persona
+- DeepSeek 为可选增强；未配置密钥时规则评分和数据生成仍完整运行
+
+## 纯 GitHub 架构
+
+```text
+config/*.yml + public feeds / OPML
+                 ↓
+        GitHub Actions（每 30 分钟）
+                 ↓
+  采集 → 标准化 → 评分 → 去重 → 故事合并
+                 ↓
+             data/*.json
+                 ↓
+         GitHub Pages 静态页面
+```
+
+`.github/workflows/update-news.yml` 的 cron 为 `*/30 * * * *`，即计划任务每 30 分钟触发一次。GitHub 对计划任务可能存在排队延迟，实际开始时间不保证精确到分钟。也可在 Actions 页面手动运行。
 
 ## 快速开始
 
-普通用户不用安装，直接打开在线页面即可（部署后替换为你的 GitHub Pages 地址）。
-
-本地运行：
+Linux / macOS：
 
 ```bash
 git clone https://github.com/xavier9802/medical-news-radar.git
 cd medical-news-radar
 python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
 python scripts/update_news.py --output-dir data --window-hours 24
+python scripts/build_source_registry.py
 python -m http.server 8080
 ```
 
-打开 http://localhost:8080
+Windows PowerShell：
 
-## 数据源
+```powershell
+git clone https://github.com/xavier9802/medical-news-radar.git
+Set-Location medical-news-radar
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-dev.txt
+python scripts/update_news.py --output-dir data --window-hours 24
+python scripts/build_source_registry.py
+python -m http.server 8080
+```
 
-默认内置公开医疗源（RSS/Atom）：
+打开 `http://localhost:8080/`，信源页为 `http://localhost:8080/sources.html`。
 
-- **官方/监管机构**：WHO、CDC、FDA、NIH 等
-- **医学期刊**：NEJM、The Lancet、JAMA、BMJ 等
-- **医疗媒体**：Medscape、Healthcare IT News、HIMSS 等
-- **中文医疗媒体**：通过 `feeds/follow.example.opml` 示例接入
+## 配置目录
 
-需要添加私有源时：
+| 文件 | 用途 |
+| --- | --- |
+| `config/categories.yml` | 八大栏目、显示名、说明和顺序 |
+| `config/keywords.yml` | 中英文强/中/噪声关键词、权重和栏目映射 |
+| `config/scoring.yml` | 评分权重、阈值和加分项 |
+| `config/source-tiers.yml` | S/A/B/C 等级与权威分 |
+| `config/sources.yml` | 公开信源、抓取策略、过滤条件和元数据 |
+
+配置缺失或无法解析时，加载器会返回安全默认值；单一来源失败不会让整轮任务或网站失效。字段定义见 [docs/source-schema.md](docs/source-schema.md)。
+
+## 添加和检测信源
+
+普通用户可在 `/sources.html` 点击“推荐新信源”，提交 GitHub Issue Form。Issue 不会自动修改配置、创建 PR 或合并代码；维护者检测并核验后，再手动编辑 `config/sources.yml`。
+
+本地检测单个公开地址：
 
 ```bash
-cp feeds/follow.example.opml feeds/follow.opml
-# 编辑 feeds/follow.opml 加入你的医学 RSS
+python scripts/source_probe.py --url "https://example.com/feed.xml" --name "示例信源"
+python scripts/source_probe.py --url "https://example.com/feed.xml" --output data/source-probe-result.json
+```
+
+检测配置中的已启用信源：
+
+```bash
+python scripts/source_probe.py --config config/sources.yml --output data/source-probe-result.json
+```
+
+在 GitHub 仓库进入 **Actions → Check Medical News Source → Run workflow**，填写公开 HTTP(S) 地址即可手动运行 `source-check.yml`。外部 Issue 只做结构检查；只有仓库所有者、成员或协作者的结构化提交才会触发网络探测。
+
+详细维护流程见 [docs/source-management.md](docs/source-management.md)。
+
+## 私有 OPML 与 Secrets
+
+公开示例位于 `feeds/follow.example.opml`。个人订阅应复制到被 Git 忽略的 `feeds/follow.opml`，不要提交到仓库：
+
+```bash
 python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml feeds/follow.opml
 ```
 
-## 核心机制
+GitHub Actions 支持：
 
-1. **信源判断**：优先接入官方机构、权威期刊、可信媒体；避免养生偏方、电商促销等噪音。
-2. **抓取与结构化**：RSS/Atom/OPML + 可选公开 API。
-3. **医疗相关性评分**：基于标题、来源、关键词判断是否为高价值医疗信号。
-4. **去重与故事线合并**：同一事件多个来源聚合成一个故事线。
-5. **静态页面发布**：GitHub Actions 自动生成 `data/*.json` 并发布到 GitHub Pages。
+| 名称 | 类型 | 必需 | 作用 |
+| --- | --- | --- | --- |
+| `FOLLOW_OPML_B64` | Secret | 否 | 私有 OPML 的 Base64 内容；未设置时使用公开示例 |
+| `RSS_MAX_FEEDS` | Variable | 否 | 限制每轮 OPML feed 数，默认 10 |
+| `DEEPSEEK_API_KEY` | Secret / 本地环境变量 | 否 | 可选 Persona 排序增强 |
+| `DEEPSEEK_PERSONA_ENABLED` | 环境变量 | 否 | 设为 `1` 才启用 DeepSeek Persona 排序 |
+
+PowerShell 生成 OPML Base64：
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("feeds/follow.opml")) | Set-Clipboard
+```
+
+Linux / macOS：
+
+```bash
+base64 < feeds/follow.opml
+```
+
+将结果保存到 **Settings → Secrets and variables → Actions → New repository secret**。不要把密钥、Cookie、Token、私有 OPML 或邮件正文写入配置、Issue、日志或前端。
 
 ## 数据产物
 
-- `data/latest-24h.json`：最近 24 小时医疗强相关消息
-- `data/latest-24h-all.json`：最近 24 小时全量消息
-- `data/source-status.json`：来源抓取状态与健康度
-- `data/daily-brief.json`：精选故事线 / Top 3
-- `data/stories-merged.json`：合并后的完整事件集合
-- `data/merge-log.json`：合并审计日志
+- `data/latest-24h.json`：24 小时医疗强相关内容
+- `data/latest-24h-all.json`：24 小时全量内容
+- `data/source-status.json`：本轮来源抓取状态
+- `data/source-registry.json`：信源配置与健康状态合并结果
+- `data/daily-brief.json`：精选故事线
+- `data/stories-merged.json`：多来源合并后的事件
+- `data/merge-log.json`：合并审计信息
+- `data/archive.json`：有限期历史归档
 
-## GitHub Actions 自动更新
+## GitHub Pages 部署
 
-`.github/workflows/update-news.yml` 已配置：
-
-- 默认每 30 分钟运行一次
-- 自动生成并提交 `data/*.json`
-- 通过 `FOLLOW_OPML_B64` secret 可接入私有 OPML
-
-### 配置私有 OPML
-
-```bash
-base64 -i feeds/follow.opml | pbcopy  # 复制到剪贴板
-# 在 GitHub 仓库 Settings > Secrets and variables > Actions 中新建 FOLLOW_OPML_B64
-```
-
-## 项目结构
-
-```
-medical-news-radar/
-├── scripts/
-│   ├── update_news.py          # 主抓取与数据生成
-│   ├── medical_relevance.py    # 医疗相关性评分
-│   └── ...
-├── assets/
-│   ├── app.js                  # 前端逻辑
-│   └── styles.css              # 样式
-├── feeds/
-│   └── follow.example.opml     # OPML 示例
-├── index.html                  # 主页面
-├── data/                       # 生成的 JSON（自动提交）
-└── tests/                      # 测试
-```
+1. Fork 仓库并在 **Settings → Actions → General** 允许 Actions 写入仓库内容。
+2. 在 **Settings → Pages** 选择 **Deploy from a branch**，分支选 `main`，目录选 `/ (root)`。
+3. 按需配置 `FOLLOW_OPML_B64` 和 `RSS_MAX_FEEDS`。
+4. 在 **Actions → Update Medical News Snapshot** 手动运行一次。
+5. 确认任务提交了 `data/*.json`，然后打开 `https://<你的账号>.github.io/medical-news-radar/` 和 `/sources.html` 验收。
 
 ## 测试
 
 ```bash
-python -m py_compile scripts/update_news.py
-pytest -q
+python -m pytest -q
+python -m compileall scripts
+node --test tests/js/*.test.cjs
+node --check assets/runtime-config.js
 node --check assets/app.js
+node --check assets/sources.js
+python scripts/build_source_registry.py
 ```
 
-## 从 AI News Radar 改造而来
+单元测试使用 mock，不依赖真实外网。
 
-本项目基于 [LearnPrompt/ai-news-radar](https://github.com/LearnPrompt/ai-news-radar) 改造，保留其轻量化 pipeline 与 GitHub Pages 部署架构，将主题全面切换为医疗健康。
+## 安全与内容边界
 
-## License
+- 只采集无需登录的公开 HTTP/HTTPS 来源，不绕过验证码、付费墙或访问控制。
+- 探测器阻止 localhost、私网、链路本地和保留地址，并对每次重定向重新校验。
+- 不执行目标网页 JavaScript，不发送 Cookie，不保存第三方完整正文。
+- 页面只展示标题、来源、时间、原文链接、摘要/推荐理由、分类和多源关系。
+- 不将资讯改写为诊疗建议；不虚构政策、临床结论、融资金额或 FDA/NMPA 审批。
+- Persona 输出是编辑辅助，不是医疗建议；事实不确定时必须回到官方原文核验。
 
-MIT
+## 来源与许可证
+
+本项目基于 [LearnPrompt/ai-news-radar](https://github.com/LearnPrompt/ai-news-radar) 改造，保留轻量抓取管线和 GitHub Pages 架构。项目继续采用 [MIT License](LICENSE)。

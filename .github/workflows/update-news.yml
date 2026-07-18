@@ -57,6 +57,14 @@ jobs:
             python scripts/update_news.py --output-dir data --window-hours 24 --archive-days 21
           fi
 
+      - name: Build source registry
+        run: |
+          python scripts/build_source_registry.py \
+            --config config/sources.yml \
+            --status data/source-status.json \
+            --archive data/archive.json \
+            --output data/source-registry.json
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"

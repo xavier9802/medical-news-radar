@@ -12,6 +12,7 @@ from scripts.config_loader import (
     normalize_feed_url,
     reset_config_cache,
 )
+from scripts.update_news import add_source_tier_fields, configured_feed_groups, dedupe_opml_feeds
 
 
 EXPECTED_CATEGORY_IDS = {
@@ -140,3 +141,50 @@ def test_reset_config_cache_allows_reloading_explicit_path(tmp_path: Path):
     assert first.data["categories"][0]["label"] == "初始"
     assert cached.data["categories"][0]["label"] == "初始"
     assert reloaded.data["categories"][0]["label"] == "更新"
+
+
+def test_configured_feeds_group_by_legacy_site_and_keep_source_metadata(tmp_path: Path):
+    path = tmp_path / "sources.yml"
+    path.write_text(
+        "sources:\n"
+        "  - id: nhc\n"
+        "    name: 国家卫生健康委员会\n"
+        "    homepage_url: https://www.nhc.gov.cn/\n"
+        "    feed_url: https://www.nhc.gov.cn/feed.xml\n"
+        "    type: rss\n"
+        "    category: policy\n"
+        "    tier: s\n"
+        "    enabled: true\n"
+        "    fetch: {strategy: rss, max_items: 12}\n"
+        "    metadata: {legacy_site_id: official_health}\n",
+        encoding="utf-8",
+    )
+
+    groups, result = configured_feed_groups(path)
+
+    assert result.used_fallback is False
+    assert list(groups) == ["official_health"]
+    assert groups["official_health"][0]["source_id"] == "nhc"
+    assert groups["official_health"][0]["category"] == "policy"
+    assert groups["official_health"][0]["source_tier"] == "s"
+    assert groups["official_health"][0]["max_entries"] == 12
+
+
+def test_opml_dedupe_excludes_configured_feed_url():
+    feeds = [
+        {"title": "Duplicate", "xml_url": "https://EXAMPLE.com:443/feed/", "html_url": ""},
+        {"title": "Unique", "xml_url": "https://example.org/feed", "html_url": ""},
+    ]
+
+    kept, duplicates = dedupe_opml_feeds(feeds, {"https://example.com/feed"})
+
+    assert [row["title"] for row in kept] == ["Unique"]
+    assert [row["title"] for row in duplicates] == ["Duplicate"]
+
+
+def test_configured_tier_is_preserved_with_legacy_compatibility():
+    result = add_source_tier_fields({"site_id": "official_health", "source_tier": "s"})
+
+    assert result["source_tier"] == "s"
+    assert result["source_tier_legacy"] == "official"
+    assert result["source_tier_rank"] == 0

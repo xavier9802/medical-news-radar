@@ -34,6 +34,16 @@ except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_
     from medical_relevance import add_medical_relevance_fields, score_medical_relevance
 
 try:
+    from scripts.config_loader import ConfigResult, load_config, normalize_feed_url
+except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_news.py`
+    from config_loader import ConfigResult, load_config, normalize_feed_url
+
+try:
+    from scripts.build_source_registry import write_source_registry
+except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_news.py`
+    from build_source_registry import write_source_registry
+
+try:
     import feedparser
 except ModuleNotFoundError:
     feedparser = None
@@ -158,6 +168,94 @@ MEDICAL_MEDIA_FEEDS: tuple[dict[str, Any], ...] = (
     },
 )
 
+LEGACY_SOURCE_SITE_NAMES = {
+    "official_health": "Official Health Updates",
+    "medical_journals": "Medical Journals",
+    "medical_media": "Medical Media",
+}
+
+CONFIGURED_FEED_META_FIELDS: tuple[str, ...] = (
+    "source_id",
+    "category",
+    "source_tier",
+    "language",
+    "region",
+    "is_official",
+    "source_metadata",
+)
+
+
+def configured_feed_meta(feed: dict[str, Any]) -> dict[str, Any]:
+    return {key: feed[key] for key in CONFIGURED_FEED_META_FIELDS if key in feed}
+
+
+def configured_feed_groups(config_path: Path | None = None) -> tuple[dict[str, list[dict[str, Any]]], ConfigResult]:
+    """Translate enabled sources.yml RSS rows into existing feed-group contracts."""
+    result = load_config("sources", config_path)
+    if result.used_fallback:
+        return {}, result
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for source in result.data.get("sources", []):
+        if not source.get("enabled", True) or not str(source.get("feed_url") or "").strip():
+            continue
+        fetch = source.get("fetch") if isinstance(source.get("fetch"), dict) else {}
+        strategy = str(fetch.get("strategy") or "auto")
+        if strategy == "skip":
+            continue
+        metadata = source.get("metadata") if isinstance(source.get("metadata"), dict) else {}
+        legacy_site_id = str(metadata.get("legacy_site_id") or "").strip()
+        if legacy_site_id not in LEGACY_SOURCE_SITE_NAMES:
+            if source.get("type") == "journal":
+                legacy_site_id = "medical_journals"
+            elif source.get("type") == "government_page" or str(source.get("tier") or "") == "s":
+                legacy_site_id = "official_health"
+            else:
+                legacy_site_id = "medical_media"
+        filters = source.get("filters") if isinstance(source.get("filters"), dict) else {}
+        source_meta = {
+            "source_id": str(source.get("id") or ""),
+            "category": str(source.get("category") or ""),
+            "source_tier": str(source.get("tier") or "c"),
+            "language": str(source.get("language") or ""),
+            "region": str(source.get("region") or ""),
+            "is_official": str(source.get("tier") or "") == "s" or source.get("type") == "government_page",
+            "source_metadata": {
+                "category": str(source.get("category") or ""),
+                "tier": str(source.get("tier") or "c"),
+                "official": str(source.get("tier") or "") == "s" or source.get("type") == "government_page",
+                "source_id": str(source.get("id") or ""),
+            },
+        }
+        feed = {
+            "title": str(source.get("name") or source.get("id") or "Source"),
+            "xml_url": str(source.get("feed_url") or ""),
+            "html_url": str(source.get("homepage_url") or ""),
+            "max_entries": max(1, int(fetch.get("max_items") or 30)),
+            "timeout_seconds": max(1, int(fetch.get("timeout_seconds") or 20)),
+            "include_keywords": ",".join(str(value) for value in filters.get("include_keywords", [])),
+            "exclude_keywords": ",".join(str(value) for value in filters.get("exclude_keywords", [])),
+            **source_meta,
+        }
+        groups.setdefault(legacy_site_id, []).append(feed)
+    return groups, result
+
+
+def dedupe_opml_feeds(
+    feeds: list[dict[str, str]],
+    configured_urls: set[str] | None = None,
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Keep OPML feeds not already represented by configured source URLs."""
+    blocked = {normalize_feed_url(url) for url in (configured_urls or set()) if normalize_feed_url(url)}
+    kept: list[dict[str, str]] = []
+    duplicates: list[dict[str, str]] = []
+    for feed in feeds:
+        normalized = normalize_feed_url(str(feed.get("xml_url") or ""))
+        if normalized and normalized in blocked:
+            duplicates.append(feed)
+        else:
+            kept.append(feed)
+    return kept, duplicates
+
 
 @dataclass
 class RawItem:
@@ -177,6 +275,13 @@ PUBLIC_RAW_META_FIELDS: tuple[str, ...] = (
     "creator_metrics",
     "search_surface",
     "summary",
+    "source_id",
+    "category",
+    "source_tier",
+    "language",
+    "region",
+    "is_official",
+    "source_metadata",
 )
 
 
@@ -927,7 +1032,7 @@ def fetch_zeli(session: requests.Session, now: datetime) -> list[RawItem]:
 
 def fetch_feed_as_official_items(
     session: requests.Session,
-    feed: dict[str, str],
+    feed: dict[str, Any],
     now: datetime,
     site_id: str = "official_health",
     site_name: str = "Official Health Updates",
@@ -937,7 +1042,7 @@ def fetch_feed_as_official_items(
 
     resp = session.get(
         feed_url,
-        timeout=20,
+        timeout=max(1, int(feed.get("timeout_seconds") or 20)),
         headers={
             "User-Agent": BROWSER_UA,
             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
@@ -989,6 +1094,7 @@ def fetch_feed_as_official_items(
                 meta={
                     "feed_url": feed_url,
                     "feed_home": feed.get("html_url") or "",
+                    **configured_feed_meta(feed),
                 },
             )
         )
@@ -1017,12 +1123,17 @@ def feed_keywords(feed: dict[str, Any]) -> list[str]:
 
 def curated_feed_entry_allowed(feed: dict[str, Any], title: str, link: str) -> bool:
     include_keywords = feed_keywords(feed)
-    if not include_keywords:
-        return True
     haystack = title.lower()
     if not feed.get("strict_title_filter"):
         haystack = f"{haystack} {link.lower()} {feed.get('title', '').lower()}"
-    return any(keyword in haystack for keyword in include_keywords)
+    exclude_keywords = [
+        keyword.strip().lower()
+        for keyword in str(feed.get("exclude_keywords") or "").split(",")
+        if keyword.strip()
+    ]
+    if exclude_keywords and any(keyword in haystack for keyword in exclude_keywords):
+        return False
+    return not include_keywords or any(keyword in haystack for keyword in include_keywords)
 
 
 def parse_curated_media_feed_items(
@@ -1069,6 +1180,7 @@ def parse_curated_media_feed_items(
                     "feed_home": feed.get("html_url") or "",
                     "research_only": bool(feed.get("research_only")),
                     "strict_title_filter": bool(feed.get("strict_title_filter")),
+                    **configured_feed_meta(feed),
                 },
             )
         )
@@ -1143,7 +1255,92 @@ def fetch_medical_media(session: requests.Session, now: datetime) -> list[RawIte
     return out
 
 
-def collect_all(session: requests.Session, now: datetime) -> tuple[list[RawItem], list[dict[str, Any]]]:
+def fetch_configured_feed(
+    session: requests.Session,
+    now: datetime,
+    site_id: str,
+    site_name: str,
+    feed: dict[str, Any],
+) -> list[RawItem]:
+    if site_id == "official_health":
+        return fetch_feed_as_official_items(session, feed, now, site_id=site_id, site_name=site_name)
+    response = session.get(
+        str(feed["xml_url"]),
+        timeout=max(1, int(feed.get("timeout_seconds") or 20)),
+        headers={
+            "User-Agent": BROWSER_UA,
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+        },
+    )
+    response.raise_for_status()
+    return parse_curated_media_feed_items(response.content, feed, now, site_id, site_name)
+
+
+def collect_configured_sources(
+    session: requests.Session,
+    now: datetime,
+    groups: dict[str, list[dict[str, Any]]],
+) -> tuple[list[RawItem], list[dict[str, Any]], list[dict[str, Any]]]:
+    raw_items: list[RawItem] = []
+    sites: list[dict[str, Any]] = []
+    source_statuses: list[dict[str, Any]] = []
+    for site_id, feeds in groups.items():
+        site_name = LEGACY_SOURCE_SITE_NAMES[site_id]
+        site_start = time.perf_counter()
+        site_items: list[RawItem] = []
+        site_errors: list[str] = []
+        successful_sources = 0
+        for feed in feeds:
+            start = time.perf_counter()
+            error: str | None = None
+            items: list[RawItem] = []
+            try:
+                items = fetch_configured_feed(session, now, site_id, site_name, feed)
+                successful_sources += 1
+                site_items.extend(items)
+            except Exception as exc:
+                error = str(exc)
+                site_errors.append(f"{feed.get('title') or feed.get('source_id')}: {error}")
+            source_statuses.append(
+                {
+                    "source_id": str(feed.get("source_id") or ""),
+                    "source_name": str(feed.get("title") or feed.get("source_id") or ""),
+                    "legacy_site_id": site_id,
+                    "feed_url": str(feed.get("xml_url") or ""),
+                    "ok": error is None,
+                    "item_count": len(items),
+                    "duration_ms": int((time.perf_counter() - start) * 1000),
+                    "error": error,
+                }
+            )
+        raw_items.extend(site_items)
+        failed_sources = len(feeds) - successful_sources
+        sites.append(
+            {
+                "site_id": site_id,
+                "site_name": site_name,
+                "ok": successful_sources > 0,
+                "item_count": len(site_items),
+                "duration_ms": int((time.perf_counter() - site_start) * 1000),
+                "error": "; ".join(site_errors[:4]) if site_errors else None,
+                "source_count": len(feeds),
+                "successful_source_count": successful_sources,
+                "failed_source_count": failed_sources,
+            }
+        )
+    return raw_items, sites, source_statuses
+
+
+def collect_all(
+    session: requests.Session,
+    now: datetime,
+    sources_config: Path | None = None,
+) -> tuple[list[RawItem], list[dict[str, Any]], list[dict[str, Any]]]:
+    configured_groups, _config_result = configured_feed_groups(sources_config)
+    if configured_groups:
+        return collect_configured_sources(session, now, configured_groups)
+
     tasks = [
         ("official_health", "Official Health Updates", fetch_official_health_updates),
         ("medical_journals", "Medical Journals", fetch_medical_journals),
@@ -1175,7 +1372,7 @@ def collect_all(session: requests.Session, now: datetime) -> tuple[list[RawItem]
             }
         )
 
-    return raw_items, statuses
+    return raw_items, statuses, []
 
 
 def parse_opml_subscriptions(opml_path: Path) -> list[dict[str, str]]:
@@ -1360,13 +1557,34 @@ def fetch_opml_rss(
     now: datetime,
     opml_path: Path,
     max_feeds: int = 0,
+    configured_urls: set[str] | None = None,
 ) -> tuple[list[RawItem], dict[str, Any], list[dict[str, Any]]]:
-    feeds = parse_opml_subscriptions(opml_path)
+    all_feeds = parse_opml_subscriptions(opml_path)
+    feeds, duplicate_feeds = dedupe_opml_feeds(all_feeds, configured_urls)
     if max_feeds > 0:
         feeds = feeds[:max_feeds]
 
     out: list[RawItem] = []
     feed_statuses: list[dict[str, Any]] = []
+    for feed in duplicate_feeds:
+        original_url = feed["xml_url"]
+        feed_id = hashlib.sha1(original_url.encode("utf-8")).hexdigest()[:10]
+        feed_statuses.append(
+            {
+                "site_id": f"opmlrss:{feed_id}",
+                "site_name": "OPML RSS",
+                "feed_title": feed["title"],
+                "feed_url": original_url,
+                "effective_feed_url": None,
+                "ok": True,
+                "item_count": 0,
+                "duration_ms": 0,
+                "error": None,
+                "skipped": True,
+                "skip_reason": "configured_source_duplicate",
+                "replaced": False,
+            }
+        )
     resolved_feeds: list[dict[str, str]] = []
 
     for feed in feeds:
@@ -1542,7 +1760,7 @@ def fetch_opml_rss(
         "item_count": len(out),
         "duration_ms": total_duration_ms,
         "error": None if failed_feeds == 0 else f"{failed_feeds} feeds failed",
-        "feed_count": len(feeds),
+        "feed_count": len(all_feeds),
         "effective_feed_count": len(resolved_feeds),
         "ok_feed_count": ok_feeds,
         "failed_feed_count": failed_feeds,
@@ -1598,6 +1816,10 @@ SOURCE_TIER_BY_SITE: dict[str, tuple[str, str, int]] = {
 }
 
 SOURCE_TIER_IMPORTANCE = {
+    "s": 1.0,
+    "a": 0.82,
+    "b": 0.62,
+    "c": 0.38,
     "official": 1.0,
     "medical_journal": 0.58,
     "medical_media": 0.58,
@@ -1608,6 +1830,13 @@ SOURCE_TIER_IMPORTANCE = {
     "advanced": 0.45,
     "discussion": 0.32,
     "other": 0.25,
+}
+
+CONFIGURED_SOURCE_TIERS: dict[str, tuple[str, int, float]] = {
+    "s": ("S级", 0, 1.0),
+    "a": ("A级", 1, 0.82),
+    "b": ("B级", 2, 0.62),
+    "c": ("C级", 3, 0.38),
 }
 
 TITLE_STOPWORDS = {
@@ -1676,7 +1905,22 @@ def source_tier_for_site(site_id: str) -> dict[str, Any]:
 
 def add_source_tier_fields(record: dict[str, Any]) -> dict[str, Any]:
     out = dict(record)
-    out.update(source_tier_for_site(str(out.get("site_id") or "")))
+    legacy = source_tier_for_site(str(out.get("site_id") or ""))
+    configured_tier = str(out.get("source_tier") or "").strip().lower()
+    if configured_tier in CONFIGURED_SOURCE_TIERS:
+        label, rank, authority = CONFIGURED_SOURCE_TIERS[configured_tier]
+        out.update(
+            {
+                "source_tier": configured_tier,
+                "source_tier_label": label,
+                "source_tier_rank": rank,
+                "source_tier_legacy": legacy["source_tier"],
+                "source_authority_score": out.get("source_authority_score", authority),
+            }
+        )
+    else:
+        out.update(legacy)
+        out.setdefault("source_tier_legacy", legacy["source_tier"])
     return out
 
 
@@ -1696,7 +1940,7 @@ def add_medical_intelligence_fields(
 
 
 def source_tier_sort_key(record: dict[str, Any]) -> tuple[int, float, str]:
-    tier = source_tier_for_site(str(record.get("site_id") or ""))
+    tier = add_source_tier_fields(record)
     ts = event_time(record)
     return (int(tier["source_tier_rank"]), -(ts.timestamp() if ts else 0), str(record.get("title") or ""))
 
@@ -2199,7 +2443,7 @@ def calculate_item_importance(
 
 def story_category(score: float, primary_item: dict[str, Any], duplicate_count: int) -> str:
     tier = str(primary_item.get("source_tier") or source_tier_for_site(str(primary_item.get("site_id") or "")).get("source_tier"))
-    if tier == "official":
+    if tier in {"s", "official"}:
         return "official"
     if duplicate_count >= 3:
         return "multi_source"
@@ -2223,7 +2467,7 @@ def choose_primary_story_item(
     window_hours: int,
 ) -> dict[str, Any]:
     def key(item: dict[str, Any]) -> tuple[int, float, float, str]:
-        tier_rank = int(source_tier_for_site(str(item.get("site_id") or "")).get("source_tier_rank", 9))
+        tier_rank = int(add_source_tier_fields(item).get("source_tier_rank", 9))
         importance = calculate_item_importance(item, now, window_hours, duplicate_count=len(items))["score"]
         ts = event_time(item)
         return (tier_rank, -importance, -(ts.timestamp() if ts else 0), str(item.get("title") or ""))
@@ -2253,8 +2497,8 @@ def story_item_link(item: dict[str, Any]) -> dict[str, Any]:
 
 def story_reasons(primary: dict[str, Any], score: float, duplicate_count: int) -> list[str]:
     reasons: list[str] = []
-    tier = source_tier_for_site(str(primary.get("site_id") or ""))
-    if tier["source_tier"] == "official":
+    tier = add_source_tier_fields(primary)
+    if tier["source_tier"] in {"s", "official"}:
         reasons.append("official_source")
     if duplicate_count >= 2:
         reasons.append("multi_source")
@@ -2531,6 +2775,7 @@ def main() -> int:
     parser.add_argument("--window-hours", type=int, default=24, help="24h window size")
     parser.add_argument("--archive-days", type=int, default=21, help="Keep archive for N days")
     parser.add_argument("--translate-max-new", type=int, default=80, help="Max new EN->ZH title translations per run")
+    parser.add_argument("--sources-config", default="config/sources.yml", help="Configured source registry YAML")
     parser.add_argument("--rss-opml", default="", help="Optional OPML file path to include RSS sources")
     parser.add_argument("--rss-max-feeds", type=int, default=0, help="Optional max OPML RSS feeds to fetch (0 means all)")
     args = parser.parse_args()
@@ -2543,6 +2788,7 @@ def main() -> int:
     latest_path = output_dir / "latest-24h.json"
     latest_all_path = output_dir / "latest-24h-all.json"
     status_path = output_dir / "source-status.json"
+    source_registry_path = output_dir / "source-registry.json"
     daily_brief_path = output_dir / "daily-brief.json"
     stories_merged_path = output_dir / "stories-merged.json"
     merge_log_path = output_dir / "merge-log.json"
@@ -2551,7 +2797,17 @@ def main() -> int:
     archive = load_archive(archive_path)
 
     session = create_session()
-    raw_items, statuses = collect_all(session, now)
+    sources_config_path = Path(args.sources_config).expanduser()
+    raw_items, statuses, configured_source_statuses = collect_all(
+        session,
+        now,
+        sources_config=sources_config_path,
+    )
+    configured_feed_urls = {
+        str(row.get("feed_url") or "")
+        for row in configured_source_statuses
+        if str(row.get("feed_url") or "").strip()
+    }
     rss_feed_statuses: list[dict[str, Any]] = []
     agentmail_status: dict[str, Any] = {"enabled": False}
     x_api_status: dict[str, Any] = {"enabled": False}
@@ -2565,6 +2821,7 @@ def main() -> int:
                 now,
                 opml_path,
                 max_feeds=max(0, int(args.rss_max_feeds)),
+                configured_urls=configured_feed_urls,
             )
             raw_items.extend(rss_items)
             statuses.append(rss_summary_status)
@@ -2741,6 +2998,7 @@ def main() -> int:
     status_payload = {
         "generated_at": generated_at,
         "sites": statuses,
+        "configured_sources": configured_source_statuses,
         "successful_sites": sum(1 for s in statuses if s["ok"]),
         "failed_sites": [s["site_id"] for s in statuses if not s["ok"]],
         "zero_item_sites": [
@@ -2779,6 +3037,15 @@ def main() -> int:
             "feeds": rss_feed_statuses,
         },
     }
+
+    source_config_result = load_config("sources", sources_config_path)
+    write_source_registry(
+        source_registry_path,
+        source_config_result.data,
+        status_payload,
+        archive_payload,
+        generated_at=generated_at,
+    )
 
     latest_payload, latest_all_payload = build_latest_payloads(latest_payload)
 

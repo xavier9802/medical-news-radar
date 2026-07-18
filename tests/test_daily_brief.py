@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 
 from scripts.update_news import (
+    add_medical_intelligence_fields,
     add_source_tier_fields,
     build_daily_brief_payload,
     build_merge_log_payload,
@@ -14,6 +15,30 @@ from scripts.update_news import (
 
 
 NOW = datetime(2026, 6, 2, 12, 0, tzinfo=timezone.utc)
+
+
+def test_medical_intelligence_enrichment_preserves_old_fields_and_adds_v1_fields():
+    record = {
+        "id": "policy-1",
+        "site_id": "official_health",
+        "site_name": "Official Health Updates",
+        "source": "国家卫生健康委员会",
+        "title": "基层医疗家庭医生政策征求意见",
+        "url": "https://example.com/policy-1",
+        "published_at": NOW.isoformat().replace("+00:00", "Z"),
+    }
+
+    enriched = add_medical_intelligence_fields(record)
+
+    assert enriched["medical_is_related"] is True
+    assert 0 <= enriched["medical_score"] <= 1
+    assert enriched["medical_relevance_score"] == enriched["medical_score"]
+    assert enriched["category"] in {"policy", "primary_care"}
+    assert enriched["category_label"]
+    assert enriched["source_tier"] == "official"
+    assert enriched["is_official"] is True
+    assert enriched["is_policy"] is True
+    assert enriched["recommendation_reason"]
 
 
 def make_item(
@@ -94,8 +119,8 @@ def test_daily_brief_respects_20_cap_when_enough_distinct_stories_exist():
 
 def test_daily_brief_record_supports_bole_output_contract():
     items = [
-        make_item(1, title="FDA approves new oncology therapy"),
-        make_item(2, site_id="healthtech_hub", title="FDA approves new oncology therapy", medical_score=0.86),
+        add_medical_intelligence_fields(make_item(1, title="FDA approves new oncology therapy")),
+        add_medical_intelligence_fields(make_item(2, site_id="healthtech_hub", title="FDA approves new oncology therapy", medical_score=0.86)),
     ]
     stories, events = merge_story_items(items, NOW, 24)
 
@@ -111,12 +136,15 @@ def test_daily_brief_record_supports_bole_output_contract():
     assert record["source_count"] == 2
     assert record["score"] == record["importance"] == record["importance_score"]
     assert record["category"] in {"official", "multi_source", "industry", "watch"}
+    assert record["medical_category"] == "pharma_device"
     assert record["reasons"]
     assert record["earliest_at"]
     assert record["latest_at"]
     assert len(record["items"]) == 2
     assert len(record["sources"]) == 2
     assert record["primary_item"]["id"] == "item-1"
+    assert record["primary_item"]["category"] == "pharma_device"
+    assert record["sources"][0]["category"] == "pharma_device"
 
 
 def test_stories_and_merge_log_payload_shapes_are_explicit():

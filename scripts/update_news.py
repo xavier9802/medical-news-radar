@@ -1680,6 +1680,21 @@ def add_source_tier_fields(record: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def add_medical_intelligence_fields(
+    record: dict[str, Any],
+    source_meta: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Add V1 medical fields while retaining the existing public contract."""
+    out = add_medical_relevance_fields(record, source_meta=source_meta)
+    out = add_source_tier_fields(out)
+    signals = [str(value) for value in out.get("matched_keywords", []) if str(value).strip()][:3]
+    category_label = str(out.get("category_label") or "医疗情报")
+    out["recommendation_reason"] = (
+        f"{category_label}：命中 {' / '.join(signals)}" if signals else f"{category_label}：通过医疗相关性规则筛选"
+    )
+    return out
+
+
 def source_tier_sort_key(record: dict[str, Any]) -> tuple[int, float, str]:
     tier = source_tier_for_site(str(record.get("site_id") or ""))
     ts = event_time(record)
@@ -2225,6 +2240,14 @@ def story_item_link(item: dict[str, Any]) -> dict[str, Any]:
         "source_name": item.get("site_name"),
         "site_id": item.get("site_id"),
         "published_at": item.get("published_at"),
+        "category": item.get("category"),
+        "category_label": item.get("category_label"),
+        "source_tier": item.get("source_tier"),
+        "source_authority_score": item.get("source_authority_score"),
+        "is_official": item.get("is_official"),
+        "is_policy": item.get("is_policy"),
+        "importance_score": item.get("importance_score"),
+        "recommendation_reason": item.get("recommendation_reason"),
     }
 
 
@@ -2279,6 +2302,13 @@ def build_story_record(
         "importance_label": importance_label(category),
         "importance_breakdown": importance["breakdown"],
         "category": category,
+        "medical_category": primary.get("category"),
+        "category_label": primary.get("category_label"),
+        "source_tier": primary.get("source_tier"),
+        "source_authority_score": primary.get("source_authority_score"),
+        "is_official": primary.get("is_official"),
+        "is_policy": primary.get("is_policy"),
+        "recommendation_reason": primary.get("recommendation_reason"),
         "reasons": story_reasons(primary, score, len(sorted_items)),
         "earliest_at": iso(min(times)) if times else None,
         "latest_at": iso(max(times)) if times else None,
@@ -2288,6 +2318,12 @@ def build_story_record(
             "url": url,
             "source": primary.get("source"),
             "source_name": primary.get("site_name"),
+            "category": primary.get("category"),
+            "category_label": primary.get("category_label"),
+            "source_tier": primary.get("source_tier"),
+            "is_official": primary.get("is_official"),
+            "is_policy": primary.get("is_policy"),
+            "recommendation_reason": primary.get("recommendation_reason"),
         },
     }
 
@@ -2616,8 +2652,7 @@ def main() -> int:
                 str(normalized.get("source") or ""),
                 str(normalized.get("url") or ""),
             ))
-            normalized = add_medical_relevance_fields(normalized)
-            normalized = add_source_tier_fields(normalized)
+            normalized = add_medical_intelligence_fields(normalized)
             latest_items_all.append(normalized)
 
     latest_items_all.sort(key=lambda x: event_time(x) or datetime.min.replace(tzinfo=UTC), reverse=True)

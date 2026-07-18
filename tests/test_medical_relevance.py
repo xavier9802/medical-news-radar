@@ -2,12 +2,87 @@ import unittest
 
 from scripts.medical_relevance import (
     add_medical_relevance_fields,
+    calculate_importance_score,
+    classify_medical_category,
+    detect_noise,
+    detect_policy_signal,
     is_medical_related_record,
+    load_medical_config,
     score_medical_relevance,
+    source_authority_score,
 )
 
 
 class MedicalRelevanceScoringTests(unittest.TestCase):
+    def test_loads_all_eight_medical_categories(self):
+        config = load_medical_config(force_reload=True)
+        self.assertEqual(
+            {row["id"] for row in config["categories"]},
+            {
+                "policy",
+                "medical_ai",
+                "primary_care",
+                "insurance_compliance",
+                "health_it",
+                "pharma_device",
+                "company_market",
+                "global_healthtech",
+            },
+        )
+
+    def test_classifies_medical_ai_news(self):
+        result = classify_medical_category("医疗大模型进入临床决策支持", "医院开始试点")
+        self.assertEqual(result["category"], "medical_ai")
+        self.assertEqual(result["category_label"], "医疗AI")
+        self.assertIn("医疗大模型", result["matched_keywords"])
+
+    def test_classifies_insurance_policy(self):
+        result = classify_medical_category("医保飞检聚焦医保基金", "检查处方合规与药品追溯")
+        self.assertIn(result["category"], {"insurance_compliance", "policy"})
+        self.assertGreater(result["category_scores"]["insurance_compliance"], 0)
+
+    def test_classifies_primary_care_news(self):
+        result = classify_medical_category("基层医疗推进家庭医生签约", "社区卫生与乡镇卫生院协同")
+        self.assertEqual(result["category"], "primary_care")
+
+    def test_detects_policy_without_inventing_metadata(self):
+        result = detect_policy_signal("国家卫生健康委发布征求意见稿", "", source={"tier": "s", "official": True})
+        self.assertTrue(result["is_policy"])
+        self.assertTrue(result["is_official"])
+        self.assertEqual(result["policy_metadata"]["document_number"], "")
+        self.assertEqual(result["policy_metadata"]["effective_date"], "")
+        self.assertEqual(result["policy_metadata"]["issuing_authority"], "")
+
+    def test_noise_detection_penalizes_celebrity_wellness(self):
+        result = detect_noise("明星健康养生偏方直播带货")
+        self.assertGreater(result["noise_score"], 0)
+        self.assertIn("明星健康", result["matched_keywords"])
+        self.assertIn("养生偏方", result["matched_keywords"])
+
+    def test_s_tier_authority_exceeds_b_tier(self):
+        self.assertGreater(source_authority_score("s"), source_authority_score("b"))
+
+    def test_importance_score_is_clamped_and_noise_is_lower(self):
+        clean = calculate_importance_score(
+            title="基层医疗政策发布",
+            source_tier="s",
+            is_official=True,
+            category="primary_care",
+            medical_relevance_score=1.0,
+            multi_source_count=99,
+        )
+        noisy = calculate_importance_score(
+            title="明星健康养生偏方带货",
+            source_tier="b",
+            is_official=False,
+            medical_relevance_score=0.3,
+        )
+        self.assertGreater(clean["importance_score"], noisy["importance_score"])
+        self.assertGreaterEqual(clean["importance_score"], 0)
+        self.assertLessEqual(clean["importance_score"], 1)
+        self.assertGreaterEqual(noisy["importance_score"], 0)
+        self.assertLessEqual(noisy["importance_score"], 1)
+
     def test_scores_strong_medical_signal_with_reason(self):
         rec = {
             "site_id": "medical_media",
@@ -127,6 +202,12 @@ class MedicalRelevanceScoringTests(unittest.TestCase):
         self.assertIn("medical_label", out)
         self.assertIn("medical_relevance_reason", out)
         self.assertIn("medical_signals", out)
+        self.assertIn("medical_relevance_score", out)
+        self.assertIn("category", out)
+        self.assertIn("category_scores", out)
+        self.assertIn("importance_score", out)
+        self.assertIn("is_policy", out)
+        self.assertIn("policy_metadata", out)
         self.assertTrue(is_medical_related_record(rec))
 
 

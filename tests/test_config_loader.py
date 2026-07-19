@@ -188,3 +188,22 @@ def test_configured_tier_is_preserved_with_legacy_compatibility():
     assert result["source_tier"] == "s"
     assert result["source_tier_legacy"] == "official"
     assert result["source_tier_rank"] == 0
+
+
+def test_default_config_pauses_sources_that_failed_github_actions_validation():
+    failed_on_actions = {
+        "who-news",
+        "fda-newsroom",
+        "nih-news",
+        "nejm",
+        "the-lancet",
+        "bmj-research",
+        "medscape",
+        "healthcare-it-news",
+        "himss-news",
+    }
+
+    sources = load_config("sources", Path("config/sources.yml")).data["sources"]
+    enabled_ids = {source["id"] for source in sources if source.get("enabled")}
+
+    assert enabled_ids.isdisjoint(failed_on_actions)

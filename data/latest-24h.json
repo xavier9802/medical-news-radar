@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T19:42:21.244917Z",
+  "generated_at": "2026-07-19T20:48:07.944464Z",
   "window_hours": 24,
   "total_items": 1,
   "total_items_ai_raw": 1,
@@ -7,7 +7,7 @@
   "total_items_all_mode": 6,
   "topic_filter": "medical_relevance_scoring_v0_1",
   "medical_relevance_threshold": 0.65,
-  "archive_total": 179,
+  "archive_total": 180,
   "site_count": 4,
   "source_count": 1,
   "site_stats": [
@@ -46,7 +46,7 @@
       "url": "https://www.yxj.org.cn/detailPage?articleId=505302",
       "published_at": "2026-07-18T23:03:00Z",
       "first_seen_at": "2026-07-19T15:52:30.512677Z",
-      "last_seen_at": "2026-07-19T19:42:21.244917Z",
+      "last_seen_at": "2026-07-19T20:48:07.944464Z",
       "summary": "",
       "source_id": "cn-yxj",
       "category": "health_it",
@@ -81,12 +81,12 @@
         "global_healthtech": 0.0
       },
       "impact_score": 0.65,
-      "importance_score": 0.5235,
+      "importance_score": 0.5212,
       "importance_breakdown": {
         "authority": 0.38,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.713,
+        "recency": 0.6978,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -115,11 +115,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 临床",
       "persona_scores": {
-        "medical-editor": 0.4712,
-        "policy-analyst": 0.0628,
-        "medical-ai-product-manager": 0.5275
+        "medical-editor": 0.4704,
+        "policy-analyst": 0.0625,
+        "medical-ai-product-manager": 0.527
       },
-      "topic_value": 0.5265,
+      "topic_value": 0.5255,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -141,7 +141,7 @@
       "url": "https://www.yxj.org.cn/detailPage?articleId=505302",
       "published_at": "2026-07-18T23:03:00Z",
       "first_seen_at": "2026-07-19T15:52:30.512677Z",
-      "last_seen_at": "2026-07-19T19:42:21.244917Z",
+      "last_seen_at": "2026-07-19T20:48:07.944464Z",
       "summary": "",
       "source_id": "cn-yxj",
       "category": "health_it",
@@ -176,12 +176,12 @@
         "global_healthtech": 0.0
       },
       "impact_score": 0.65,
-      "importance_score": 0.5235,
+      "importance_score": 0.5212,
       "importance_breakdown": {
         "authority": 0.38,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.713,
+        "recency": 0.6978,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -210,11 +210,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 临床",
       "persona_scores": {
-        "medical-editor": 0.4712,
-        "policy-analyst": 0.0628,
-        "medical-ai-product-manager": 0.5275
+        "medical-editor": 0.4704,
+        "policy-analyst": 0.0625,
+        "medical-ai-product-manager": 0.527
       },
-      "topic_value": 0.5265,
+      "topic_value": 0.5255,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"

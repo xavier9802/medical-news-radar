@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-19T17:05:08.345607Z",
+  "generated_at": "2026-07-19T18:26:56.208688Z",
   "window_hours": 24,
-  "total_items": 3,
-  "total_items_ai_raw": 3,
-  "total_items_raw": 8,
-  "total_items_all_mode": 8,
+  "total_items": 2,
+  "total_items_ai_raw": 2,
+  "total_items_raw": 7,
+  "total_items_all_mode": 7,
   "topic_filter": "medical_relevance_scoring_v0_1",
   "medical_relevance_threshold": 0.65,
   "archive_total": 179,
@@ -14,8 +14,8 @@
     {
       "site_id": "medical_media",
       "site_name": "Medical Media",
-      "count": 3,
-      "raw_count": 8
+      "count": 2,
+      "raw_count": 7
     },
     {
       "site_id": "official_health",
@@ -46,7 +46,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T17:05:08.345607Z",
+      "last_seen_at": "2026-07-19T18:26:56.208688Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -80,12 +80,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.593,
+      "importance_score": 0.5901,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.6965,
+        "recency": 0.6775,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -114,11 +114,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.4955,
-        "policy-analyst": 0.0712,
-        "medical-ai-product-manager": 0.5414
+        "medical-editor": 0.4945,
+        "policy-analyst": 0.0708,
+        "medical-ai-product-manager": 0.5408
       },
-      "topic_value": 0.5543,
+      "topic_value": 0.5531,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -129,104 +129,6 @@
       "title_bilingual": "代谢综合征患者的大脑衰老速度更快 / Brain Aging Advances More Quickly for People With Metabolic Syndrome"
     },
     {
-      "id": "d4a6b7515821805f2dc2367cda26944a40a4ce5e",
-      "site_id": "medical_media",
-      "site_name": "Medical Media",
-      "source": "MedPage Today",
-      "title": "Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals",
-      "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
-      "published_at": "2026-07-18T18:00:00Z",
-      "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T17:05:08.345607Z",
-      "source_id": "medpage-today",
-      "category": "health_it",
-      "source_tier": "b",
-      "language": "en",
-      "region": "us",
-      "is_official": false,
-      "source_metadata": {
-        "category": "global_healthtech",
-        "tier": "b",
-        "official": false,
-        "source_id": "medpage-today"
-      },
-      "medical_is_related": true,
-      "medical_score": 0.77,
-      "medical_label": "hospital_digital",
-      "medical_relevance_reason": "medical_media_source_filter",
-      "medical_signals": [
-        "cancer",
-        "hospital",
-        "patient",
-        "lis"
-      ],
-      "medical_noise": [],
-      "medical_relevance_score": 0.77,
-      "category_label": "医疗信息化",
-      "category_scores": {
-        "policy": 0.0,
-        "medical_ai": 0.0,
-        "primary_care": 0.4,
-        "insurance_compliance": 0.0,
-        "health_it": 0.45,
-        "pharma_device": 0.0,
-        "company_market": 0.0,
-        "global_healthtech": 0.2
-      },
-      "impact_score": 0.65,
-      "importance_score": 0.6104,
-      "importance_breakdown": {
-        "authority": 0.62,
-        "medical_relevance": 0.77,
-        "impact": 0.65,
-        "recency": 0.6793,
-        "multi_source_heat": 0.0,
-        "bonuses": {},
-        "noise_penalty": 0.0
-      },
-      "is_policy": false,
-      "is_policy_signal": false,
-      "policy_metadata": {
-        "document_number": "",
-        "issuing_authority": "",
-        "jurisdiction": "",
-        "policy_level": "",
-        "publish_date": "",
-        "effective_date": "",
-        "status": "",
-        "affected_entities": [],
-        "regions": [],
-        "topics": []
-      },
-      "noise_score": 0.0,
-      "matched_keywords": [
-        "hospital",
-        "cancer",
-        "patient",
-        "lis"
-      ],
-      "source_authority_score": 0.62,
-      "source_tier_label": "B级",
-      "source_tier_rank": 2,
-      "source_tier_legacy": "medical_media",
-      "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
-      "persona_scores": {
-        "medical-editor": 0.5176,
-        "policy-analyst": 0.0732,
-        "medical-ai-product-manager": 0.5545
-      },
-      "topic_value": 0.5685,
-      "content_angles": [
-        "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
-        "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
-      ],
-      "persona_enhanced": false,
-      "title_original": "Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals",
-      "title_en": "Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals",
-      "title_zh": "诊断癌症患者的肺栓塞；美国医院感染情况",
-      "title_bilingual": "诊断癌症患者的肺栓塞；美国医院感染情况 / Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals"
-    },
-    {
       "id": "da54208cddb430ba5b8d2bd8b7aa20d0a113ba25",
       "site_id": "medical_media",
       "site_name": "Medical Media",
@@ -235,7 +137,7 @@
       "url": "https://www.yxj.org.cn/detailPage?articleId=505302",
       "published_at": "2026-07-18T23:03:00Z",
       "first_seen_at": "2026-07-19T15:52:30.512677Z",
-      "last_seen_at": "2026-07-19T17:05:08.345607Z",
+      "last_seen_at": "2026-07-19T18:26:56.208688Z",
       "summary": "",
       "source_id": "cn-yxj",
       "category": "health_it",
@@ -270,12 +172,12 @@
         "global_healthtech": 0.0
       },
       "impact_score": 0.65,
-      "importance_score": 0.5289,
+      "importance_score": 0.5261,
       "importance_breakdown": {
         "authority": 0.38,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7494,
+        "recency": 0.7305,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -304,11 +206,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 临床",
       "persona_scores": {
-        "medical-editor": 0.4731,
-        "policy-analyst": 0.0635,
-        "medical-ai-product-manager": 0.5286
+        "medical-editor": 0.4721,
+        "policy-analyst": 0.0631,
+        "medical-ai-product-manager": 0.528
       },
-      "topic_value": 0.5287,
+      "topic_value": 0.5275,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -330,7 +232,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T17:05:08.345607Z",
+      "last_seen_at": "2026-07-19T18:26:56.208688Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -364,12 +266,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.593,
+      "importance_score": 0.5901,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.6965,
+        "recency": 0.6775,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -398,11 +300,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.4955,
-        "policy-analyst": 0.0712,
-        "medical-ai-product-manager": 0.5414
+        "medical-editor": 0.4945,
+        "policy-analyst": 0.0708,
+        "medical-ai-product-manager": 0.5408
       },
-      "topic_value": 0.5543,
+      "topic_value": 0.5531,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -413,104 +315,6 @@
       "title_bilingual": "代谢综合征患者的大脑衰老速度更快 / Brain Aging Advances More Quickly for People With Metabolic Syndrome"
     },
     {
-      "id": "d4a6b7515821805f2dc2367cda26944a40a4ce5e",
-      "site_id": "medical_media",
-      "site_name": "Medical Media",
-      "source": "MedPage Today",
-      "title": "Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals",
-      "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
-      "published_at": "2026-07-18T18:00:00Z",
-      "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T17:05:08.345607Z",
-      "source_id": "medpage-today",
-      "category": "health_it",
-      "source_tier": "b",
-      "language": "en",
-      "region": "us",
-      "is_official": false,
-      "source_metadata": {
-        "category": "global_healthtech",
-        "tier": "b",
-        "official": false,
-        "source_id": "medpage-today"
-      },
-      "medical_is_related": true,
-      "medical_score": 0.77,
-      "medical_label": "hospital_digital",
-      "medical_relevance_reason": "medical_media_source_filter",
-      "medical_signals": [
-        "cancer",
-        "hospital",
-        "patient",
-        "lis"
-      ],
-      "medical_noise": [],
-      "medical_relevance_score": 0.77,
-      "category_label": "医疗信息化",
-      "category_scores": {
-        "policy": 0.0,
-        "medical_ai": 0.0,
-        "primary_care": 0.4,
-        "insurance_compliance": 0.0,
-        "health_it": 0.45,
-        "pharma_device": 0.0,
-        "company_market": 0.0,
-        "global_healthtech": 0.2
-      },
-      "impact_score": 0.65,
-      "importance_score": 0.6104,
-      "importance_breakdown": {
-        "authority": 0.62,
-        "medical_relevance": 0.77,
-        "impact": 0.65,
-        "recency": 0.6793,
-        "multi_source_heat": 0.0,
-        "bonuses": {},
-        "noise_penalty": 0.0
-      },
-      "is_policy": false,
-      "is_policy_signal": false,
-      "policy_metadata": {
-        "document_number": "",
-        "issuing_authority": "",
-        "jurisdiction": "",
-        "policy_level": "",
-        "publish_date": "",
-        "effective_date": "",
-        "status": "",
-        "affected_entities": [],
-        "regions": [],
-        "topics": []
-      },
-      "noise_score": 0.0,
-      "matched_keywords": [
-        "hospital",
-        "cancer",
-        "patient",
-        "lis"
-      ],
-      "source_authority_score": 0.62,
-      "source_tier_label": "B级",
-      "source_tier_rank": 2,
-      "source_tier_legacy": "medical_media",
-      "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
-      "persona_scores": {
-        "medical-editor": 0.5176,
-        "policy-analyst": 0.0732,
-        "medical-ai-product-manager": 0.5545
-      },
-      "topic_value": 0.5685,
-      "content_angles": [
-        "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
-        "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
-      ],
-      "persona_enhanced": false,
-      "title_original": "Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals",
-      "title_en": "Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals",
-      "title_zh": "诊断癌症患者的肺栓塞；美国医院感染情况",
-      "title_bilingual": "诊断癌症患者的肺栓塞；美国医院感染情况 / Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals"
-    },
-    {
       "id": "da54208cddb430ba5b8d2bd8b7aa20d0a113ba25",
       "site_id": "medical_media",
       "site_name": "Medical Media",
@@ -519,7 +323,7 @@
       "url": "https://www.yxj.org.cn/detailPage?articleId=505302",
       "published_at": "2026-07-18T23:03:00Z",
       "first_seen_at": "2026-07-19T15:52:30.512677Z",
-      "last_seen_at": "2026-07-19T17:05:08.345607Z",
+      "last_seen_at": "2026-07-19T18:26:56.208688Z",
       "summary": "",
       "source_id": "cn-yxj",
       "category": "health_it",
@@ -554,12 +358,12 @@
         "global_healthtech": 0.0
       },
       "impact_score": 0.65,
-      "importance_score": 0.5289,
+      "importance_score": 0.5261,
       "importance_breakdown": {
         "authority": 0.38,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7494,
+        "recency": 0.7305,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -588,11 +392,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 临床",
       "persona_scores": {
-        "medical-editor": 0.4731,
-        "policy-analyst": 0.0635,
-        "medical-ai-product-manager": 0.5286
+        "medical-editor": 0.4721,
+        "policy-analyst": 0.0631,
+        "medical-ai-product-manager": 0.528
       },
-      "topic_value": 0.5287,
+      "topic_value": 0.5275,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"

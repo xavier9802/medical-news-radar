@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T07:26:24.919524Z",
+  "generated_at": "2026-07-19T09:27:28.600743Z",
   "window_hours": 24,
   "total_items": 3,
   "total_items_ai_raw": 3,
@@ -46,7 +46,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T09:27:28.600743Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -80,12 +80,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6131,
+      "importance_score": 0.6089,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.8305,
+        "recency": 0.8025,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -114,11 +114,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.5026,
-        "policy-analyst": 0.0736,
-        "medical-ai-product-manager": 0.5454
+        "medical-editor": 0.5011,
+        "policy-analyst": 0.0731,
+        "medical-ai-product-manager": 0.5446
       },
-      "topic_value": 0.5623,
+      "topic_value": 0.5607,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -137,7 +137,7 @@
       "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
       "published_at": "2026-07-18T18:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T09:27:28.600743Z",
       "source_id": "medpage-today",
       "category": "health_it",
       "source_tier": "b",
@@ -174,12 +174,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6305,
+      "importance_score": 0.6263,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.77,
         "impact": 0.65,
-        "recency": 0.8133,
+        "recency": 0.7853,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -211,11 +211,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
       "persona_scores": {
-        "medical-editor": 0.5247,
-        "policy-analyst": 0.0757,
-        "medical-ai-product-manager": 0.5585
+        "medical-editor": 0.5232,
+        "policy-analyst": 0.0752,
+        "medical-ai-product-manager": 0.5577
       },
-      "topic_value": 0.5765,
+      "topic_value": 0.5748,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -235,7 +235,7 @@
       "url": "https://www.medpagetoday.com/infectiousdisease/vaccines/122232",
       "published_at": "2026-07-18T14:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T09:27:28.600743Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -269,12 +269,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6022,
+      "importance_score": 0.598,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7578,
+        "recency": 0.7297,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -303,11 +303,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 vaccine",
       "persona_scores": {
-        "medical-editor": 0.4988,
-        "policy-analyst": 0.0723,
-        "medical-ai-product-manager": 0.5432
+        "medical-editor": 0.4973,
+        "policy-analyst": 0.0718,
+        "medical-ai-product-manager": 0.5424
       },
-      "topic_value": 0.5579,
+      "topic_value": 0.5563,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -328,7 +328,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T09:27:28.600743Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -362,12 +362,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6131,
+      "importance_score": 0.6089,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.8305,
+        "recency": 0.8025,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -396,11 +396,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.5026,
-        "policy-analyst": 0.0736,
-        "medical-ai-product-manager": 0.5454
+        "medical-editor": 0.5011,
+        "policy-analyst": 0.0731,
+        "medical-ai-product-manager": 0.5446
       },
-      "topic_value": 0.5623,
+      "topic_value": 0.5607,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -419,7 +419,7 @@
       "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
       "published_at": "2026-07-18T18:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T09:27:28.600743Z",
       "source_id": "medpage-today",
       "category": "health_it",
       "source_tier": "b",
@@ -456,12 +456,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6305,
+      "importance_score": 0.6263,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.77,
         "impact": 0.65,
-        "recency": 0.8133,
+        "recency": 0.7853,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -493,11 +493,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
       "persona_scores": {
-        "medical-editor": 0.5247,
-        "policy-analyst": 0.0757,
-        "medical-ai-product-manager": 0.5585
+        "medical-editor": 0.5232,
+        "policy-analyst": 0.0752,
+        "medical-ai-product-manager": 0.5577
       },
-      "topic_value": 0.5765,
+      "topic_value": 0.5748,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -517,7 +517,7 @@
       "url": "https://www.medpagetoday.com/infectiousdisease/vaccines/122232",
       "published_at": "2026-07-18T14:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T09:27:28.600743Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -551,12 +551,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6022,
+      "importance_score": 0.598,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7578,
+        "recency": 0.7297,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -585,11 +585,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 vaccine",
       "persona_scores": {
-        "medical-editor": 0.4988,
-        "policy-analyst": 0.0723,
-        "medical-ai-product-manager": 0.5432
+        "medical-editor": 0.4973,
+        "policy-analyst": 0.0718,
+        "medical-ai-product-manager": 0.5424
       },
-      "topic_value": 0.5579,
+      "topic_value": 0.5563,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T07:26:24.919524Z",
+  "generated_at": "2026-07-19T09:27:28.600743Z",
   "total": 16,
   "enabled": 13,
   "healthy": 13,
@@ -24,11 +24,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 8,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T00:00:00Z",
-      "response_ms": 1322,
+      "response_ms": 150,
       "error": ""
     },
     {
@@ -47,11 +47,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 13,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T04:00:00Z",
-      "response_ms": 89,
+      "response_ms": 55,
       "error": ""
     },
     {
@@ -70,11 +70,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 1,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-06-16T12:00:00Z",
-      "response_ms": 143,
+      "response_ms": 72,
       "error": ""
     },
     {
@@ -93,11 +93,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 12,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-15T12:15:58Z",
-      "response_ms": 263,
+      "response_ms": 222,
       "error": ""
     },
     {
@@ -116,11 +116,11 @@
       "featured": true,
       "status": "disabled",
       "item_count": 19,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": null,
-      "response_ms": 447,
+      "response_ms": 544,
       "error": ""
     },
     {
@@ -139,11 +139,11 @@
       "featured": true,
       "status": "disabled",
       "item_count": 19,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": null,
-      "response_ms": 447,
+      "response_ms": 544,
       "error": ""
     },
     {
@@ -162,11 +162,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 2,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-06-30T15:06:47Z",
-      "response_ms": 191,
+      "response_ms": 135,
       "error": ""
     },
     {
@@ -185,11 +185,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T00:00:00Z",
-      "response_ms": 189,
+      "response_ms": 341,
       "error": ""
     },
     {
@@ -208,11 +208,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-14T00:00:00Z",
-      "response_ms": 128,
+      "response_ms": 125,
       "error": ""
     },
     {
@@ -231,11 +231,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-18T00:00:00Z",
-      "response_ms": 529,
+      "response_ms": 630,
       "error": ""
     },
     {
@@ -254,11 +254,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-01T00:00:00Z",
-      "response_ms": 244,
+      "response_ms": 84,
       "error": ""
     },
     {
@@ -277,11 +277,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 13,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T15:01:17Z",
-      "response_ms": 41,
+      "response_ms": 77,
       "error": ""
     },
     {
@@ -300,11 +300,11 @@
       "featured": false,
       "status": "healthy",
       "item_count": 3,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-15T17:58:17Z",
-      "response_ms": 100,
+      "response_ms": 161,
       "error": ""
     },
     {
@@ -323,11 +323,11 @@
       "featured": false,
       "status": "disabled",
       "item_count": 19,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": null,
-      "response_ms": 447,
+      "response_ms": 544,
       "error": ""
     },
     {
@@ -346,11 +346,11 @@
       "featured": false,
       "status": "healthy",
       "item_count": 8,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-18T19:45:57Z",
-      "response_ms": 244,
+      "response_ms": 242,
       "error": ""
     },
     {
@@ -369,11 +369,11 @@
       "featured": false,
       "status": "healthy",
       "item_count": 8,
-      "last_success_at": "2026-07-19T07:26:24.919524Z",
-      "last_checked_at": "2026-07-19T07:26:24.919524Z",
+      "last_success_at": "2026-07-19T09:27:28.600743Z",
+      "last_checked_at": "2026-07-19T09:27:28.600743Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T22:00:41Z",
-      "response_ms": 103,
+      "response_ms": 140,
       "error": ""
     }
   ]

@@ -1,66 +1,56 @@
 {
-  "generated_at": "2026-07-19T01:55:06.163342Z",
+  "generated_at": "2026-07-19T02:06:37.816714Z",
   "sites": [
     {
       "site_id": "official_health",
       "site_name": "Official Health Updates",
       "ok": true,
       "item_count": 13,
-      "duration_ms": 381,
-      "error": "WHO News: 404 Client Error: Not Found for url: https://www.who.int/feeds/entity/cds/headlines/en/rss.xml; FDA News: 404 Client Error: Not Found for url: https://www.fda.gov/apology_objects/abuse-detection-apology.html; NIH News: 404 Client Error: Not Found for url: https://www.nih.gov/news-events/news-releases/rss.xml",
-      "source_count": 4,
+      "duration_ms": 75,
+      "error": null,
+      "source_count": 1,
       "successful_source_count": 1,
-      "failed_source_count": 3
+      "failed_source_count": 0
     },
     {
       "site_id": "medical_journals",
       "site_name": "Medical Journals",
       "ok": true,
       "item_count": 18,
-      "duration_ms": 748,
-      "error": "NEJM: 403 Client Error: Forbidden for url: https://www.nejm.org/rss/medical-articles.xml; The Lancet: 403 Client Error: Forbidden for url: https://www.thelancet.com/rssfeed/online_first.xml; BMJ: 403 Client Error: Forbidden for url: https://www.bmj.com/rss/research.xml",
-      "source_count": 5,
+      "duration_ms": 1023,
+      "error": null,
+      "source_count": 2,
       "successful_source_count": 2,
-      "failed_source_count": 3
+      "failed_source_count": 0
     },
     {
       "site_id": "medical_media",
       "site_name": "Medical Media",
       "ok": true,
       "item_count": 3,
-      "duration_ms": 668,
-      "error": "Healthcare IT News: 403 Client Error: Forbidden for url: https://www.healthcareitnews.com/rss; HIMSS: 403 Client Error: Forbidden for url: https://www.himss.org/news/rss",
-      "source_count": 4,
-      "successful_source_count": 2,
-      "failed_source_count": 2
+      "duration_ms": 164,
+      "error": null,
+      "source_count": 1,
+      "successful_source_count": 1,
+      "failed_source_count": 0
     },
     {
       "site_id": "opmlrss",
       "site_name": "OPML RSS",
       "ok": true,
-      "partial_failures": 8,
+      "partial_failures": 9,
       "item_count": 0,
-      "duration_ms": 6356,
-      "error": "8 feeds failed",
+      "duration_ms": 1902,
+      "error": "9 feeds failed",
       "feed_count": 14,
       "effective_feed_count": 10,
-      "ok_feed_count": 6,
-      "failed_feed_count": 8,
-      "skipped_feed_count": 4,
+      "ok_feed_count": 2,
+      "failed_feed_count": 9,
+      "skipped_feed_count": 1,
       "replaced_feed_count": 0
     }
   ],
   "configured_sources": [
-    {
-      "source_id": "who-news",
-      "source_name": "WHO News",
-      "legacy_site_id": "official_health",
-      "feed_url": "https://www.who.int/feeds/entity/cds/headlines/en/rss.xml",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 138,
-      "error": "404 Client Error: Not Found for url: https://www.who.int/feeds/entity/cds/headlines/en/rss.xml"
-    },
     {
       "source_id": "cdc-newsroom",
       "source_name": "CDC Newsroom",
@@ -68,48 +58,8 @@
       "feed_url": "https://tools.cdc.gov/podcasts/feed.asp?feedid=183",
       "ok": true,
       "item_count": 13,
-      "duration_ms": 57,
+      "duration_ms": 75,
       "error": null
-    },
-    {
-      "source_id": "fda-newsroom",
-      "source_name": "FDA News",
-      "legacy_site_id": "official_health",
-      "feed_url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/newsroom/rss.xml",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 126,
-      "error": "404 Client Error: Not Found for url: https://www.fda.gov/apology_objects/abuse-detection-apology.html"
-    },
-    {
-      "source_id": "nih-news",
-      "source_name": "NIH News",
-      "legacy_site_id": "official_health",
-      "feed_url": "https://www.nih.gov/news-events/news-releases/rss.xml",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 59,
-      "error": "404 Client Error: Not Found for url: https://www.nih.gov/news-events/news-releases/rss.xml"
-    },
-    {
-      "source_id": "nejm",
-      "source_name": "NEJM",
-      "legacy_site_id": "medical_journals",
-      "feed_url": "https://www.nejm.org/rss/medical-articles.xml",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 181,
-      "error": "403 Client Error: Forbidden for url: https://www.nejm.org/rss/medical-articles.xml"
-    },
-    {
-      "source_id": "the-lancet",
-      "source_name": "The Lancet",
-      "legacy_site_id": "medical_journals",
-      "feed_url": "https://www.thelancet.com/rssfeed/online_first.xml",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 134,
-      "error": "403 Client Error: Forbidden for url: https://www.thelancet.com/rssfeed/online_first.xml"
     },
     {
       "source_id": "jama",
@@ -118,18 +68,8 @@
       "feed_url": "https://jamanetwork.com/rss/site_3/67.xml",
       "ok": true,
       "item_count": 10,
-      "duration_ms": 164,
+      "duration_ms": 104,
       "error": null
-    },
-    {
-      "source_id": "bmj-research",
-      "source_name": "BMJ",
-      "legacy_site_id": "medical_journals",
-      "feed_url": "https://www.bmj.com/rss/research.xml",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 206,
-      "error": "403 Client Error: Forbidden for url: https://www.bmj.com/rss/research.xml"
     },
     {
       "source_id": "nature-medicine",
@@ -138,28 +78,8 @@
       "feed_url": "https://www.nature.com/nm.rss",
       "ok": true,
       "item_count": 8,
-      "duration_ms": 60,
+      "duration_ms": 919,
       "error": null
-    },
-    {
-      "source_id": "medscape",
-      "source_name": "Medscape",
-      "legacy_site_id": "medical_media",
-      "feed_url": "https://www.medscape.com/rss",
-      "ok": true,
-      "item_count": 0,
-      "duration_ms": 272,
-      "error": null
-    },
-    {
-      "source_id": "healthcare-it-news",
-      "source_name": "Healthcare IT News",
-      "legacy_site_id": "medical_media",
-      "feed_url": "https://www.healthcareitnews.com/rss",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 67,
-      "error": "403 Client Error: Forbidden for url: https://www.healthcareitnews.com/rss"
     },
     {
       "source_id": "fierce-healthcare",
@@ -168,18 +88,8 @@
       "feed_url": "https://www.fiercehealthcare.com/rss.xml",
       "ok": true,
       "item_count": 3,
-      "duration_ms": 144,
+      "duration_ms": 164,
       "error": null
-    },
-    {
-      "source_id": "himss-news",
-      "source_name": "HIMSS",
-      "legacy_site_id": "medical_media",
-      "feed_url": "https://www.himss.org/news/rss",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 183,
-      "error": "403 Client Error: Forbidden for url: https://www.himss.org/news/rss"
     }
   ],
   "successful_sites": 4,
@@ -194,38 +104,26 @@
   "rss_opml": {
     "enabled": true,
     "path": "configured",
-    "feed_total": 14,
+    "feed_total": 11,
     "effective_feed_total": 10,
-    "ok_feeds": 2,
+    "ok_feeds": 1,
     "failed_feeds": [
       "https://www.bmj.com/rss",
       "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds",
       "https://www.himss.org/rss.xml",
+      "https://www.healthcareitnews.com/rss",
       "https://jamanetwork.com/rss",
       "https://www.nejm.org/medical-articles/rss",
+      "https://www.nih.gov/news-events/news-releases/rss.xml",
       "https://www.thelancet.com/rss",
-      "https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml",
-      "https://www.yxj.org.cn/rss"
+      "https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml"
     ],
     "zero_item_feeds": [
-      "https://www.dxy.cn/rss",
-      "https://www.vbdata.cn/rss"
+      "https://www.medscape.com/rss"
     ],
     "skipped_feeds": [
       {
         "feed_url": "https://tools.cdc.gov/podcasts/feed.asp?feedid=183",
-        "reason": "configured_source_duplicate"
-      },
-      {
-        "feed_url": "https://www.healthcareitnews.com/rss",
-        "reason": "configured_source_duplicate"
-      },
-      {
-        "feed_url": "https://www.medscape.com/rss",
-        "reason": "configured_source_duplicate"
-      },
-      {
-        "feed_url": "https://www.nih.gov/news-events/news-releases/rss.xml",
         "reason": "configured_source_duplicate"
       }
     ],
@@ -239,7 +137,7 @@
         "effective_feed_url": "https://www.bmj.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 38,
+        "duration_ms": 194,
         "error": "403 Client Error: Forbidden for url: https://www.bmj.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -268,7 +166,7 @@
         "effective_feed_url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 41,
+        "duration_ms": 133,
         "error": "404 Client Error: Not Found for url: https://www.fda.gov/apology_objects/abuse-detection-apology.html",
         "skipped": false,
         "skip_reason": null,
@@ -283,7 +181,7 @@
         "effective_feed_url": "https://www.himss.org/rss.xml",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 23,
+        "duration_ms": 60,
         "error": "403 Client Error: Forbidden for url: https://www.himss.org/rss.xml",
         "skipped": false,
         "skip_reason": null,
@@ -295,14 +193,15 @@
         "site_name": "OPML RSS",
         "feed_title": "Healthcare IT News",
         "feed_url": "https://www.healthcareitnews.com/rss",
-        "effective_feed_url": null,
-        "ok": true,
+        "effective_feed_url": "https://www.healthcareitnews.com/rss",
+        "ok": false,
         "item_count": 0,
-        "duration_ms": 0,
-        "error": null,
-        "skipped": true,
-        "skip_reason": "configured_source_duplicate",
-        "replaced": false
+        "duration_ms": 63,
+        "error": "403 Client Error: Forbidden for url: https://www.healthcareitnews.com/rss",
+        "skipped": false,
+        "skip_reason": null,
+        "replaced": false,
+        "bridge_type": null
       },
       {
         "site_id": "opmlrss:e07327de7b",
@@ -312,7 +211,7 @@
         "effective_feed_url": "https://jamanetwork.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 221,
+        "duration_ms": 282,
         "error": "404 Client Error: Not Found for url: https://jamanetwork.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -324,14 +223,15 @@
         "site_name": "OPML RSS",
         "feed_title": "Medscape",
         "feed_url": "https://www.medscape.com/rss",
-        "effective_feed_url": null,
+        "effective_feed_url": "https://www.medscape.com/rss",
         "ok": true,
         "item_count": 0,
-        "duration_ms": 0,
+        "duration_ms": 277,
         "error": null,
-        "skipped": true,
-        "skip_reason": "configured_source_duplicate",
-        "replaced": false
+        "skipped": false,
+        "skip_reason": null,
+        "replaced": false,
+        "bridge_type": null
       },
       {
         "site_id": "opmlrss:1ec29daf3e",
@@ -341,7 +241,7 @@
         "effective_feed_url": "https://www.nejm.org/medical-articles/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 25,
+        "duration_ms": 182,
         "error": "403 Client Error: Forbidden for url: https://www.nejm.org/medical-articles/rss",
         "skipped": false,
         "skip_reason": null,
@@ -353,14 +253,15 @@
         "site_name": "OPML RSS",
         "feed_title": "NIH News Releases",
         "feed_url": "https://www.nih.gov/news-events/news-releases/rss.xml",
-        "effective_feed_url": null,
-        "ok": true,
+        "effective_feed_url": "https://www.nih.gov/news-events/news-releases/rss.xml",
+        "ok": false,
         "item_count": 0,
-        "duration_ms": 0,
-        "error": null,
-        "skipped": true,
-        "skip_reason": "configured_source_duplicate",
-        "replaced": false
+        "duration_ms": 104,
+        "error": "404 Client Error: Not Found for url: https://www.nih.gov/news-events/news-releases/rss.xml",
+        "skipped": false,
+        "skip_reason": null,
+        "replaced": false,
+        "bridge_type": null
       },
       {
         "site_id": "opmlrss:22a071095d",
@@ -370,7 +271,7 @@
         "effective_feed_url": "https://www.thelancet.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 18,
+        "duration_ms": 321,
         "error": "403 Client Error: Forbidden for url: https://www.thelancet.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -385,53 +286,8 @@
         "effective_feed_url": "https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 43,
+        "duration_ms": 286,
         "error": "404 Client Error: Not Found for url: https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml",
-        "skipped": false,
-        "skip_reason": null,
-        "replaced": false,
-        "bridge_type": null
-      },
-      {
-        "site_id": "opmlrss:451d8c2534",
-        "site_name": "OPML RSS",
-        "feed_title": "丁香园",
-        "feed_url": "https://www.dxy.cn/rss",
-        "effective_feed_url": "https://www.dxy.cn/rss",
-        "ok": true,
-        "item_count": 0,
-        "duration_ms": 1314,
-        "error": null,
-        "skipped": false,
-        "skip_reason": null,
-        "replaced": false,
-        "bridge_type": null
-      },
-      {
-        "site_id": "opmlrss:7eda200260",
-        "site_name": "OPML RSS",
-        "feed_title": "动脉网",
-        "feed_url": "https://www.vbdata.cn/rss",
-        "effective_feed_url": "https://www.vbdata.cn/rss",
-        "ok": true,
-        "item_count": 0,
-        "duration_ms": 3477,
-        "error": null,
-        "skipped": false,
-        "skip_reason": null,
-        "replaced": false,
-        "bridge_type": null
-      },
-      {
-        "site_id": "opmlrss:f97bbf7dcc",
-        "site_name": "OPML RSS",
-        "feed_title": "医学界",
-        "feed_url": "https://www.yxj.org.cn/rss",
-        "effective_feed_url": "https://www.yxj.org.cn/rss",
-        "ok": false,
-        "item_count": 0,
-        "duration_ms": 1156,
-        "error": "404 Client Error: Not Found for url: https://www.yxj.org.cn/rss",
         "skipped": false,
         "skip_reason": null,
         "replaced": false,

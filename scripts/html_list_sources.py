@@ -41,7 +41,7 @@ HTML_LIST_PROFILES = {
     "chima_news": HtmlListProfile("ul.article_xw_l > li", ".right_xw a.title_type", ".span_date_left", r"^/Html/News/Articles/\d+\.html$", ("%d %Y.%m",), title_attribute="title", summary_selector=".right_xw > p"),
     "kanyijie": HtmlListProfile("div.des", "a.h2[href*='/details?id=']", ".time", r"^/details\?id=\d+$", ("%Y-%m-%d",), title_attribute="title", summary_selector=".sub"),
     "hospital_ceo": HtmlListProfile(".paging .zlist01", "a.tit[href*='/post/']", ".time", r"^/post/\d+\.html$", ("%Y年%m月%d日 %H:%M",), summary_selector=".des"),
-    "mdweekly": HtmlListProfile("ul.glob-list > li.img-li", "h1 a[href*='/index/article/ztdetail']", ".time", r"^/index/article/ztdetail\?id=\d+$", ("%Y-%m-%d",), summary_selector="p"),
+    "cn_healthcare": HtmlListProfile(".ni_clist", ".clist_c_wrap > a[href*='/article/'], .clist_c_wrap > a[href*='/articlewm/']", ".clist_msg_wrap > span:last-of-type", r"^/article(?:wm)?/\d{8}/content-\d+\.html$", ("%Y/%m/%d",)),
     "bioon": HtmlListProfile(".composs-blog-list .item", "h2 a[href*='news.bioon.com/article/']", ".item-meta-item", r"^/article/[a-zA-Z0-9_-]+\.html$", ("%Y-%m-%d",), summary_selector="p.text-justify"),
 }
 
@@ -54,7 +54,7 @@ CDATA_RECORD_RE = re.compile(
 )
 
 
-def _candidate_nodes(html: str, profile: HtmlListProfile) -> list[Tag]:
+def _candidate_nodes(html: str | bytes, profile: HtmlListProfile) -> list[Tag]:
     soup = BeautifulSoup(html, "html.parser")
     if profile.content_mode != "nhsa_cdata":
         return [node for node in soup.select(profile.item_selector) if isinstance(node, Tag)][:MAX_CANDIDATES]
@@ -106,7 +106,7 @@ def _allowed_item_url(
 
 
 def parse_html_list_items(
-    html: str,
+    html: str | bytes,
     *,
     base_url: str,
     profile_id: str,

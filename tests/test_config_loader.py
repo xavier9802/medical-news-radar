@@ -257,7 +257,7 @@ def test_default_config_contains_nine_dated_china_sources():
         "cn-chima-news": ("html_list", "chima_news", "a", "health_it", 6),
         "cn-kanyijie": ("html_list", "kanyijie", "b", "company_market", 5),
         "cn-hospital-ceo": ("html_list", "hospital_ceo", "b", "company_market", 5),
-        "cn-mdweekly": ("html_list", "mdweekly", "b", "primary_care", 4),
+        "cn-healthcare": ("html_list", "cn_healthcare", "b", "primary_care", 4),
         "cn-yxj": ("json", "yxj_home_json", "c", "health_it", 3),
         "cn-bioon": ("html_list", "bioon", "c", "pharma_device", 3),
     }
@@ -273,7 +273,7 @@ def test_default_config_contains_nine_dated_china_sources():
             row["category"],
             row["fetch"]["max_items"],
         ) == contract
-    assert by_id["cn-mdweekly"]["feed_url"] == "https://www.mdweekly.com.cn/index/article/zt1?id=1"
+    assert by_id["cn-healthcare"]["feed_url"] == "https://www.cn-healthcare.com/?logo=1"
     assert by_id["cn-bioon"]["feed_url"] == "https://www.bioon.com/BioMedical"
     assert "细胞外囊泡" in by_id["cn-bioon"]["filters"]["include_keywords"]
-    assert "cn-medtrend" not in by_id
+    assert {"cn-medtrend", "cn-mdweekly"}.isdisjoint(by_id)

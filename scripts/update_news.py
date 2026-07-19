@@ -1439,13 +1439,8 @@ def fetch_html_list(session, feed, now, site_id, site_name):
         body = _read_bounded_adapter_body(response)
     finally:
         response.close()
-    encoding = str(response.encoding or "utf-8")
-    try:
-        html = body.decode(encoding, errors="replace")
-    except LookupError:
-        html = body.decode("utf-8", errors="replace")
     parsed = parse_html_list_items(
-        html,
+        body,
         base_url=str(response.url),
         profile_id=str(feed.get("parser_profile") or ""),
         allowed_hosts=allowed_hosts,

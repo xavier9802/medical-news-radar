@@ -23,7 +23,7 @@
 | `fetch.interval_hours` | number | 建议采集间隔 |
 | `fetch.max_items` | integer | 单轮最大条目数 |
 | `fetch.timeout_seconds` | number | 单来源超时建议 |
-| `fetch.parser_profile` | string | 登记过的解析器 ID：`nhsa_policy`、`chs_news`、`cnmia_news`、`chima_news`、`kanyijie`、`hospital_ceo`、`mdweekly`、`bioon`、`yxj_home_json` |
+| `fetch.parser_profile` | string | 登记过的解析器 ID：`nhsa_policy`、`chs_news`、`cnmia_news`、`chima_news`、`kanyijie`、`hospital_ceo`、`cn_healthcare`、`bioon`、`yxj_home_json` |
 | `fetch.allowed_hosts` | string[] | 列表最终地址和文章链接允许使用的公共域名白名单 |
 | `filters.include_keywords` | array | 仅保留命中词；空数组表示不额外限制 |
 | `filters.exclude_keywords` | array | 排除词 |

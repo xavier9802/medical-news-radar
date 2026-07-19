@@ -393,10 +393,10 @@ sources:
     filters: {include_keywords: [医院, 医疗, 医保, 医共体, AI, 人工智能, 数智化, 运营, 管理], exclude_keywords: [报名, 早鸟票, 招商, 招聘, 课程, 培训班, 会议通知, 直播预告, 广告]}
     metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 医院管理和数智化媒体}
 
-  - id: cn-mdweekly
-    name: 医师报
-    homepage_url: https://www.mdweekly.com.cn/
-    feed_url: https://www.mdweekly.com.cn/index/article/zt1?id=1
+  - id: cn-healthcare
+    name: 健康界
+    homepage_url: https://www.cn-healthcare.com/
+    feed_url: https://www.cn-healthcare.com/?logo=1
     type: social_observation
     category: primary_care
     tier: b
@@ -404,9 +404,9 @@ sources:
     region: cn
     enabled: true
     featured: false
-    fetch: {strategy: html_list, interval_hours: 3, max_items: 4, timeout_seconds: 20, parser_profile: mdweekly, allowed_hosts: [www.mdweekly.com.cn]}
-    filters: {include_keywords: [医院, 医疗, 基层, 卫生院, 医共体, 人工智能, AI, 医保, 健康管理], exclude_keywords: [病例, 用药, 症状, 诊疗指南, 报名, 招商, 招聘, 课程, 培训班, 直播预告, 广告]}
-    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 医师报公开行业新闻}
+    fetch: {strategy: html_list, interval_hours: 3, max_items: 4, timeout_seconds: 20, parser_profile: cn_healthcare, allowed_hosts: [www.cn-healthcare.com]}
+    filters: {include_keywords: [医院, 医疗, 基层, 卫生院, 医共体, 医保, 健康管理, 数字化, 信息化, 强基], exclude_keywords: [病例, 用药, 症状, 诊疗指南, 报名, 招商, 招聘, 课程, 培训班, 直播预告, 广告]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 健康界公开医疗行业与健康号内容}
 
   - id: cn-yxj
     name: 医学界

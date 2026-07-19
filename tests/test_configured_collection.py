@@ -82,6 +82,7 @@ class FakeListResponse:
         payload=None,
         url="https://www.h-ceo.com/news.html",
         content_type="text/html; charset=utf-8",
+        encoding="utf-8",
     ):
         self.text = text
         self.payload = payload or {}
@@ -92,7 +93,7 @@ class FakeListResponse:
         )
         self.url = url
         self.headers = {"content-type": content_type}
-        self.encoding = "utf-8"
+        self.encoding = encoding
         self.closed = False
 
     @property
@@ -304,6 +305,38 @@ def test_configured_html_list_is_filtered_capped_and_mapped():
     assert session.response.closed is True
 
 
+def test_configured_html_list_honors_meta_charset_when_header_omits_it():
+    html = '<meta charset="utf-8">' + Path(
+        "tests/fixtures/html_sources/cn_healthcare.html"
+    ).read_text(encoding="utf-8")
+    feed = {
+        "title": "健康界",
+        "xml_url": "https://www.cn-healthcare.com/?logo=1",
+        "html_url": "https://www.cn-healthcare.com/",
+        "strategy": "html_list",
+        "parser_profile": "cn_healthcare",
+        "allowed_hosts": ["www.cn-healthcare.com"],
+        "max_entries": 1,
+        "include_keywords": "基层,医疗,AI",
+        "exclude_keywords": "广告",
+        "source_id": "cn-healthcare",
+        "category": "primary_care",
+        "source_tier": "b",
+    }
+    response = FakeListResponse(
+        text=html,
+        url=feed["xml_url"],
+        content_type="text/html",
+        encoding="ISO-8859-1",
+    )
+
+    items = update_news.fetch_configured_feed(
+        FakeAdapterSession(response), NOW, "medical_media", "Medical Media", feed
+    )
+
+    assert items[0].title == "AI赋能基层医疗机构实践"
+
+
 def test_configured_yxj_json_uses_fixed_post_contract():
     payload = json.loads(Path("tests/fixtures/yxj_home.json").read_text(encoding="utf-8"))
     feed = {
@@ -426,6 +459,12 @@ def test_china_media_filters_keep_domain_news_and_drop_promotional_or_clinical_i
     )
     assert not update_news.curated_feed_entry_allowed(
         feeds["cn-yxj"], "儿童鼻窦炎用药指南", article_url
+    )
+    assert update_news.curated_feed_entry_allowed(
+        feeds["cn-healthcare"], "AI赋能基层医疗机构实践", article_url
+    )
+    assert not update_news.curated_feed_entry_allowed(
+        feeds["cn-healthcare"], "世界人工智能大会主旨讲话", article_url
     )
     assert update_news.curated_feed_entry_allowed(
         feeds["cn-bioon"], "创新药获批推动产业转化", article_url

@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import copy
+import ipaddress
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -151,6 +153,7 @@ class ConfigLoadError(ValueError):
 
 
 _CONFIG_CACHE: dict[tuple[str, str], ConfigResult] = {}
+HOST_RE = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 
 
 def reset_config_cache() -> None:
@@ -173,6 +176,23 @@ def _safe_float(value: Any, default: float, *, minimum: float = 0.0, maximum: fl
         return max(minimum, min(maximum, float(value)))
     except (TypeError, ValueError):
         return default
+
+
+def _safe_public_hosts(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    hosts: list[str] = []
+    for raw in value:
+        host = str(raw or "").strip().lower().rstrip(".")
+        try:
+            ipaddress.ip_address(host)
+        except ValueError:
+            pass
+        else:
+            continue
+        if HOST_RE.fullmatch(host) and host not in hosts:
+            hosts.append(host)
+    return hosts
 
 
 def _require_mapping(payload: Any, root: str) -> dict[str, Any]:
@@ -325,6 +345,8 @@ def _validate_source_row(row: Any, index: int) -> tuple[dict[str, Any] | None, s
             "interval_hours": _safe_int(fetch.get("interval_hours"), 24, minimum=1),
             "max_items": _safe_int(fetch.get("max_items"), 30, minimum=1),
             "timeout_seconds": _safe_int(fetch.get("timeout_seconds"), 20, minimum=1),
+            "parser_profile": str(fetch.get("parser_profile") or "").strip().lower(),
+            "allowed_hosts": _safe_public_hosts(fetch.get("allowed_hosts")),
         },
         "filters": {
             "include_keywords": [str(value).strip() for value in filters.get("include_keywords", []) if str(value).strip()]

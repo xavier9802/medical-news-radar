@@ -49,6 +49,13 @@ except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_
     from persona_score import apply_persona_scores
 
 try:
+    from scripts.html_list_sources import parse_html_list_items
+    from scripts.yxj_source import YXJ_API_URL, YXJ_REQUEST_BODY, parse_yxj_home_items
+except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_news.py`
+    from html_list_sources import parse_html_list_items
+    from yxj_source import YXJ_API_URL, YXJ_REQUEST_BODY, parse_yxj_home_items
+
+try:
     import feedparser
 except ModuleNotFoundError:
     feedparser = None
@@ -59,6 +66,7 @@ BROWSER_UA = (
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 )
 CONFIGURED_FEED_UA = "MedicalNewsRadar/1.0 (+https://github.com/xavier9802/medical-news-radar)"
+MAX_CONFIGURED_LIST_BYTES = 2_000_000
 SH_TZ = ZoneInfo("Asia/Shanghai")
 RSS_FEED_REPLACEMENTS: dict[str, str] = {
     "https://rsshub.app/infoq/recommend": "https://www.infoq.cn/feed",
@@ -239,6 +247,8 @@ def configured_feed_groups(config_path: Path | None = None) -> tuple[dict[str, l
             "strategy": strategy,
             "max_entries": max(1, int(fetch.get("max_items") or 30)),
             "timeout_seconds": max(1, int(fetch.get("timeout_seconds") or 20)),
+            "parser_profile": str(fetch.get("parser_profile") or ""),
+            "allowed_hosts": list(fetch.get("allowed_hosts") or []),
             "include_keywords": ",".join(str(value) for value in filters.get("include_keywords", [])),
             "exclude_keywords": ",".join(str(value) for value in filters.get("exclude_keywords", [])),
             **source_meta,
@@ -1337,6 +1347,138 @@ def fetch_medical_media(session: requests.Session, now: datetime) -> list[RawIte
     return out
 
 
+def _adapter_request(call):
+    try:
+        return call()
+    except requests.RequestException as exc:
+        raise ValueError("request_failed") from exc
+
+
+def _validate_adapter_response(response, expected_type: str, allowed_hosts: list[str]) -> None:
+    try:
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        raise ValueError("request_failed") from exc
+    raw_content_length = str(response.headers.get("content-length") or "").strip()
+    if raw_content_length:
+        try:
+            content_length = int(raw_content_length)
+        except ValueError:
+            content_length = 0
+        if content_length > MAX_CONFIGURED_LIST_BYTES:
+            raise ValueError("response_too_large")
+    if expected_type not in str(response.headers.get("content-type") or "").lower():
+        raise ValueError("unexpected_content_type")
+    final_host = str(urlparse(str(response.url)).hostname or "").lower()
+    if final_host not in set(allowed_hosts):
+        raise ValueError("invalid_item_url")
+
+
+def _read_bounded_adapter_body(response) -> bytes:
+    body = bytearray()
+    try:
+        for chunk in response.iter_content(chunk_size=65_536):
+            if not chunk:
+                continue
+            body.extend(chunk)
+            if len(body) > MAX_CONFIGURED_LIST_BYTES:
+                raise ValueError("response_too_large")
+    except requests.RequestException as exc:
+        raise ValueError("request_failed") from exc
+    return bytes(body)
+
+
+def _adapter_raw_items(parsed_items, feed, now, site_id, site_name):
+    parsed_items = list(parsed_items)
+    out: list[RawItem] = []
+    saw_fresh_item = False
+    max_entries = max(1, int(feed.get("max_entries") or 8))
+    for parsed in parsed_items:
+        if parsed.published_at < now - timedelta(days=MEDICAL_JOURNAL_MAX_AGE_DAYS):
+            continue
+        saw_fresh_item = True
+        if not curated_feed_entry_allowed(feed, parsed.title, parsed.url):
+            continue
+        out.append(
+            RawItem(
+                site_id=site_id,
+                site_name=site_name,
+                source=str(feed["title"]),
+                title=parsed.title,
+                url=parsed.url,
+                published_at=parsed.published_at,
+                meta={
+                    "feed_url": str(feed["xml_url"]),
+                    "feed_home": str(feed.get("html_url") or ""),
+                    "summary": parsed.summary,
+                    **configured_feed_meta(feed),
+                },
+            )
+        )
+        if len(out) >= max_entries:
+            break
+    if not out:
+        if parsed_items and not saw_fresh_item:
+            return []
+        raise ValueError("no_valid_items")
+    return out
+
+
+def fetch_html_list(session, feed, now, site_id, site_name):
+    allowed_hosts = list(feed.get("allowed_hosts") or [])
+    response = _adapter_request(
+        lambda: session.get(
+            str(feed["xml_url"]),
+            timeout=max(1, int(feed.get("timeout_seconds") or 20)),
+            headers={"User-Agent": CONFIGURED_FEED_UA, "Accept": "text/html,application/xhtml+xml"},
+            stream=True,
+        )
+    )
+    try:
+        _validate_adapter_response(response, "text/html", allowed_hosts)
+        body = _read_bounded_adapter_body(response)
+    finally:
+        response.close()
+    parsed = parse_html_list_items(
+        body,
+        base_url=str(response.url),
+        profile_id=str(feed.get("parser_profile") or ""),
+        allowed_hosts=allowed_hosts,
+        now=now,
+    )
+    return _adapter_raw_items(parsed, feed, now, site_id, site_name)
+
+
+def fetch_yxj_home_json(session, feed, now, site_id, site_name):
+    if str(feed.get("xml_url") or "") != YXJ_API_URL:
+        raise ValueError("unsupported_parser_profile")
+    allowed_hosts = list(feed.get("allowed_hosts") or [])
+    response = _adapter_request(
+        lambda: session.post(
+            YXJ_API_URL,
+            json=YXJ_REQUEST_BODY,
+            timeout=max(1, int(feed.get("timeout_seconds") or 20)),
+            headers={
+                "User-Agent": CONFIGURED_FEED_UA,
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            stream=True,
+        )
+    )
+    try:
+        _validate_adapter_response(response, "application/json", allowed_hosts)
+        body = _read_bounded_adapter_body(response)
+    finally:
+        response.close()
+    try:
+        payload = json.loads(body.decode("utf-8-sig"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("invalid_json_shape") from exc
+    parsed = parse_yxj_home_items(payload, now=now)
+    return _adapter_raw_items(parsed, feed, now, site_id, site_name)
+
+
 def fetch_configured_feed(
     session: requests.Session,
     now: datetime,
@@ -1344,7 +1486,13 @@ def fetch_configured_feed(
     site_name: str,
     feed: dict[str, Any],
 ) -> list[RawItem]:
-    if str(feed.get("strategy") or "auto") == "json":
+    strategy = str(feed.get("strategy") or "auto")
+    profile = str(feed.get("parser_profile") or "")
+    if strategy == "html_list":
+        return fetch_html_list(session, feed, now, site_id, site_name)
+    if strategy == "json" and profile == "yxj_home_json":
+        return fetch_yxj_home_json(session, feed, now, site_id, site_name)
+    if strategy == "json":
         feed_url = str(feed["xml_url"])
         if urlparse(feed_url).hostname != "api.crossref.org":
             raise ValueError("Unsupported configured JSON feed")

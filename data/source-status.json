@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-19T15:57:41.463838Z",
+  "generated_at": "2026-07-19T16:34:25.296385Z",
   "sites": [
     {
       "site_id": "official_health",
       "site_name": "Official Health Updates",
       "ok": true,
-      "item_count": 41,
-      "duration_ms": 1034,
+      "item_count": 42,
+      "duration_ms": 3449,
       "error": null,
-      "source_count": 5,
-      "successful_source_count": 5,
+      "source_count": 6,
+      "successful_source_count": 6,
       "failed_source_count": 0
     },
     {
@@ -17,7 +17,7 @@
       "site_name": "Medical Journals",
       "ok": true,
       "item_count": 48,
-      "duration_ms": 966,
+      "duration_ms": 1108,
       "error": null,
       "source_count": 5,
       "successful_source_count": 5,
@@ -27,11 +27,11 @@
       "site_id": "medical_media",
       "site_name": "Medical Media",
       "ok": true,
-      "item_count": 19,
-      "duration_ms": 541,
+      "item_count": 45,
+      "duration_ms": 18284,
       "error": null,
-      "source_count": 3,
-      "successful_source_count": 3,
+      "source_count": 11,
+      "successful_source_count": 11,
       "failed_source_count": 0
     },
     {
@@ -40,7 +40,7 @@
       "ok": true,
       "partial_failures": 9,
       "item_count": 0,
-      "duration_ms": 2695,
+      "duration_ms": 3309,
       "error": "9 feeds failed",
       "feed_count": 14,
       "effective_feed_count": 10,
@@ -58,7 +58,7 @@
       "feed_url": "https://www.who.int/rss-feeds/news-english.xml",
       "ok": true,
       "item_count": 12,
-      "duration_ms": 298,
+      "duration_ms": 736,
       "error": null
     },
     {
@@ -68,7 +68,7 @@
       "feed_url": "https://tools.cdc.gov/podcasts/feed.asp?feedid=183",
       "ok": true,
       "item_count": 13,
-      "duration_ms": 93,
+      "duration_ms": 131,
       "error": null
     },
     {
@@ -78,7 +78,7 @@
       "feed_url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml",
       "ok": true,
       "item_count": 13,
-      "duration_ms": 112,
+      "duration_ms": 121,
       "error": null
     },
     {
@@ -88,7 +88,7 @@
       "feed_url": "https://www.cancer.gov/publishedcontent/rss/news-events/cancer-currents-blog.rss",
       "ok": true,
       "item_count": 1,
-      "duration_ms": 224,
+      "duration_ms": 228,
       "error": null
     },
     {
@@ -98,7 +98,17 @@
       "feed_url": "https://healthit.gov/blog/feed/",
       "ok": true,
       "item_count": 2,
-      "duration_ms": 305,
+      "duration_ms": 257,
+      "error": null
+    },
+    {
+      "source_id": "cn-nhsa-policy",
+      "source_name": "国家医保局政策法规",
+      "legacy_site_id": "official_health",
+      "feed_url": "https://www.nhsa.gov.cn/col/col104/index.html",
+      "ok": true,
+      "item_count": 1,
+      "duration_ms": 1975,
       "error": null
     },
     {
@@ -108,7 +118,7 @@
       "feed_url": "https://api.crossref.org/journals/0028-4793/works?rows=20&sort=published&order=desc",
       "ok": true,
       "item_count": 10,
-      "duration_ms": 388,
+      "duration_ms": 477,
       "error": null
     },
     {
@@ -118,7 +128,7 @@
       "feed_url": "https://api.crossref.org/journals/0140-6736/works?rows=20&sort=published&order=desc",
       "ok": true,
       "item_count": 10,
-      "duration_ms": 153,
+      "duration_ms": 146,
       "error": null
     },
     {
@@ -128,7 +138,7 @@
       "feed_url": "https://jamanetwork.com/rss/site_3/67.xml",
       "ok": true,
       "item_count": 10,
-      "duration_ms": 213,
+      "duration_ms": 201,
       "error": null
     },
     {
@@ -138,7 +148,7 @@
       "feed_url": "https://api.crossref.org/journals/1756-1833/works?rows=20&sort=published&order=desc",
       "ok": true,
       "item_count": 10,
-      "duration_ms": 154,
+      "duration_ms": 125,
       "error": null
     },
     {
@@ -148,7 +158,7 @@
       "feed_url": "https://www.nature.com/nm.rss",
       "ok": true,
       "item_count": 8,
-      "duration_ms": 56,
+      "duration_ms": 158,
       "error": null
     },
     {
@@ -158,7 +168,7 @@
       "feed_url": "https://www.medpagetoday.com/rss/headlines.xml",
       "ok": true,
       "item_count": 8,
-      "duration_ms": 208,
+      "duration_ms": 292,
       "error": null
     },
     {
@@ -168,7 +178,7 @@
       "feed_url": "https://www.fiercehealthcare.com/rss.xml",
       "ok": true,
       "item_count": 3,
-      "duration_ms": 154,
+      "duration_ms": 150,
       "error": null
     },
     {
@@ -178,7 +188,87 @@
       "feed_url": "https://hitconsultant.net/feed/",
       "ok": true,
       "item_count": 8,
-      "duration_ms": 178,
+      "duration_ms": 374,
+      "error": null
+    },
+    {
+      "source_id": "cn-chs-news",
+      "source_name": "中国社区卫生协会",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.chs.org.cn/news/list/7/",
+      "ok": true,
+      "item_count": 2,
+      "duration_ms": 1121,
+      "error": null
+    },
+    {
+      "source_id": "cn-cnmia-news",
+      "source_name": "中国非公立医疗机构协会",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.cnmia.org/Web/Article/Dynamic.aspx",
+      "ok": true,
+      "item_count": 1,
+      "duration_ms": 2175,
+      "error": null
+    },
+    {
+      "source_id": "cn-chima-news",
+      "source_name": "CHIMA",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.chima.org.cn/Html/News/Main/53.html",
+      "ok": true,
+      "item_count": 5,
+      "duration_ms": 1976,
+      "error": null
+    },
+    {
+      "source_id": "cn-kanyijie",
+      "source_name": "看医界",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.kanyijie.com/",
+      "ok": true,
+      "item_count": 5,
+      "duration_ms": 923,
+      "error": null
+    },
+    {
+      "source_id": "cn-hospital-ceo",
+      "source_name": "中国医院院长网",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.h-ceo.com/news.html",
+      "ok": true,
+      "item_count": 5,
+      "duration_ms": 1281,
+      "error": null
+    },
+    {
+      "source_id": "cn-healthcare",
+      "source_name": "健康界",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.cn-healthcare.com/?logo=1",
+      "ok": true,
+      "item_count": 4,
+      "duration_ms": 1555,
+      "error": null
+    },
+    {
+      "source_id": "cn-yxj",
+      "source_name": "医学界",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://pcapi.yxj.org.cn/ysz-content/web/home/news/getNewsModuleData",
+      "ok": true,
+      "item_count": 3,
+      "duration_ms": 3665,
+      "error": null
+    },
+    {
+      "source_id": "cn-bioon",
+      "source_name": "生物谷",
+      "legacy_site_id": "medical_media",
+      "feed_url": "https://www.bioon.com/BioMedical",
+      "ok": true,
+      "item_count": 1,
+      "duration_ms": 4767,
       "error": null
     }
   ],
@@ -188,9 +278,9 @@
     "opmlrss"
   ],
   "empty_advanced_sources": [],
-  "fetched_raw_items": 108,
-  "items_before_topic_filter": 5,
-  "items_in_24h": 2,
+  "fetched_raw_items": 135,
+  "items_before_topic_filter": 8,
+  "items_in_24h": 3,
   "rss_opml": {
     "enabled": true,
     "path": "configured",
@@ -227,7 +317,7 @@
         "effective_feed_url": "https://www.bmj.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 76,
+        "duration_ms": 134,
         "error": "403 Client Error: Forbidden for url: https://www.bmj.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -256,7 +346,7 @@
         "effective_feed_url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 48,
+        "duration_ms": 189,
         "error": "404 Client Error: Not Found for url: https://www.fda.gov/apology_objects/abuse-detection-apology.html",
         "skipped": false,
         "skip_reason": null,
@@ -271,7 +361,7 @@
         "effective_feed_url": "https://www.himss.org/rss.xml",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 227,
+        "duration_ms": 286,
         "error": "403 Client Error: Forbidden for url: https://www.himss.org/rss.xml",
         "skipped": false,
         "skip_reason": null,
@@ -286,7 +376,7 @@
         "effective_feed_url": "https://www.healthcareitnews.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 110,
+        "duration_ms": 118,
         "error": "403 Client Error: Forbidden for url: https://www.healthcareitnews.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -301,7 +391,7 @@
         "effective_feed_url": "https://jamanetwork.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 595,
+        "duration_ms": 380,
         "error": "404 Client Error: Not Found for url: https://jamanetwork.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -316,7 +406,7 @@
         "effective_feed_url": "https://www.medscape.com/rss",
         "ok": true,
         "item_count": 0,
-        "duration_ms": 575,
+        "duration_ms": 631,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -331,7 +421,7 @@
         "effective_feed_url": "https://www.nejm.org/medical-articles/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 74,
+        "duration_ms": 328,
         "error": "403 Client Error: Forbidden for url: https://www.nejm.org/medical-articles/rss",
         "skipped": false,
         "skip_reason": null,
@@ -346,7 +436,7 @@
         "effective_feed_url": "https://www.nih.gov/news-events/news-releases/rss.xml",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 340,
+        "duration_ms": 425,
         "error": "404 Client Error: Not Found for url: https://www.nih.gov/news-events/news-releases/rss.xml",
         "skipped": false,
         "skip_reason": null,
@@ -361,7 +451,7 @@
         "effective_feed_url": "https://www.thelancet.com/rss",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 434,
+        "duration_ms": 543,
         "error": "403 Client Error: Forbidden for url: https://www.thelancet.com/rss",
         "skipped": false,
         "skip_reason": null,
@@ -376,7 +466,7 @@
         "effective_feed_url": "https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 216,
+        "duration_ms": 275,
         "error": "404 Client Error: Not Found for url: https://www.who.int/feeds/entity/mediacentre/news/en/rss.xml",
         "skipped": false,
         "skip_reason": null,

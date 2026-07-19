@@ -54,6 +54,35 @@ def test_loads_categories_from_valid_yaml(tmp_path: Path):
     assert result.errors == ()
 
 
+def test_source_config_preserves_restricted_adapter_fields(tmp_path: Path):
+    path = tmp_path / "sources.yml"
+    path.write_text(
+        "sources:\n  - id: html-source\n    name: HTML source\n"
+        "    homepage_url: https://example.com/news\n    feed_url: https://example.com/news\n    type: static_page\n"
+        "    fetch:\n      strategy: html_list\n      parser_profile: hospital_ceo\n"
+        "      allowed_hosts: [EXAMPLE.com, news.example.com, EXAMPLE.com]\n",
+        encoding="utf-8",
+    )
+    source = load_config("sources", path).data["sources"][0]
+    feed = configured_feed_groups(path)[0]["medical_media"][0]
+    assert source["fetch"]["parser_profile"] == "hospital_ceo"
+    assert source["fetch"]["allowed_hosts"] == ["example.com", "news.example.com"]
+    assert feed["parser_profile"] == "hospital_ceo"
+    assert feed["allowed_hosts"] == ["example.com", "news.example.com"]
+
+
+def test_source_config_drops_invalid_host_entries(tmp_path: Path):
+    path = tmp_path / "sources.yml"
+    path.write_text(
+        "sources:\n  - id: bad-hosts\n    name: Bad hosts\n"
+        "    homepage_url: https://example.com/\n    type: static_page\n"
+        "    fetch: {strategy: html_list, parser_profile: hospital_ceo, allowed_hosts: ['https://example.com', '127.0.0.1', good.example]}\n",
+        encoding="utf-8",
+    )
+    source = load_config("sources", path).data["sources"][0]
+    assert source["fetch"]["allowed_hosts"] == ["good.example"]
+
+
 def test_missing_config_uses_safe_defaults(tmp_path: Path):
     result = load_config("categories", tmp_path / "missing.yml")
 
@@ -214,3 +243,37 @@ def test_default_config_enables_actions_verified_replacements_and_pauses_blocked
     assert by_id["the-lancet"]["fetch"]["strategy"] == "json"
     assert by_id["bmj-research"]["fetch"]["strategy"] == "json"
     assert "/journals/1756-1833/works" in by_id["bmj-research"]["feed_url"]
+
+
+def test_default_config_contains_nine_dated_china_sources():
+    by_id = {
+        row["id"]: row
+        for row in load_config("sources", Path("config/sources.yml")).data["sources"]
+    }
+    expected = {
+        "cn-nhsa-policy": ("html_list", "nhsa_policy", "s", "insurance_compliance", 8),
+        "cn-chs-news": ("html_list", "chs_news", "a", "primary_care", 6),
+        "cn-cnmia-news": ("html_list", "cnmia_news", "a", "company_market", 6),
+        "cn-chima-news": ("html_list", "chima_news", "a", "health_it", 6),
+        "cn-kanyijie": ("html_list", "kanyijie", "b", "company_market", 5),
+        "cn-hospital-ceo": ("html_list", "hospital_ceo", "b", "company_market", 5),
+        "cn-healthcare": ("html_list", "cn_healthcare", "b", "primary_care", 4),
+        "cn-yxj": ("json", "yxj_home_json", "c", "health_it", 3),
+        "cn-bioon": ("html_list", "bioon", "c", "pharma_device", 3),
+    }
+    for source_id, contract in expected.items():
+        row = by_id[source_id]
+        assert row["enabled"] is True
+        assert row["language"] == "zh" and row["region"] == "cn"
+        assert row["fetch"]["allowed_hosts"]
+        assert (
+            row["fetch"]["strategy"],
+            row["fetch"]["parser_profile"],
+            row["tier"],
+            row["category"],
+            row["fetch"]["max_items"],
+        ) == contract
+    assert by_id["cn-healthcare"]["feed_url"] == "https://www.cn-healthcare.com/?logo=1"
+    assert by_id["cn-bioon"]["feed_url"] == "https://www.bioon.com/BioMedical"
+    assert "细胞外囊泡" in by_id["cn-bioon"]["filters"]["include_keywords"]
+    assert {"cn-medtrend", "cn-mdweekly"}.isdisjoint(by_id)

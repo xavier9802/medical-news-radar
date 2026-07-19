@@ -23,6 +23,8 @@
 | `fetch.interval_hours` | number | 建议采集间隔 |
 | `fetch.max_items` | integer | 单轮最大条目数 |
 | `fetch.timeout_seconds` | number | 单来源超时建议 |
+| `fetch.parser_profile` | string | 登记过的解析器 ID：`nhsa_policy`、`chs_news`、`cnmia_news`、`chima_news`、`kanyijie`、`hospital_ceo`、`cn_healthcare`、`bioon`、`yxj_home_json` |
+| `fetch.allowed_hosts` | string[] | 列表最终地址和文章链接允许使用的公共域名白名单 |
 | `filters.include_keywords` | array | 仅保留命中词；空数组表示不额外限制 |
 | `filters.exclude_keywords` | array | 排除词 |
 | `metadata.source_origin` | string | 如 `builtin`、`manual` |
@@ -31,6 +33,21 @@
 | `metadata.notes` | string | 维护备注和暂停原因 |
 
 当前内置 `json` 采集器仅接受 `api.crossref.org` 的期刊 works 响应，并读取 `message.items` 中的标题、DOI 链接和发布日期。它用于期刊官网 RSS 在 GitHub Actions 被 403 拦截时的元数据回退；其他 JSON 地址必须先实现明确适配器，不能按通用 feed 直接启用。
+
+`html_list` 最多扫描 100 个候选节点、最多读取 2,000,000 bytes，缺少有效标题、URL 或发布日期的条目会被丢弃。`yxj_home_json` 只允许固定医学界主机、路径、POST 请求体和字段路径，不能用作通用 JSON 请求器。
+
+受限适配器使用以下稳定错误类别，状态文件不会记录第三方响应正文：
+
+```text
+unsupported_parser_profile
+request_failed
+response_too_large
+unexpected_content_type
+no_valid_items
+invalid_json_shape
+invalid_item_url
+invalid_publish_time
+```
 
 ## `config/categories.yml`
 

@@ -97,6 +97,12 @@ python scripts/source_probe.py --config config/sources.yml --output data/source-
 
 详细维护流程见 [docs/source-management.md](docs/source-management.md)。
 
+### 国内列表级信源
+
+国内政策、协会和行业媒体使用公开 RSS、静态 HTML 列表或登记过的公开 JSON 列表接口。采集器只读取标题、原文链接、发布日期和列表已有短摘要，不执行 JavaScript、不发送 Cookie、不访问详情页，也不绕过登录、验证码、WAF 或付费墙。
+
+S/A 级来源用于政策与行业依据；B/C 级医疗媒体只作为线索发现层，并应用主题过滤和单源限流。同一事件优先展示更高等级来源。
+
 ## 私有 OPML 与 Secrets
 
 公开示例位于 `feeds/follow.example.opml`。个人订阅应复制到被 Git 忽略的 `feeds/follow.opml`，不要提交到仓库：

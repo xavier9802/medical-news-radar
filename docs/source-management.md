@@ -86,3 +86,5 @@ V1 没有数据库软删除字段。推荐流程：
 - 注册表缺失：运行 `python scripts/build_source_registry.py`；前端会显示“信源状态暂不可用”。
 - DeepSeek 未配置/失败：保持 `DEEPSEEK_PERSONA_ENABLED` 关闭，使用确定性 Persona 评分。
 - 政府站 403/超时：不要绕过，先暂停或寻找该机构的官方公开 feed。
+- 期刊官网 RSS 对 GitHub Actions 返回 403：可使用 Crossref 按 ISSN 获取 DOI 元数据，保留期刊主页和原始 DOI 链接，不采集全文。
+- 媒体源需要登录或持续被拦截：保留原源为停用状态，并添加通过 GitHub Actions 探测的公开替代源，不使用 Cookie、代理或反爬绕过。

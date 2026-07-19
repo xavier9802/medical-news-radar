@@ -190,20 +190,27 @@ def test_configured_tier_is_preserved_with_legacy_compatibility():
     assert result["source_tier_rank"] == 0
 
 
-def test_default_config_pauses_sources_that_failed_github_actions_validation():
-    failed_on_actions = {
+def test_default_config_enables_actions_verified_replacements_and_pauses_blocked_originals():
+    sources = load_config("sources", Path("config/sources.yml")).data["sources"]
+    by_id = {source["id"]: source for source in sources}
+    enabled_ids = {source["id"] for source in sources if source.get("enabled")}
+
+    assert {
         "who-news",
         "fda-newsroom",
         "nih-news",
         "nejm",
         "the-lancet",
         "bmj-research",
-        "medscape",
-        "healthcare-it-news",
-        "himss-news",
-    }
-
-    sources = load_config("sources", Path("config/sources.yml")).data["sources"]
-    enabled_ids = {source["id"] for source in sources if source.get("enabled")}
-
-    assert enabled_ids.isdisjoint(failed_on_actions)
+        "medpage-today",
+        "onc-health-it",
+        "hit-consultant",
+    } <= enabled_ids
+    assert enabled_ids.isdisjoint({"medscape", "healthcare-it-news", "himss-news"})
+    assert by_id["who-news"]["feed_url"] == "https://www.who.int/rss-feeds/news-english.xml"
+    assert by_id["fda-newsroom"]["feed_url"].endswith("/rss-feeds/press-releases/rss.xml")
+    assert by_id["nih-news"]["feed_url"].endswith("/cancer-currents-blog.rss")
+    assert by_id["nejm"]["fetch"]["strategy"] == "json"
+    assert by_id["the-lancet"]["fetch"]["strategy"] == "json"
+    assert by_id["bmj-research"]["fetch"]["strategy"] == "json"
+    assert "/journals/1756-1833/works" in by_id["bmj-research"]["feed_url"]

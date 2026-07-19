@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-19T03:41:45.455939Z",
+  "generated_at": "2026-07-19T03:49:36.180236Z",
   "total": 16,
   "enabled": 13,
-  "healthy": 12,
+  "healthy": 13,
   "warning": 0,
-  "failed": 1,
+  "failed": 0,
   "disabled": 3,
   "unknown": 0,
   "sources": [
@@ -24,11 +24,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 8,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T00:00:00Z",
-      "response_ms": 265,
+      "response_ms": 692,
       "error": ""
     },
     {
@@ -47,11 +47,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 13,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T04:00:00Z",
-      "response_ms": 89,
+      "response_ms": 45,
       "error": ""
     },
     {
@@ -70,11 +70,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 1,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-06-16T12:00:00Z",
-      "response_ms": 314,
+      "response_ms": 48,
       "error": ""
     },
     {
@@ -93,11 +93,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 12,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-15T12:15:58Z",
-      "response_ms": 413,
+      "response_ms": 204,
       "error": ""
     },
     {
@@ -116,11 +116,11 @@
       "featured": true,
       "status": "disabled",
       "item_count": 19,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": null,
-      "response_ms": 775,
+      "response_ms": 526,
       "error": ""
     },
     {
@@ -139,11 +139,11 @@
       "featured": true,
       "status": "disabled",
       "item_count": 19,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": null,
-      "response_ms": 775,
+      "response_ms": 526,
       "error": ""
     },
     {
@@ -162,11 +162,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 2,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-06-30T15:06:47Z",
-      "response_ms": 270,
+      "response_ms": 116,
       "error": ""
     },
     {
@@ -185,11 +185,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T00:00:00Z",
-      "response_ms": 368,
+      "response_ms": 67,
       "error": ""
     },
     {
@@ -208,11 +208,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-14T00:00:00Z",
-      "response_ms": 243,
+      "response_ms": 136,
       "error": ""
     },
     {
@@ -231,11 +231,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-18T00:00:00Z",
-      "response_ms": 622,
+      "response_ms": 148,
       "error": ""
     },
     {
@@ -254,11 +254,11 @@
       "featured": true,
       "status": "healthy",
       "item_count": 10,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-01T00:00:00Z",
-      "response_ms": 116,
+      "response_ms": 63,
       "error": ""
     },
     {
@@ -275,14 +275,14 @@
       "region": "us",
       "enabled": true,
       "featured": true,
-      "status": "failed",
-      "item_count": 0,
-      "last_success_at": null,
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "status": "healthy",
+      "item_count": 13,
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
-      "latest_item_at": null,
-      "response_ms": 287,
-      "error": "404 Client Error: Not Found for url: https://www.fda.gov/apology_objects/abuse-detection-apology.html"
+      "latest_item_at": "2026-07-17T15:01:17Z",
+      "response_ms": 125,
+      "error": ""
     },
     {
       "id": "fierce-healthcare",
@@ -300,11 +300,11 @@
       "featured": false,
       "status": "healthy",
       "item_count": 3,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-15T17:58:17Z",
-      "response_ms": 149,
+      "response_ms": 142,
       "error": ""
     },
     {
@@ -323,11 +323,11 @@
       "featured": false,
       "status": "disabled",
       "item_count": 19,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": null,
-      "response_ms": 775,
+      "response_ms": 526,
       "error": ""
     },
     {
@@ -346,11 +346,11 @@
       "featured": false,
       "status": "healthy",
       "item_count": 8,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-18T19:45:57Z",
-      "response_ms": 238,
+      "response_ms": 222,
       "error": ""
     },
     {
@@ -369,11 +369,11 @@
       "featured": false,
       "status": "healthy",
       "item_count": 8,
-      "last_success_at": "2026-07-19T03:41:45.455939Z",
-      "last_checked_at": "2026-07-19T03:41:45.455939Z",
+      "last_success_at": "2026-07-19T03:49:36.180236Z",
+      "last_checked_at": "2026-07-19T03:49:36.180236Z",
       "success_rate": null,
       "latest_item_at": "2026-07-17T22:00:41Z",
-      "response_ms": 387,
+      "response_ms": 161,
       "error": ""
     }
   ]

@@ -1,6 +1,6 @@
 interface:
-  display_name: "AI News Radar"
-  short_description: "Review and extend AI news source coverage"
-  default_prompt: "Use $ai-news-radar to run a v2 source-coverage review, then add or route this AI news source safely if it fits the project."
+  display_name: "Medical News Radar"
+  short_description: "Review and maintain medical news sources"
+  default_prompt: "Use $medical-news-radar to assess this medical source, probe it safely, and route it without exposing secrets or weakening the static GitHub architecture."
 policy:
   allow_implicit_invocation: true

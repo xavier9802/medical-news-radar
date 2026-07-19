@@ -1,0 +1,48 @@
+categories:
+  - id: policy
+    label: 政策监管
+    description: 国家及地方医疗政策、监管文件、征求意见、司法案例和行政处罚
+    order: 10
+    enabled: true
+
+  - id: medical_ai
+    label: 医疗AI
+    description: 医疗大模型、临床决策支持、AI诊疗、医学影像AI和医疗智能体
+    order: 20
+    enabled: true
+
+  - id: primary_care
+    label: 基层医疗
+    description: 诊所、社区卫生、乡镇卫生院、家庭医生、中医馆和基层医生
+    order: 30
+    enabled: true
+
+  - id: insurance_compliance
+    label: 医保合规
+    description: 医保支付、飞行检查、基金监管、追溯码、处方和收费合规
+    order: 40
+    enabled: true
+
+  - id: health_it
+    label: 医疗信息化
+    description: HIS、EMR、电子病历、互联网医院、数据治理和医疗信息安全
+    order: 50
+    enabled: true
+
+  - id: pharma_device
+    label: 医药器械
+    description: 药品、医疗器械、NMPA、FDA审批、药监和药品追溯
+    order: 60
+    enabled: true
+
+  - id: company_market
+    label: 企业动态
+    description: 融资、并购、企业合作、产品发布、经营数据和行业竞争
+    order: 70
+    enabled: true
+
+  - id: global_healthtech
+    label: 海外前沿
+    description: 海外医疗科技、数字疗法、远程医疗、国际医疗AI和海外监管
+    order: 80
+    enabled: true

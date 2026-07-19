@@ -20,8 +20,8 @@
         htmlUrl="https://www.cdc.gov/media/"
       />
       <outline
-        text="FDA News & Events"
-        title="FDA News & Events"
+        text="FDA News &amp; Events"
+        title="FDA News &amp; Events"
         type="rss"
         xmlUrl="https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds"
         htmlUrl="https://www.fda.gov/news-events"

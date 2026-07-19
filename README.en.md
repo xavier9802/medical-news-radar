@@ -1,108 +1,70 @@
-# Medical News Radar｜24h Medical Intelligence Radar
+# Medical News Radar
 
-An auto-updating 24-hour radar for medical and healthcare intelligence.
+A medical-industry source, policy, technology, and editorial-intelligence radar that runs entirely on GitHub Actions and GitHub Pages. It requires no database, login system, or long-running server.
 
-- **For readers**: open the hosted page and scan the last 24 hours of medical, public-health, clinical-research, regulatory, and industry updates.
-- **For developers/organizations**: fork this repo, plug in your own medical RSS/OPML, journal feeds, or public APIs, and deploy your own intelligence site.
-- **For agents**: use the in-repo Skill to maintain sources, evaluate new feeds, and deploy to GitHub Pages.
+- Reader: `/index.html`
+- Source registry and submission entry: `/sources.html`
+- Hosted site: [xavier9802.github.io/medical-news-radar](https://xavier9802.github.io/medical-news-radar/)
 
-## Quick start
+The radar keeps the existing fetch, normalization, deduplication, multi-source story merge, source-health, and static JSON pipeline while moving categories, keywords, scoring, tiers, and public sources into `config/*.yml`.
 
-Readers do not need to install anything; open the hosted page directly (replace with your GitHub Pages URL after deployment).
+## Coverage
 
-To run locally:
+Eight categories are supported: policy/regulation, medical AI, primary care, insurance compliance, health IT, pharma/devices, company/market, and global healthtech. The UI also preserves all, selected, current-hot, search, time sorting, and multi-source folding views.
+
+## Local setup
 
 ```bash
 git clone https://github.com/xavier9802/medical-news-radar.git
 cd medical-news-radar
 python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
 python scripts/update_news.py --output-dir data --window-hours 24
+python scripts/build_source_registry.py
 python -m http.server 8080
 ```
 
-Open http://localhost:8080
+Open `http://localhost:8080/` and `http://localhost:8080/sources.html`.
 
-## Sources
+## Automation
 
-Default public medical sources (RSS/Atom):
+`.github/workflows/update-news.yml` uses `*/30 * * * *`, so GitHub schedules it every 30 minutes (actual start may be delayed by Actions queuing). It generates and commits `data/*.json`, including `source-registry.json`.
 
-- **Official / regulatory**: WHO, CDC, FDA, NIH, etc.
-- **Medical journals**: NEJM, The Lancet, JAMA, BMJ, etc.
-- **Medical media**: Medscape, Healthcare IT News, HIMSS, etc.
-- **Chinese medical media**: add via the `feeds/follow.example.opml` sample
+Optional settings:
 
-To add private sources:
+- Secret `FOLLOW_OPML_B64`: base64-encoded private OPML; never commit the real file.
+- Variable `RSS_MAX_FEEDS`: OPML feed cap, default 10.
+- `DEEPSEEK_API_KEY` plus `DEEPSEEK_PERSONA_ENABLED=1`: optional Persona ranking only; deterministic behavior remains the default.
 
-```bash
-cp feeds/follow.example.opml feeds/follow.opml
-# edit feeds/follow.opml with your medical RSS feeds
-python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml feeds/follow.opml
-```
+To deploy, enable Actions write permission, select **Settings → Pages → Deploy from a branch**, choose `main` and `/ (root)`, then manually run **Update Medical News Snapshot** once.
 
-## How it works
+## Source intake
 
-1. **Source judgment**: prefer official agencies, authoritative journals, and trusted media; filter out wellness quackery, e-commerce noise, etc.
-2. **Fetch & structure**: RSS/Atom/OPML + optional public APIs.
-3. **Medical relevance scoring**: score items by title, source, and keywords.
-4. **Deduplication & story merging**: cluster multiple sources for the same event into a story timeline.
-5. **Static site publishing**: GitHub Actions generates `data/*.json` and publishes to GitHub Pages.
-
-## Data outputs
-
-- `data/latest-24h.json`: medical-focused updates from the last 24 hours
-- `data/latest-24h-all.json`: all updates from the last 24 hours
-- `data/source-status.json`: source fetch status and health
-- `data/daily-brief.json`: curated story timeline / Top 3
-- `data/stories-merged.json`: full merged story set
-- `data/merge-log.json`: merge audit log
-
-## GitHub Actions auto-update
-
-`.github/workflows/update-news.yml` is already configured:
-
-- Runs every 30 minutes by default
-- Generates and commits `data/*.json` automatically
-- Private OPML can be supplied via the `FOLLOW_OPML_B64` secret
-
-### Configure private OPML
+Use the “Recommend source” button or the `source-request.yml` Issue Form. Submissions never edit configuration, create PRs, or merge automatically.
 
 ```bash
-base64 -i feeds/follow.opml | pbcopy  # copy to clipboard
-# Create FOLLOW_OPML_B64 in GitHub repo Settings > Secrets and variables > Actions
+python scripts/source_probe.py --url "https://example.com/feed.xml" --name "Example"
+python scripts/source_probe.py --config config/sources.yml --output data/source-probe-result.json
 ```
 
-## Project structure
+Maintainers can also run **Actions → Check Medical News Source → Run workflow**. External Issues receive structural-only checks; network probes from Issues are restricted to trusted repository roles.
 
-```
-medical-news-radar/
-├── scripts/
-│   ├── update_news.py          # main fetcher and data generator
-│   ├── medical_relevance.py    # medical relevance scoring
-│   └── ...
-├── assets/
-│   ├── app.js                  # frontend logic
-│   └── styles.css              # styles
-├── feeds/
-│   └── follow.example.opml     # OPML example
-├── index.html                  # main page
-├── data/                       # generated JSON (auto-committed)
-└── tests/                      # tests
-```
+See [source management](docs/source-management.md), [schema reference](docs/source-schema.md), and [coverage policy](docs/SOURCE_COVERAGE.md).
 
-## Tests
+## Validation
 
 ```bash
-python -m py_compile scripts/update_news.py
-pytest -q
+python -m pytest -q
+python -m compileall scripts
+node --test tests/js/*.test.cjs
+node --check assets/runtime-config.js
 node --check assets/app.js
+node --check assets/sources.js
 ```
 
-## Forked from AI News Radar
+## Safety
 
-This project is adapted from [LearnPrompt/ai-news-radar](https://github.com/LearnPrompt/ai-news-radar), keeping its lightweight pipeline and GitHub Pages deployment architecture while switching the topic entirely to medical and healthcare.
+Only public HTTP(S) sources are eligible. The probe blocks local/private/reserved addresses, revalidates redirects, and limits redirects, timeouts, and response size. The project does not bypass login, captcha, cookies, or paywalls; does not store third-party full text; and must not turn news into medical advice or invent policy, clinical, approval, or financing facts.
 
-## License
-
-MIT
+Adapted from [LearnPrompt/ai-news-radar](https://github.com/LearnPrompt/ai-news-radar). Licensed under [MIT](LICENSE).

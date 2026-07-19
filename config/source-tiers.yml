@@ -1,0 +1,20 @@
+tiers:
+  s:
+    label: S级
+    authority_score: 1.0
+    description: 官方政策、监管机构和原始文件
+
+  a:
+    label: A级
+    authority_score: 0.82
+    description: 权威期刊、行业媒体、研究机构和企业官方公告
+
+  b:
+    label: B级
+    authority_score: 0.62
+    description: 综合科技、财经和可靠转载媒体
+
+  c:
+    label: C级
+    authority_score: 0.38
+    description: 聚合站、公众号、社交媒体和选题观察来源

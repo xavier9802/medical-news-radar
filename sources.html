@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>信源管理｜Medical News Radar</title>
+    <meta name="description" content="查看 Medical News Radar 的公开信源、栏目、等级与最近采集状态。" />
+    <meta name="theme-color" content="#f6f6f2" />
+    <link rel="icon" href="./assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/styles.css?v=medical-source-v1" />
+    <link rel="stylesheet" href="./assets/sources.css?v=medical-source-v1" />
+  </head>
+  <body>
+    <main class="source-shell">
+      <header class="source-hero">
+        <div class="source-hero-copy">
+          <a class="source-back" href="./index.html">← 返回情报首页</a>
+          <p class="source-eyebrow">MEDICAL SOURCE REGISTRY</p>
+          <h1>信源管理</h1>
+          <p class="source-intro">公开展示信源配置与最近采集状态。这里是静态登记表和提交入口，不是可直接写入配置的后台。</p>
+        </div>
+        <div class="source-hero-actions">
+          <span class="source-updated-label">最后更新</span>
+          <strong id="sourceUpdatedAt">加载中…</strong>
+          <a
+            class="source-recommend"
+            href="https://github.com/xavier9802/medical-news-radar/issues/new?template=source-request.yml"
+            target="_blank"
+            rel="noopener noreferrer"
+          >推荐新信源</a>
+        </div>
+      </header>
+
+      <section class="source-stats" id="sourceStats" aria-label="信源统计"></section>
+
+      <section class="source-filters" aria-label="筛选信源">
+        <label>
+          <span>搜索</span>
+          <input id="sourceSearch" type="search" placeholder="名称、ID、地区或网址" />
+        </label>
+        <label>
+          <span>栏目</span>
+          <select id="sourceCategoryFilter">
+            <option value="">全部栏目</option>
+            <option value="policy">政策监管</option>
+            <option value="medical_ai">医疗AI</option>
+            <option value="primary_care">基层医疗</option>
+            <option value="insurance_compliance">医保合规</option>
+            <option value="health_it">医疗信息化</option>
+            <option value="pharma_device">医药器械</option>
+            <option value="company_market">企业动态</option>
+            <option value="global_healthtech">海外前沿</option>
+          </select>
+        </label>
+        <label>
+          <span>等级</span>
+          <select id="sourceTierFilter">
+            <option value="">全部等级</option>
+            <option value="s">S级</option>
+            <option value="a">A级</option>
+            <option value="b">B级</option>
+            <option value="c">C级</option>
+          </select>
+        </label>
+        <label>
+          <span>状态</span>
+          <select id="sourceStatusFilter">
+            <option value="">全部状态</option>
+            <option value="healthy">正常</option>
+            <option value="warning">注意</option>
+            <option value="failed">异常</option>
+            <option value="disabled">已暂停</option>
+            <option value="unknown">未知</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="source-results">
+        <header class="source-results-head">
+          <div>
+            <p class="source-eyebrow">CONFIGURED SOURCES</p>
+            <h2>公开信源</h2>
+          </div>
+          <span id="sourceResultCount">0 个信源</span>
+        </header>
+        <div class="source-list" id="sourceList">
+          <div class="source-empty">正在加载信源状态…</div>
+        </div>
+      </section>
+
+      <aside class="source-guidance">
+        <h2>添加信源说明</h2>
+        <ul>
+          <li>提交后会进入 GitHub Issue，由维护者进行结构检查与安全探测。</li>
+          <li>通过检测不代表一定接入；官方原文和权威来源优先。</li>
+          <li>不接入必须登录、验证码、Cookie 或绕过访问限制才能读取的来源。</li>
+          <li>不自动修改 <code>config/sources.yml</code>，不自动创建或合并 PR。</li>
+        </ul>
+        <a
+          href="https://github.com/xavier9802/medical-news-radar/issues/new?template=source-request.yml"
+          target="_blank"
+          rel="noopener noreferrer"
+        >打开信源推荐表单</a>
+      </aside>
+    </main>
+
+    <script src="./assets/runtime-config.js?v=medical-source-v1"></script>
+    <script src="./assets/sources.js?v=medical-source-v1"></script>
+  </body>
+</html>

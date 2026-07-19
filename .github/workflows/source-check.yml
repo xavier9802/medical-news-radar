@@ -1,0 +1,212 @@
+name: Check Medical News Source
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: Public HTTP(S) source or feed URL
+        required: true
+        type: string
+      source_name:
+        description: Optional source name
+        required: false
+        default: ""
+        type: string
+      source_category:
+        description: Requested medical category
+        required: false
+        default: auto
+        type: choice
+        options:
+          - auto
+          - policy
+          - medical_ai
+          - primary_care
+          - insurance_compliance
+          - health_it
+          - pharma_device
+          - company_market
+          - global_healthtech
+  issues:
+    types:
+      - opened
+      - edited
+
+permissions:
+  contents: read
+  issues: read
+
+concurrency:
+  group: source-check-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout trusted default-branch code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Prepare structured request
+        id: prepare
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_URL: ${{ inputs.source_url || '' }}
+          DISPATCH_NAME: ${{ inputs.source_name || '' }}
+          DISPATCH_CATEGORY: ${{ inputs.source_category || '' }}
+          ISSUE_BODY: ${{ github.event.issue.body || '' }}
+          AUTHOR_ASSOCIATION: ${{ github.event.issue.author_association || '' }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+
+          def issue_fields(body):
+              fields = {}
+              current = None
+              values = []
+              for line in body.splitlines():
+                  match = re.match(r"^###\s+(.+?)\s*$", line)
+                  if match:
+                      if current:
+                          fields[current] = "\n".join(values).strip()
+                      current = match.group(1).strip()
+                      values = []
+                  elif current:
+                      values.append(line)
+              if current:
+                  fields[current] = "\n".join(values).strip()
+              return fields
+
+          def first_line(value, limit):
+              for line in str(value or "").splitlines():
+                  cleaned = line.strip().strip("<>")
+                  if cleaned and cleaned != "_No response_":
+                      return cleaned[:limit]
+              return ""
+
+          event_name = os.environ.get("EVENT_NAME", "")
+          manual = event_name == "workflow_dispatch"
+          fields = issue_fields(os.environ.get("ISSUE_BODY", ""))
+          source_name = first_line(os.environ.get("DISPATCH_NAME") if manual else fields.get("信源名称"), 200)
+          feed_url = first_line(fields.get("RSS / Atom / JSON 地址"), 2048)
+          homepage_url = first_line(fields.get("信源主页地址"), 2048)
+          source_url = first_line(os.environ.get("DISPATCH_URL"), 2048) if manual else (feed_url or homepage_url)
+          source_category = first_line(os.environ.get("DISPATCH_CATEGORY") if manual else fields.get("建议栏目"), 100)
+          association = os.environ.get("AUTHOR_ASSOCIATION", "").upper()
+          trusted = manual or association in {"OWNER", "MEMBER", "COLLABORATOR"}
+          structured = bool(source_url) and (manual or bool(source_name and fields.get("推荐理由")))
+          request = {
+              "source_url": source_url,
+              "source_name": source_name,
+              "source_category": source_category,
+              "trusted": trusted,
+              "structured": structured,
+              "event_name": event_name,
+          }
+          Path("probe-input.json").write_text(json.dumps(request, ensure_ascii=False), encoding="utf-8")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"trusted={str(trusted).lower()}\n")
+              output.write(f"structured={str(structured).lower()}\n")
+              output.write(f"should_probe={str(trusted and structured).lower()}\n")
+          PY
+
+      - name: Setup Python
+        if: steps.prepare.outputs.should_probe == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        if: steps.prepare.outputs.should_probe == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Probe trusted source
+        if: steps.prepare.outputs.should_probe == 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.source_probe import probe_url
+
+          request = json.loads(Path("probe-input.json").read_text(encoding="utf-8"))
+          result = probe_url(request["source_url"], request["source_name"])
+          result["requested_category"] = request["source_category"]
+          result["trusted_submission"] = True
+          output = Path("artifacts/source-probe-result.json")
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+          PY
+
+      - name: Record structural-only review
+        if: steps.prepare.outputs.should_probe != 'true'
+        env:
+          TRUSTED: ${{ steps.prepare.outputs.trusted }}
+          STRUCTURED: ${{ steps.prepare.outputs.structured }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          trusted = os.environ.get("TRUSTED") == "true"
+          structured = os.environ.get("STRUCTURED") == "true"
+          reason = "untrusted_issue_no_network_probe" if not trusted else "invalid_issue_structure"
+          result = {
+              "checked_at": None,
+              "network_probe_performed": False,
+              "trusted_submission": trusted,
+              "structured_submission": structured,
+              "warnings": [reason],
+              "errors": [],
+          }
+          output = Path("artifacts/source-probe-result.json")
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+          PY
+
+      - name: Add safe job summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import html
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("artifacts/source-probe-result.json")
+          result = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"errors": ["result_missing"]}
+          performed = result.get("network_probe_performed", "status_code" in result)
+          lines = [
+              "## Medical source check",
+              "",
+              f"- Network probe performed: **{str(bool(performed)).lower()}**",
+              f"- Reachable: **{str(bool(result.get('reachable'))).lower()}**" if performed else "- Reachable: **not checked**",
+              f"- Status: `{html.escape(str(result.get('status_code') or 'n/a'))}`",
+              f"- Detected type: `{html.escape(str(result.get('detected_type') or 'n/a'))}`",
+              f"- Feed valid: **{str(bool(result.get('feed_valid'))).lower()}**",
+              f"- Items: `{int(result.get('item_count') or 0)}`",
+              f"- Warnings: `{len(result.get('warnings') or [])}`",
+              f"- Errors: `{len(result.get('errors') or [])}`",
+          ]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("\n".join(lines) + "\n")
+          PY
+
+      - name: Upload probe result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-probe-${{ github.run_id }}
+          path: artifacts/source-probe-result.json
+          if-no-files-found: warn
+          retention-days: 7

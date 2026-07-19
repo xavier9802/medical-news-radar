@@ -1,0 +1,247 @@
+sources:
+  - id: who-news
+    name: WHO News
+    homepage_url: https://www.who.int/news-room/headlines
+    feed_url: https://www.who.int/feeds/entity/cds/headlines/en/rss.xml
+    type: rss
+    category: global_healthtech
+    tier: s
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: official_health
+      notes: 世界卫生组织公开新闻源
+
+  - id: cdc-newsroom
+    name: CDC Newsroom
+    homepage_url: https://www.cdc.gov/media/releases/index.html
+    feed_url: https://tools.cdc.gov/podcasts/feed.asp?feedid=183
+    type: rss
+    category: global_healthtech
+    tier: s
+    language: en
+    region: us
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: official_health
+      notes: 美国疾控中心公开新闻源
+
+  - id: fda-newsroom
+    name: FDA News
+    homepage_url: https://www.fda.gov/news-events/fda-newsroom
+    feed_url: https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/newsroom/rss.xml
+    type: rss
+    category: pharma_device
+    tier: s
+    language: en
+    region: us
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: official_health
+      notes: 美国食品药品监督管理局公开新闻源
+
+  - id: nih-news
+    name: NIH News
+    homepage_url: https://www.nih.gov/news-events/news-releases
+    feed_url: https://www.nih.gov/news-events/news-releases/rss.xml
+    type: rss
+    category: global_healthtech
+    tier: s
+    language: en
+    region: us
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: official_health
+      notes: 美国国立卫生研究院公开新闻源
+
+  - id: nejm
+    name: NEJM
+    homepage_url: https://www.nejm.org/medical-articles
+    feed_url: https://www.nejm.org/rss/medical-articles.xml
+    type: journal
+    category: pharma_device
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_journals
+      notes: 新英格兰医学杂志公开RSS
+
+  - id: the-lancet
+    name: The Lancet
+    homepage_url: https://www.thelancet.com/online-first
+    feed_url: https://www.thelancet.com/rssfeed/online_first.xml
+    type: journal
+    category: pharma_device
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_journals
+      notes: 柳叶刀在线优先公开RSS
+
+  - id: jama
+    name: JAMA
+    homepage_url: https://jamanetwork.com/journals/jama/latest
+    feed_url: https://jamanetwork.com/rss/site_3/67.xml
+    type: journal
+    category: pharma_device
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_journals
+      notes: 美国医学会杂志公开RSS
+
+  - id: bmj-research
+    name: BMJ
+    homepage_url: https://www.bmj.com/research
+    feed_url: https://www.bmj.com/rss/research.xml
+    type: journal
+    category: pharma_device
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_journals
+      notes: 英国医学杂志研究公开RSS
+
+  - id: nature-medicine
+    name: Nature Medicine
+    homepage_url: https://www.nature.com/nm
+    feed_url: https://www.nature.com/nm.rss
+    type: journal
+    category: global_healthtech
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_journals
+      notes: Nature Medicine公开RSS
+
+  - id: medscape
+    name: Medscape
+    homepage_url: https://www.medscape.com/
+    feed_url: https://www.medscape.com/rss
+    type: rss
+    category: global_healthtech
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: false
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_media
+      notes: 医疗专业媒体公开RSS
+
+  - id: healthcare-it-news
+    name: Healthcare IT News
+    homepage_url: https://www.healthcareitnews.com/
+    feed_url: https://www.healthcareitnews.com/rss
+    type: rss
+    category: health_it
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_media
+      notes: 医疗信息化媒体公开RSS
+
+  - id: fierce-healthcare
+    name: Fierce Healthcare
+    homepage_url: https://www.fiercehealthcare.com/
+    feed_url: https://www.fiercehealthcare.com/rss.xml
+    type: rss
+    category: company_market
+    tier: b
+    language: en
+    region: us
+    enabled: true
+    featured: false
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_media
+      notes: 医疗产业媒体公开RSS
+
+  - id: himss-news
+    name: HIMSS
+    homepage_url: https://www.himss.org/news
+    feed_url: https://www.himss.org/news/rss
+    type: rss
+    category: health_it
+    tier: a
+    language: en
+    region: global
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: builtin
+      added_by: system
+      legacy_site_id: medical_media
+      notes: 医疗信息化行业组织公开RSS

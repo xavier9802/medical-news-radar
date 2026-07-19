@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-07-19T07:26:24.919524Z",
+  "generated_at": "2026-07-19T15:52:30.512677Z",
   "window_hours": 24,
   "total_items": 3,
   "total_items_ai_raw": 3,
-  "total_items_raw": 5,
-  "total_items_all_mode": 5,
+  "total_items_raw": 8,
+  "total_items_all_mode": 8,
   "topic_filter": "medical_relevance_scoring_v0_1",
   "medical_relevance_threshold": 0.65,
-  "archive_total": 144,
+  "archive_total": 167,
   "site_count": 4,
-  "source_count": 1,
+  "source_count": 2,
   "site_stats": [
     {
       "site_id": "medical_media",
       "site_name": "Medical Media",
       "count": 3,
-      "raw_count": 5
+      "raw_count": 8
     },
     {
       "site_id": "official_health",
@@ -46,7 +46,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T15:52:30.512677Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -80,12 +80,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6131,
+      "importance_score": 0.5955,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.8305,
+        "recency": 0.7131,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -114,11 +114,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.5026,
-        "policy-analyst": 0.0736,
-        "medical-ai-product-manager": 0.5454
+        "medical-editor": 0.4964,
+        "policy-analyst": 0.0715,
+        "medical-ai-product-manager": 0.5419
       },
-      "topic_value": 0.5623,
+      "topic_value": 0.5553,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -137,7 +137,7 @@
       "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
       "published_at": "2026-07-18T18:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T15:52:30.512677Z",
       "source_id": "medpage-today",
       "category": "health_it",
       "source_tier": "b",
@@ -174,12 +174,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6305,
+      "importance_score": 0.6129,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.77,
         "impact": 0.65,
-        "recency": 0.8133,
+        "recency": 0.6959,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -211,11 +211,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
       "persona_scores": {
-        "medical-editor": 0.5247,
-        "policy-analyst": 0.0757,
-        "medical-ai-product-manager": 0.5585
+        "medical-editor": 0.5185,
+        "policy-analyst": 0.0735,
+        "medical-ai-product-manager": 0.555
       },
-      "topic_value": 0.5765,
+      "topic_value": 0.5695,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -227,54 +227,55 @@
       "title_bilingual": "诊断癌症患者的肺栓塞；美国医院感染情况 / Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals"
     },
     {
-      "id": "61f3e2fb4abf53bd49cc50db12135ca50799e27c",
+      "id": "da54208cddb430ba5b8d2bd8b7aa20d0a113ba25",
       "site_id": "medical_media",
       "site_name": "Medical Media",
-      "source": "MedPage Today",
-      "title": "The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses",
-      "url": "https://www.medpagetoday.com/infectiousdisease/vaccines/122232",
-      "published_at": "2026-07-18T14:00:00Z",
-      "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
-      "source_id": "medpage-today",
-      "category": "global_healthtech",
-      "source_tier": "b",
-      "language": "en",
-      "region": "us",
+      "source": "医学界",
+      "title": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！",
+      "url": "https://www.yxj.org.cn/detailPage?articleId=505302",
+      "published_at": "2026-07-18T23:03:00Z",
+      "first_seen_at": "2026-07-19T15:52:30.512677Z",
+      "last_seen_at": "2026-07-19T15:52:30.512677Z",
+      "summary": "",
+      "source_id": "cn-yxj",
+      "category": "health_it",
+      "source_tier": "c",
+      "language": "zh",
+      "region": "cn",
       "is_official": false,
       "source_metadata": {
-        "category": "global_healthtech",
-        "tier": "b",
+        "category": "health_it",
+        "tier": "c",
         "official": false,
-        "source_id": "medpage-today"
+        "source_id": "cn-yxj"
       },
       "medical_is_related": true,
       "medical_score": 0.69,
       "medical_label": "medical_general",
       "medical_relevance_reason": "medical_media_source_filter",
       "medical_signals": [
-        "vaccine"
+        "临床"
       ],
       "medical_noise": [],
       "medical_relevance_score": 0.69,
-      "category_label": "海外前沿",
+      "category_label": "医疗信息化",
       "category_scores": {
         "policy": 0.0,
         "medical_ai": 0.0,
         "primary_care": 0.0,
         "insurance_compliance": 0.0,
-        "health_it": 0.0,
+        "health_it": 0.2,
         "pharma_device": 0.0,
         "company_market": 0.0,
-        "global_healthtech": 0.2
+        "global_healthtech": 0.0
       },
       "impact_score": 0.65,
-      "importance_score": 0.6022,
+      "importance_score": 0.5314,
       "importance_breakdown": {
-        "authority": 0.62,
+        "authority": 0.38,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7578,
+        "recency": 0.7661,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -295,27 +296,28 @@
       },
       "noise_score": 0.0,
       "matched_keywords": [
-        "vaccine"
+        "临床"
       ],
-      "source_authority_score": 0.62,
-      "source_tier_label": "B级",
-      "source_tier_rank": 2,
+      "source_authority_score": 0.38,
+      "source_tier_label": "C级",
+      "source_tier_rank": 3,
       "source_tier_legacy": "medical_media",
-      "recommendation_reason": "海外前沿：命中 vaccine",
+      "recommendation_reason": "医疗信息化：命中 临床",
       "persona_scores": {
-        "medical-editor": 0.4988,
-        "policy-analyst": 0.0723,
-        "medical-ai-product-manager": 0.5432
+        "medical-editor": 0.474,
+        "policy-analyst": 0.0638,
+        "medical-ai-product-manager": 0.5291
       },
-      "topic_value": 0.5579,
+      "topic_value": 0.5297,
       "content_angles": [
-        "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
+        "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
+        "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
       ],
       "persona_enhanced": false,
-      "title_original": "The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses",
-      "title_en": "The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses",
-      "title_zh": "新型疟疾疫苗为非洲提供帮助，但面临考验：完成全部 4 剂疫苗",
-      "title_bilingual": "新型疟疾疫苗为非洲提供帮助，但面临考验：完成全部 4 剂疫苗 / The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses"
+      "title_original": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！",
+      "title_en": null,
+      "title_zh": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！",
+      "title_bilingual": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！"
     }
   ],
   "items_ai": [
@@ -328,7 +330,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T15:52:30.512677Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -362,12 +364,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6131,
+      "importance_score": 0.5955,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.8305,
+        "recency": 0.7131,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -396,11 +398,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.5026,
-        "policy-analyst": 0.0736,
-        "medical-ai-product-manager": 0.5454
+        "medical-editor": 0.4964,
+        "policy-analyst": 0.0715,
+        "medical-ai-product-manager": 0.5419
       },
-      "topic_value": 0.5623,
+      "topic_value": 0.5553,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -419,7 +421,7 @@
       "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
       "published_at": "2026-07-18T18:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
+      "last_seen_at": "2026-07-19T15:52:30.512677Z",
       "source_id": "medpage-today",
       "category": "health_it",
       "source_tier": "b",
@@ -456,12 +458,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6305,
+      "importance_score": 0.6129,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.77,
         "impact": 0.65,
-        "recency": 0.8133,
+        "recency": 0.6959,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -493,11 +495,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
       "persona_scores": {
-        "medical-editor": 0.5247,
-        "policy-analyst": 0.0757,
-        "medical-ai-product-manager": 0.5585
+        "medical-editor": 0.5185,
+        "policy-analyst": 0.0735,
+        "medical-ai-product-manager": 0.555
       },
-      "topic_value": 0.5765,
+      "topic_value": 0.5695,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -509,54 +511,55 @@
       "title_bilingual": "诊断癌症患者的肺栓塞；美国医院感染情况 / Diagnosing Pulmonary Embolism in Cancer Patients; Infections in U.S. Hospitals"
     },
     {
-      "id": "61f3e2fb4abf53bd49cc50db12135ca50799e27c",
+      "id": "da54208cddb430ba5b8d2bd8b7aa20d0a113ba25",
       "site_id": "medical_media",
       "site_name": "Medical Media",
-      "source": "MedPage Today",
-      "title": "The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses",
-      "url": "https://www.medpagetoday.com/infectiousdisease/vaccines/122232",
-      "published_at": "2026-07-18T14:00:00Z",
-      "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T07:26:24.919524Z",
-      "source_id": "medpage-today",
-      "category": "global_healthtech",
-      "source_tier": "b",
-      "language": "en",
-      "region": "us",
+      "source": "医学界",
+      "title": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！",
+      "url": "https://www.yxj.org.cn/detailPage?articleId=505302",
+      "published_at": "2026-07-18T23:03:00Z",
+      "first_seen_at": "2026-07-19T15:52:30.512677Z",
+      "last_seen_at": "2026-07-19T15:52:30.512677Z",
+      "summary": "",
+      "source_id": "cn-yxj",
+      "category": "health_it",
+      "source_tier": "c",
+      "language": "zh",
+      "region": "cn",
       "is_official": false,
       "source_metadata": {
-        "category": "global_healthtech",
-        "tier": "b",
+        "category": "health_it",
+        "tier": "c",
         "official": false,
-        "source_id": "medpage-today"
+        "source_id": "cn-yxj"
       },
       "medical_is_related": true,
       "medical_score": 0.69,
       "medical_label": "medical_general",
       "medical_relevance_reason": "medical_media_source_filter",
       "medical_signals": [
-        "vaccine"
+        "临床"
       ],
       "medical_noise": [],
       "medical_relevance_score": 0.69,
-      "category_label": "海外前沿",
+      "category_label": "医疗信息化",
       "category_scores": {
         "policy": 0.0,
         "medical_ai": 0.0,
         "primary_care": 0.0,
         "insurance_compliance": 0.0,
-        "health_it": 0.0,
+        "health_it": 0.2,
         "pharma_device": 0.0,
         "company_market": 0.0,
-        "global_healthtech": 0.2
+        "global_healthtech": 0.0
       },
       "impact_score": 0.65,
-      "importance_score": 0.6022,
+      "importance_score": 0.5314,
       "importance_breakdown": {
-        "authority": 0.62,
+        "authority": 0.38,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7578,
+        "recency": 0.7661,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -577,27 +580,28 @@
       },
       "noise_score": 0.0,
       "matched_keywords": [
-        "vaccine"
+        "临床"
       ],
-      "source_authority_score": 0.62,
-      "source_tier_label": "B级",
-      "source_tier_rank": 2,
+      "source_authority_score": 0.38,
+      "source_tier_label": "C级",
+      "source_tier_rank": 3,
       "source_tier_legacy": "medical_media",
-      "recommendation_reason": "海外前沿：命中 vaccine",
+      "recommendation_reason": "医疗信息化：命中 临床",
       "persona_scores": {
-        "medical-editor": 0.4988,
-        "policy-analyst": 0.0723,
-        "medical-ai-product-manager": 0.5432
+        "medical-editor": 0.474,
+        "policy-analyst": 0.0638,
+        "medical-ai-product-manager": 0.5291
       },
-      "topic_value": 0.5579,
+      "topic_value": 0.5297,
       "content_angles": [
-        "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
+        "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
+        "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
       ],
       "persona_enhanced": false,
-      "title_original": "The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses",
-      "title_en": "The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses",
-      "title_zh": "新型疟疾疫苗为非洲提供帮助，但面临考验：完成全部 4 剂疫苗",
-      "title_bilingual": "新型疟疾疫苗为非洲提供帮助，但面临考验：完成全部 4 剂疫苗 / The New Malaria Vaccine Helps in Africa but Faces a Test: Completing All 4 Doses"
+      "title_original": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！",
+      "title_en": null,
+      "title_zh": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！",
+      "title_bilingual": "早读 | 中美最新共识划重点：DOAC用于血栓防与治，这11个临床决策点必看！"
     }
   ],
   "all_mode_data_url": "data/latest-24h-all.json",

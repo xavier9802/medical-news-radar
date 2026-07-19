@@ -2,13 +2,13 @@ sources:
   - id: who-news
     name: WHO News
     homepage_url: https://www.who.int/news-room/headlines
-    feed_url: https://www.who.int/feeds/entity/cds/headlines/en/rss.xml
+    feed_url: https://www.who.int/rss-feeds/news-english.xml
     type: rss
     category: global_healthtech
     tier: s
     language: en
     region: global
-    enabled: false
+    enabled: true
     featured: true
     fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -16,7 +16,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: official_health
-      notes: 世界卫生组织公开新闻源；2026-07-19 GitHub Actions 返回 404，暂停等待官方稳定 feed
+      notes: 世界卫生组织公开新闻源；2026-07-19 新官方 feed 经 GitHub Actions 验证为 200、25 条
 
   - id: cdc-newsroom
     name: CDC Newsroom
@@ -40,13 +40,13 @@ sources:
   - id: fda-newsroom
     name: FDA News
     homepage_url: https://www.fda.gov/news-events/fda-newsroom
-    feed_url: https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/newsroom/rss.xml
+    feed_url: https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml
     type: rss
     category: pharma_device
     tier: s
     language: en
     region: us
-    enabled: false
+    enabled: true
     featured: true
     fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -54,18 +54,18 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: official_health
-      notes: 美国食品药品监督管理局公开新闻源；2026-07-19 GitHub Actions 返回 404，暂停等待官方稳定 feed
+      notes: 美国食品药品监督管理局 Press Releases RSS；2026-07-19 经 GitHub Actions 验证为 200、20 条
 
   - id: nih-news
-    name: NIH News
-    homepage_url: https://www.nih.gov/news-events/news-releases
-    feed_url: https://www.nih.gov/news-events/news-releases/rss.xml
+    name: NIH NCI Cancer Currents
+    homepage_url: https://www.cancer.gov/news-events/cancer-currents-blog
+    feed_url: https://www.cancer.gov/publishedcontent/rss/news-events/cancer-currents-blog.rss
     type: rss
     category: global_healthtech
     tier: s
     language: en
     region: us
-    enabled: false
+    enabled: true
     featured: true
     fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -73,45 +73,45 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: official_health
-      notes: 美国国立卫生研究院公开新闻源；2026-07-19 GitHub Actions 返回 404，暂停等待官方稳定 feed
+      notes: NIH 下属 NCI 官方研究进展源；NIH 主站 feed 对 Actions 返回 403，2026-07-19 此源验证为 200、10 条
 
   - id: nejm
     name: NEJM
     homepage_url: https://www.nejm.org/medical-articles
-    feed_url: https://www.nejm.org/rss/medical-articles.xml
+    feed_url: https://api.crossref.org/journals/0028-4793/works?rows=20&sort=published&order=desc
     type: journal
     category: pharma_device
     tier: a
     language: en
     region: global
-    enabled: false
+    enabled: true
     featured: true
-    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    fetch: {strategy: json, interval_hours: 6, max_items: 10, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
     metadata:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_journals
-      notes: 新英格兰医学杂志公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
+      notes: NEJM 官网 RSS 对 GitHub Actions 返回 403；改用 Crossref 按 ISSN 提供的 DOI 元数据，原文仍链接 NEJM
 
   - id: the-lancet
     name: The Lancet
     homepage_url: https://www.thelancet.com/online-first
-    feed_url: https://www.thelancet.com/rssfeed/online_first.xml
+    feed_url: https://api.crossref.org/journals/0140-6736/works?rows=20&sort=published&order=desc
     type: journal
     category: pharma_device
     tier: a
     language: en
     region: global
-    enabled: false
+    enabled: true
     featured: true
-    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    fetch: {strategy: json, interval_hours: 6, max_items: 10, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
     metadata:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_journals
-      notes: 柳叶刀在线优先公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
+      notes: The Lancet 官网 RSS 对 GitHub Actions 返回 403；改用 Crossref 按 ISSN 提供的 DOI 元数据
 
   - id: jama
     name: JAMA
@@ -135,21 +135,21 @@ sources:
   - id: bmj-research
     name: BMJ
     homepage_url: https://www.bmj.com/research
-    feed_url: https://www.bmj.com/rss/research.xml
+    feed_url: https://api.crossref.org/journals/1756-1833/works?rows=20&sort=published&order=desc
     type: journal
     category: pharma_device
     tier: a
     language: en
     region: global
-    enabled: false
+    enabled: true
     featured: true
-    fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
+    fetch: {strategy: json, interval_hours: 6, max_items: 10, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
     metadata:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_journals
-      notes: 英国医学杂志研究公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
+      notes: BMJ 官网 RSS 对 GitHub Actions 返回 403；改用 Crossref 按在线 ISSN 提供的 DOI 元数据
 
   - id: nature-medicine
     name: Nature Medicine
@@ -189,6 +189,25 @@ sources:
       legacy_site_id: medical_media
       notes: 医疗专业媒体公开RSS；2026-07-19 未解析到有效条目，暂停等待稳定 feed
 
+  - id: medpage-today
+    name: MedPage Today
+    homepage_url: https://www.medpagetoday.com/
+    feed_url: https://www.medpagetoday.com/rss/headlines.xml
+    type: rss
+    category: global_healthtech
+    tier: b
+    language: en
+    region: us
+    enabled: true
+    featured: false
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: manual
+      added_by: system
+      legacy_site_id: medical_media
+      notes: Medscape 入口需要登录后的公开替代媒体源；2026-07-19 经 GitHub Actions 验证为 200、20 条
+
   - id: healthcare-it-news
     name: Healthcare IT News
     homepage_url: https://www.healthcareitnews.com/
@@ -206,7 +225,26 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_media
-      notes: 医疗信息化媒体公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
+      notes: 医疗信息化媒体公开RSS；2026-07-19 GitHub Actions 返回 403，不绕过访问控制，以 ONC Health IT Blog 替代
+
+  - id: onc-health-it
+    name: ONC Health IT Blog
+    homepage_url: https://healthit.gov/blog/
+    feed_url: https://healthit.gov/blog/feed/
+    type: government_page
+    category: health_it
+    tier: s
+    language: en
+    region: us
+    enabled: true
+    featured: true
+    fetch: {strategy: rss, interval_hours: 3, max_items: 12, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: manual
+      added_by: system
+      legacy_site_id: official_health
+      notes: 美国卫生信息技术国家协调办公室官方源；2026-07-19 经 GitHub Actions 验证为 200、10 条
 
   - id: fierce-healthcare
     name: Fierce Healthcare
@@ -244,4 +282,23 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_media
-      notes: 医疗信息化行业组织公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
+      notes: 医疗信息化行业组织公开RSS；2026-07-19 GitHub Actions 返回 403，不绕过访问控制，以 HIT Consultant 替代
+
+  - id: hit-consultant
+    name: HIT Consultant
+    homepage_url: https://hitconsultant.net/
+    feed_url: https://hitconsultant.net/feed/
+    type: rss
+    category: health_it
+    tier: b
+    language: en
+    region: us
+    enabled: true
+    featured: false
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: manual
+      added_by: system
+      legacy_site_id: medical_media
+      notes: 医疗信息化行业媒体替代源；2026-07-19 经 GitHub Actions 验证为 200、15 条

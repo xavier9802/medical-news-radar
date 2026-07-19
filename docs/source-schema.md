@@ -30,6 +30,8 @@
 | `metadata.legacy_site_id` | string | 与旧抓取器兼容的可选 ID |
 | `metadata.notes` | string | 维护备注和暂停原因 |
 
+当前内置 `json` 采集器仅接受 `api.crossref.org` 的期刊 works 响应，并读取 `message.items` 中的标题、DOI 链接和发布日期。它用于期刊官网 RSS 在 GitHub Actions 被 403 拦截时的元数据回退；其他 JSON 地址必须先实现明确适配器，不能按通用 feed 直接启用。
+
 ## `config/categories.yml`
 
 顶层 `categories` 为数组。

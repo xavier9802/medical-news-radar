@@ -2,6 +2,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import warnings
 
 from scripts.update_news import make_item_id, normalize_url, parse_date_any, parse_opml_subscriptions, parse_relative_time_zh
 
@@ -25,6 +26,15 @@ class UtilsTests(unittest.TestCase):
         now = datetime(2026, 2, 21, 4, 30, tzinfo=timezone.utc)
         dt = parse_date_any("Tue, 07 Oct 2025 03:00:00 GMT", now)
         self.assertEqual(dt, datetime(2025, 10, 7, 3, 0, tzinfo=timezone.utc))
+
+    def test_parse_date_any_understands_edt_without_warning(self):
+        now = datetime(2026, 7, 19, 8, 0, tzinfo=timezone.utc)
+        with warnings.catch_warnings(record=True) as captured:
+            warnings.simplefilter("always")
+            dt = parse_date_any("Fri, 17 Jul 2026 10:00:00 EDT", now)
+
+        self.assertEqual(dt, datetime(2026, 7, 17, 14, 0, tzinfo=timezone.utc))
+        self.assertEqual(captured, [])
 
     def test_parse_opml_subscriptions(self):
         opml = """<?xml version="1.0" encoding="UTF-8"?>

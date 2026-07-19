@@ -235,6 +235,7 @@ def configured_feed_groups(config_path: Path | None = None) -> tuple[dict[str, l
             "title": str(source.get("name") or source.get("id") or "Source"),
             "xml_url": str(source.get("feed_url") or ""),
             "html_url": str(source.get("homepage_url") or ""),
+            "strategy": strategy,
             "max_entries": max(1, int(fetch.get("max_items") or 30)),
             "timeout_seconds": max(1, int(fetch.get("timeout_seconds") or 20)),
             "include_keywords": ",".join(str(value) for value in filters.get("include_keywords", [])),
@@ -554,7 +555,7 @@ def parse_date_any(value: Any, now: datetime) -> datetime | None:
             pass
 
     try:
-        dt = dtparser.parse(s, tzinfos={"UT": 0, "UTC": 0, "GMT": 0})
+        dt = dtparser.parse(s, tzinfos={"UT": 0, "UTC": 0, "GMT": 0, "EDT": -4 * 3600})
         if not dt.tzinfo:
             dt = dt.replace(tzinfo=UTC)
         return dt.astimezone(UTC)
@@ -1195,6 +1196,81 @@ def parse_curated_media_feed_items(
     return out
 
 
+def crossref_published_at(item: dict[str, Any]) -> datetime | None:
+    for key in ("published-online", "published-print", "published", "issued"):
+        value = item.get(key)
+        date_parts = value.get("date-parts") if isinstance(value, dict) else None
+        first = date_parts[0] if isinstance(date_parts, list) and date_parts else None
+        if not isinstance(first, list) or not first:
+            continue
+        try:
+            year = int(first[0])
+            month = int(first[1]) if len(first) > 1 else 1
+            day = int(first[2]) if len(first) > 2 else 1
+            return datetime(year, month, day, tzinfo=UTC)
+        except (TypeError, ValueError):
+            continue
+    created = item.get("created")
+    if isinstance(created, dict):
+        return parse_date_any(created.get("date-time"), datetime.now(UTC))
+    return None
+
+
+def parse_crossref_json_items(
+    payload: dict[str, Any],
+    feed: dict[str, Any],
+    now: datetime,
+    site_id: str,
+    site_name: str,
+) -> list[RawItem]:
+    message = payload.get("message") if isinstance(payload, dict) else None
+    entries = message.get("items") if isinstance(message, dict) else None
+    if not isinstance(entries, list):
+        raise ValueError("Crossref response has no message.items list")
+
+    out: list[RawItem] = []
+    seen_urls: set[str] = set()
+    max_entries = max(1, int(feed.get("max_entries") or 10))
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        raw_titles = entry.get("title")
+        title = str(raw_titles[0] if isinstance(raw_titles, list) and raw_titles else raw_titles or "").strip()
+        doi = str(entry.get("DOI") or "").strip()
+        link = str(entry.get("URL") or (f"https://doi.org/{doi}" if doi else "")).strip()
+        published = crossref_published_at(entry)
+        if not title or not link or not published:
+            continue
+        if published < now - timedelta(days=MEDICAL_JOURNAL_MAX_AGE_DAYS):
+            continue
+        title = maybe_fix_mojibake(title)
+        if not curated_feed_entry_allowed(feed, title, link):
+            continue
+        normalized_url = normalize_url(link)
+        if normalized_url in seen_urls:
+            continue
+        seen_urls.add(normalized_url)
+        out.append(
+            RawItem(
+                site_id=site_id,
+                site_name=site_name,
+                source=str(feed["title"]),
+                title=title,
+                url=link,
+                published_at=published,
+                meta={
+                    "feed_url": str(feed["xml_url"]),
+                    "feed_home": str(feed.get("html_url") or ""),
+                    "metadata_provider": "Crossref",
+                    **configured_feed_meta(feed),
+                },
+            )
+        )
+        if len(out) >= max_entries:
+            break
+    return out
+
+
 def fetch_official_health_updates(session: requests.Session, now: datetime) -> list[RawItem]:
     out: list[RawItem] = []
 
@@ -1267,6 +1343,20 @@ def fetch_configured_feed(
     site_name: str,
     feed: dict[str, Any],
 ) -> list[RawItem]:
+    if str(feed.get("strategy") or "auto") == "json":
+        feed_url = str(feed["xml_url"])
+        if urlparse(feed_url).hostname != "api.crossref.org":
+            raise ValueError("Unsupported configured JSON feed")
+        response = session.get(
+            feed_url,
+            timeout=max(1, int(feed.get("timeout_seconds") or 20)),
+            headers={
+                "User-Agent": "MedicalNewsRadar/1.0 (+https://github.com/xavier9802/medical-news-radar)",
+                "Accept": "application/json",
+            },
+        )
+        response.raise_for_status()
+        return parse_crossref_json_items(response.json(), feed, now, site_id, site_name)
     if site_id == "official_health":
         return fetch_feed_as_official_items(session, feed, now, site_id=site_id, site_name=site_name)
     response = session.get(

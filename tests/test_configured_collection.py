@@ -4,7 +4,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scripts import update_news
-from scripts.update_news import RawItem, collect_all, fetch_opml_rss, parse_curated_media_feed_items
+from scripts.update_news import (
+    RawItem,
+    collect_all,
+    configured_feed_groups,
+    fetch_opml_rss,
+    parse_curated_media_feed_items,
+)
 
 
 UTC = timezone.utc
@@ -28,6 +34,36 @@ class FakeResponse:
 class FakeSession:
     def get(self, *_args, **_kwargs) -> FakeResponse:
         return FakeResponse()
+
+
+class FakeCrossrefResponse:
+    content = b""
+
+    def raise_for_status(self) -> None:
+        return None
+
+    def json(self) -> dict:
+        return {
+            "message": {
+                "items": [
+                    {
+                        "DOI": "10.1056/NEJMoa2600001",
+                        "URL": "https://doi.org/10.1056/NEJMoa2600001",
+                        "title": ["Clinical AI trial update"],
+                        "published": {"date-parts": [[2026, 7, 18]]},
+                    }
+                ]
+            }
+        }
+
+
+class FakeCrossrefSession:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, dict]] = []
+
+    def get(self, url: str, **kwargs) -> FakeCrossrefResponse:
+        self.calls.append((url, kwargs))
+        return FakeCrossrefResponse()
 
 
 def test_configured_metadata_survives_feed_parsing():
@@ -93,6 +129,41 @@ def test_collect_all_uses_valid_source_config_and_emits_per_source_status(tmp_pa
     assert configured[0]["ok"] is True
     assert configured[0]["item_count"] == 1
     assert configured[0]["feed_url"] == "https://example.com/feed.xml"
+
+
+def test_configured_crossref_strategy_is_preserved_and_parsed(tmp_path: Path):
+    config = tmp_path / "sources.yml"
+    config.write_text(
+        "sources:\n"
+        "  - id: nejm\n"
+        "    name: NEJM\n"
+        "    homepage_url: https://www.nejm.org/\n"
+        "    feed_url: https://api.crossref.org/journals/0028-4793/works?rows=20&sort=published&order=desc\n"
+        "    type: journal\n"
+        "    category: pharma_device\n"
+        "    tier: a\n"
+        "    language: en\n"
+        "    region: global\n"
+        "    enabled: true\n"
+        "    fetch: {strategy: json, max_items: 10, timeout_seconds: 12}\n"
+        "    metadata: {legacy_site_id: medical_journals}\n",
+        encoding="utf-8",
+    )
+
+    groups, _result = configured_feed_groups(config)
+    session = FakeCrossrefSession()
+    items, sites, statuses = collect_all(session, NOW, sources_config=config)
+
+    assert groups["medical_journals"][0]["strategy"] == "json"
+    assert len(items) == 1
+    assert items[0].title == "Clinical AI trial update"
+    assert items[0].url == "https://doi.org/10.1056/NEJMoa2600001"
+    assert items[0].published_at == datetime(2026, 7, 18, tzinfo=UTC)
+    assert items[0].meta["source_id"] == "nejm"
+    assert sites[0]["ok"] is True
+    assert statuses[0]["ok"] is True
+    assert statuses[0]["item_count"] == 1
+    assert session.calls[0][1]["headers"]["Accept"] == "application/json"
 
 
 def test_collect_all_falls_back_when_source_config_is_missing(monkeypatch, tmp_path: Path):

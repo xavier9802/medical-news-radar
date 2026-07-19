@@ -1359,8 +1359,14 @@ def _validate_adapter_response(response, expected_type: str, allowed_hosts: list
         response.raise_for_status()
     except requests.RequestException as exc:
         raise ValueError("request_failed") from exc
-    if len(response.content) > MAX_CONFIGURED_LIST_BYTES:
-        raise ValueError("response_too_large")
+    raw_content_length = str(response.headers.get("content-length") or "").strip()
+    if raw_content_length:
+        try:
+            content_length = int(raw_content_length)
+        except ValueError:
+            content_length = 0
+        if content_length > MAX_CONFIGURED_LIST_BYTES:
+            raise ValueError("response_too_large")
     if expected_type not in str(response.headers.get("content-type") or "").lower():
         raise ValueError("unexpected_content_type")
     final_host = str(urlparse(str(response.url)).hostname or "").lower()
@@ -1368,12 +1374,29 @@ def _validate_adapter_response(response, expected_type: str, allowed_hosts: list
         raise ValueError("invalid_item_url")
 
 
+def _read_bounded_adapter_body(response) -> bytes:
+    body = bytearray()
+    try:
+        for chunk in response.iter_content(chunk_size=65_536):
+            if not chunk:
+                continue
+            body.extend(chunk)
+            if len(body) > MAX_CONFIGURED_LIST_BYTES:
+                raise ValueError("response_too_large")
+    except requests.RequestException as exc:
+        raise ValueError("request_failed") from exc
+    return bytes(body)
+
+
 def _adapter_raw_items(parsed_items, feed, now, site_id, site_name):
+    parsed_items = list(parsed_items)
     out: list[RawItem] = []
+    saw_fresh_item = False
     max_entries = max(1, int(feed.get("max_entries") or 8))
     for parsed in parsed_items:
         if parsed.published_at < now - timedelta(days=MEDICAL_JOURNAL_MAX_AGE_DAYS):
             continue
+        saw_fresh_item = True
         if not curated_feed_entry_allowed(feed, parsed.title, parsed.url):
             continue
         out.append(
@@ -1395,6 +1418,8 @@ def _adapter_raw_items(parsed_items, feed, now, site_id, site_name):
         if len(out) >= max_entries:
             break
     if not out:
+        if parsed_items and not saw_fresh_item:
+            return []
         raise ValueError("no_valid_items")
     return out
 
@@ -1406,11 +1431,21 @@ def fetch_html_list(session, feed, now, site_id, site_name):
             str(feed["xml_url"]),
             timeout=max(1, int(feed.get("timeout_seconds") or 20)),
             headers={"User-Agent": CONFIGURED_FEED_UA, "Accept": "text/html,application/xhtml+xml"},
+            stream=True,
         )
     )
-    _validate_adapter_response(response, "text/html", allowed_hosts)
+    try:
+        _validate_adapter_response(response, "text/html", allowed_hosts)
+        body = _read_bounded_adapter_body(response)
+    finally:
+        response.close()
+    encoding = str(response.encoding or "utf-8")
+    try:
+        html = body.decode(encoding, errors="replace")
+    except LookupError:
+        html = body.decode("utf-8", errors="replace")
     parsed = parse_html_list_items(
-        response.text,
+        html,
         base_url=str(response.url),
         profile_id=str(feed.get("parser_profile") or ""),
         allowed_hosts=allowed_hosts,
@@ -1433,12 +1468,17 @@ def fetch_yxj_home_json(session, feed, now, site_id, site_name):
                 "Accept": "application/json",
                 "Content-Type": "application/json",
             },
+            stream=True,
         )
     )
-    _validate_adapter_response(response, "application/json", allowed_hosts)
     try:
-        payload = response.json()
-    except (requests.RequestException, ValueError) as exc:
+        _validate_adapter_response(response, "application/json", allowed_hosts)
+        body = _read_bounded_adapter_body(response)
+    finally:
+        response.close()
+    try:
+        payload = json.loads(body.decode("utf-8-sig"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("invalid_json_shape") from exc
     parsed = parse_yxj_home_items(payload, now=now)
     return _adapter_raw_items(parsed, feed, now, site_id, site_name)

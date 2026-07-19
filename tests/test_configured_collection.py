@@ -84,16 +84,33 @@ class FakeListResponse:
         content_type="text/html; charset=utf-8",
     ):
         self.text = text
-        self.content = text.encode("utf-8")
         self.payload = payload or {}
+        self._content = (
+            json.dumps(payload, ensure_ascii=False).encode("utf-8")
+            if payload is not None and not text
+            else text.encode("utf-8")
+        )
         self.url = url
         self.headers = {"content-type": content_type}
+        self.encoding = "utf-8"
+        self.closed = False
+
+    @property
+    def content(self):
+        raise AssertionError("adapter responses must be consumed through bounded streaming")
 
     def raise_for_status(self):
         return None
 
     def json(self):
         return self.payload
+
+    def iter_content(self, chunk_size=65536):
+        for offset in range(0, len(self._content), chunk_size):
+            yield self._content[offset : offset + chunk_size]
+
+    def close(self):
+        self.closed = True
 
 
 class FakeAdapterSession:
@@ -283,6 +300,8 @@ def test_configured_html_list_is_filtered_capped_and_mapped():
     assert items[0].meta["summary"] == "医院管理摘要"
     assert items[0].meta["source_id"] == "cn-hospital-ceo"
     assert session.calls[0][0] == "GET"
+    assert session.calls[0][2]["stream"] is True
+    assert session.response.closed is True
 
 
 def test_configured_yxj_json_uses_fixed_post_contract():
@@ -307,6 +326,8 @@ def test_configured_yxj_json_uses_fixed_post_contract():
     assert items[0].meta["source_id"] == "cn-yxj"
     assert session.calls[0][0] == "POST"
     assert session.calls[0][2]["json"] == {"categoryId": 0, "position": "HOME_PAGE_MAIN_NEWS"}
+    assert session.calls[0][2]["stream"] is True
+    assert session.response.closed is True
 
 
 def test_adapter_zero_valid_items_is_a_per_source_failure(tmp_path: Path):
@@ -326,6 +347,27 @@ def test_adapter_zero_valid_items_is_a_per_source_failure(tmp_path: Path):
     assert statuses[0]["ok"] is False
     assert statuses[0]["error"] == "no_valid_items"
     assert sites[0]["failed_source_count"] == 1
+
+
+def test_adapter_with_only_well_formed_stale_items_is_a_warning_candidate(tmp_path: Path):
+    config = tmp_path / "sources.yml"
+    config.write_text(
+        "sources:\n  - id: stale-html\n    name: Stale HTML\n"
+        "    feed_url: https://www.h-ceo.com/news.html\n    type: static_page\n    enabled: true\n"
+        "    fetch: {strategy: html_list, parser_profile: hospital_ceo, allowed_hosts: [www.h-ceo.com]}\n",
+        encoding="utf-8",
+    )
+    stale_html = '<div class="paging"><div class="zlist01"><a class="tit" href="/post/1.html">医院管理历史回顾</a><span class="time">2026年05月01日 12:00</span></div></div>'
+    items, sites, statuses = collect_all(
+        FakeAdapterSession(FakeListResponse(text=stale_html)),
+        NOW,
+        sources_config=config,
+    )
+    assert items == []
+    assert statuses[0]["ok"] is True
+    assert statuses[0]["item_count"] == 0
+    assert statuses[0]["error"] is None
+    assert sites[0]["successful_source_count"] == 1
 
 
 def test_configured_adapter_request_failure_uses_stable_error_category():

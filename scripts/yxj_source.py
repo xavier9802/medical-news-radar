@@ -24,6 +24,8 @@ class ParsedYxjItem:
 def parse_yxj_home_items(payload: Mapping[str, Any], *, now: datetime) -> list[ParsedYxjItem]:
     if now.tzinfo is None:
         raise ValueError("invalid_publish_time")
+    if not isinstance(payload, Mapping):
+        raise ValueError("invalid_json_shape")
     body = payload.get("body")
     modules = body.get("moduleList") if isinstance(body, Mapping) else None
     if not isinstance(modules, list):

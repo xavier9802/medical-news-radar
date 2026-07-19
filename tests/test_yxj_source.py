@@ -29,6 +29,8 @@ def test_yxj_parser_deduplicates_and_rejects_invalid_items():
 def test_yxj_parser_rejects_unexpected_shape():
     with pytest.raises(ValueError, match="invalid_json_shape"):
         parse_yxj_home_items({"body": {"moduleList": "bad"}}, now=NOW)
+    with pytest.raises(ValueError, match="invalid_json_shape"):
+        parse_yxj_home_items([], now=NOW)
 
 
 def test_yxj_parser_rejects_naive_collection_time():

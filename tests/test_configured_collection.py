@@ -365,3 +365,26 @@ def test_configured_adapter_rejects_oversized_response():
         update_news.fetch_configured_feed(
             FakeAdapterSession(response), NOW, "medical_media", "Medical Media", feed
         )
+
+
+def test_china_media_filters_keep_domain_news_and_drop_promotional_or_clinical_items():
+    groups, result = configured_feed_groups(Path("config/sources.yml"))
+    assert result.used_fallback is False
+    feeds = {
+        feed["source_id"]: feed
+        for group_feeds in groups.values()
+        for feed in group_feeds
+    }
+    article_url = "https://example.invalid/article"
+    assert update_news.curated_feed_entry_allowed(
+        feeds["cn-kanyijie"], "社会办医院AI应用落地", article_url
+    )
+    assert not update_news.curated_feed_entry_allowed(
+        feeds["cn-kanyijie"], "医疗大会早鸟票报名通知", article_url
+    )
+    assert not update_news.curated_feed_entry_allowed(
+        feeds["cn-yxj"], "儿童鼻窦炎用药指南", article_url
+    )
+    assert update_news.curated_feed_entry_allowed(
+        feeds["cn-bioon"], "创新药获批推动产业转化", article_url
+    )

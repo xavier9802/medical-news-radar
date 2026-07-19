@@ -302,3 +302,138 @@ sources:
       added_by: system
       legacy_site_id: medical_media
       notes: 医疗信息化行业媒体替代源；2026-07-19 经 GitHub Actions 验证为 200、15 条
+
+  - id: cn-nhsa-policy
+    name: 国家医保局政策法规
+    homepage_url: https://www.nhsa.gov.cn/col/col104/index.html
+    feed_url: https://www.nhsa.gov.cn/col/col104/index.html
+    type: government_page
+    category: insurance_compliance
+    tier: s
+    language: zh
+    region: cn
+    enabled: true
+    featured: true
+    fetch: {strategy: html_list, interval_hours: 3, max_items: 8, timeout_seconds: 20, parser_profile: nhsa_policy, allowed_hosts: [www.nhsa.gov.cn]}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: official_health, notes: 国家医保局公开政策法规列表}
+
+  - id: cn-chs-news
+    name: 中国社区卫生协会
+    homepage_url: https://www.chs.org.cn/news/
+    feed_url: https://www.chs.org.cn/news/list/7/
+    type: static_page
+    category: primary_care
+    tier: a
+    language: zh
+    region: cn
+    enabled: true
+    featured: true
+    fetch: {strategy: html_list, interval_hours: 6, max_items: 6, timeout_seconds: 20, parser_profile: chs_news, allowed_hosts: [www.chs.org.cn]}
+    filters: {include_keywords: [], exclude_keywords: [培训班, 报名]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 中国社区卫生协会分支机构列表}
+
+  - id: cn-cnmia-news
+    name: 中国非公立医疗机构协会
+    homepage_url: https://www.cnmia.org/
+    feed_url: https://www.cnmia.org/Web/Article/Dynamic.aspx
+    type: static_page
+    category: company_market
+    tier: a
+    language: zh
+    region: cn
+    enabled: true
+    featured: true
+    fetch: {strategy: html_list, interval_hours: 6, max_items: 6, timeout_seconds: 20, parser_profile: cnmia_news, allowed_hosts: [www.cnmia.org]}
+    filters: {include_keywords: [], exclude_keywords: [培训班, 报名, 招商]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 非公立医疗机构协会公开动态}
+
+  - id: cn-chima-news
+    name: CHIMA
+    homepage_url: https://www.chima.org.cn/
+    feed_url: https://www.chima.org.cn/Html/News/Main/53.html
+    type: static_page
+    category: health_it
+    tier: a
+    language: zh
+    region: cn
+    enabled: true
+    featured: true
+    fetch: {strategy: html_list, interval_hours: 6, max_items: 6, timeout_seconds: 20, parser_profile: chima_news, allowed_hosts: [www.chima.org.cn]}
+    filters: {include_keywords: [], exclude_keywords: [培训班, 报名]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 医院信息化联盟公开新闻}
+
+  - id: cn-kanyijie
+    name: 看医界
+    homepage_url: https://www.kanyijie.com/
+    feed_url: https://www.kanyijie.com/
+    type: social_observation
+    category: company_market
+    tier: b
+    language: zh
+    region: cn
+    enabled: true
+    featured: false
+    fetch: {strategy: html_list, interval_hours: 3, max_items: 5, timeout_seconds: 20, parser_profile: kanyijie, allowed_hosts: [www.kanyijie.com]}
+    filters: {include_keywords: [医院, 诊所, 社会办医, 民营, 医疗, 医保, 医共体, 基层, AI, 人工智能], exclude_keywords: [报名, 早鸟票, 招商, 招聘, 课程, 培训班, 会议通知, 直播预告, 广告]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 社会办医行业媒体}
+
+  - id: cn-hospital-ceo
+    name: 中国医院院长网
+    homepage_url: https://www.h-ceo.com/
+    feed_url: https://www.h-ceo.com/news.html
+    type: social_observation
+    category: company_market
+    tier: b
+    language: zh
+    region: cn
+    enabled: true
+    featured: false
+    fetch: {strategy: html_list, interval_hours: 3, max_items: 5, timeout_seconds: 20, parser_profile: hospital_ceo, allowed_hosts: [www.h-ceo.com]}
+    filters: {include_keywords: [医院, 医疗, 医保, 医共体, AI, 人工智能, 数智化, 运营, 管理], exclude_keywords: [报名, 早鸟票, 招商, 招聘, 课程, 培训班, 会议通知, 直播预告, 广告]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 医院管理和数智化媒体}
+
+  - id: cn-mdweekly
+    name: 医师报
+    homepage_url: https://www.mdweekly.com.cn/
+    feed_url: https://www.mdweekly.com.cn/
+    type: social_observation
+    category: primary_care
+    tier: b
+    language: zh
+    region: cn
+    enabled: true
+    featured: false
+    fetch: {strategy: html_list, interval_hours: 3, max_items: 4, timeout_seconds: 20, parser_profile: mdweekly, allowed_hosts: [www.mdweekly.com.cn]}
+    filters: {include_keywords: [医院, 医疗, 基层, 卫生院, 医共体, 人工智能, AI, 医保, 健康管理], exclude_keywords: [病例, 用药, 症状, 诊疗指南, 报名, 招商, 招聘, 课程, 培训班, 直播预告, 广告]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 医师报公开行业新闻}
+
+  - id: cn-yxj
+    name: 医学界
+    homepage_url: https://www.yxj.org.cn/
+    feed_url: https://pcapi.yxj.org.cn/ysz-content/web/home/news/getNewsModuleData
+    type: json
+    category: health_it
+    tier: c
+    language: zh
+    region: cn
+    enabled: true
+    featured: false
+    fetch: {strategy: json, interval_hours: 3, max_items: 3, timeout_seconds: 20, parser_profile: yxj_home_json, allowed_hosts: [pcapi.yxj.org.cn, www.yxj.org.cn]}
+    filters: {include_keywords: [医院, 医疗, 医保, 医共体, 基层, AI, 人工智能, 政策], exclude_keywords: [病例, 用药, 症状, 诊疗指南, 报名, 招商, 招聘, 课程, 培训班, 直播预告, 广告]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 医学界公开首页列表接口}
+
+  - id: cn-bioon
+    name: 生物谷
+    homepage_url: https://www.bioon.com/
+    feed_url: https://www.bioon.com/
+    type: social_observation
+    category: pharma_device
+    tier: c
+    language: zh
+    region: cn
+    enabled: true
+    featured: false
+    fetch: {strategy: html_list, interval_hours: 6, max_items: 3, timeout_seconds: 20, parser_profile: bioon, allowed_hosts: [www.bioon.com, news.bioon.com]}
+    filters: {include_keywords: [创新药, 医疗器械, 医药产业, 人工智能, AI, 获批, 审批, 临床试验, 转化, 研发], exclude_keywords: [报名, 早鸟票, 招商, 招聘, 课程, 培训班, 会议通知, 直播预告, 广告]}
+    metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 生物医药新媒体公开列表}

@@ -243,3 +243,34 @@ def test_default_config_enables_actions_verified_replacements_and_pauses_blocked
     assert by_id["the-lancet"]["fetch"]["strategy"] == "json"
     assert by_id["bmj-research"]["fetch"]["strategy"] == "json"
     assert "/journals/1756-1833/works" in by_id["bmj-research"]["feed_url"]
+
+
+def test_default_config_contains_nine_dated_china_sources():
+    by_id = {
+        row["id"]: row
+        for row in load_config("sources", Path("config/sources.yml")).data["sources"]
+    }
+    expected = {
+        "cn-nhsa-policy": ("html_list", "nhsa_policy", "s", "insurance_compliance", 8),
+        "cn-chs-news": ("html_list", "chs_news", "a", "primary_care", 6),
+        "cn-cnmia-news": ("html_list", "cnmia_news", "a", "company_market", 6),
+        "cn-chima-news": ("html_list", "chima_news", "a", "health_it", 6),
+        "cn-kanyijie": ("html_list", "kanyijie", "b", "company_market", 5),
+        "cn-hospital-ceo": ("html_list", "hospital_ceo", "b", "company_market", 5),
+        "cn-mdweekly": ("html_list", "mdweekly", "b", "primary_care", 4),
+        "cn-yxj": ("json", "yxj_home_json", "c", "health_it", 3),
+        "cn-bioon": ("html_list", "bioon", "c", "pharma_device", 3),
+    }
+    for source_id, contract in expected.items():
+        row = by_id[source_id]
+        assert row["enabled"] is True
+        assert row["language"] == "zh" and row["region"] == "cn"
+        assert row["fetch"]["allowed_hosts"]
+        assert (
+            row["fetch"]["strategy"],
+            row["fetch"]["parser_profile"],
+            row["tier"],
+            row["category"],
+            row["fetch"]["max_items"],
+        ) == contract
+    assert "cn-medtrend" not in by_id

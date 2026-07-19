@@ -273,4 +273,7 @@ def test_default_config_contains_nine_dated_china_sources():
             row["category"],
             row["fetch"]["max_items"],
         ) == contract
+    assert by_id["cn-mdweekly"]["feed_url"] == "https://www.mdweekly.com.cn/index/article/zt1?id=1"
+    assert by_id["cn-bioon"]["feed_url"] == "https://www.bioon.com/BioMedical"
+    assert "细胞外囊泡" in by_id["cn-bioon"]["filters"]["include_keywords"]
     assert "cn-medtrend" not in by_id

@@ -41,7 +41,7 @@ HTML_LIST_PROFILES = {
     "chima_news": HtmlListProfile("ul.article_xw_l > li", ".right_xw a.title_type", ".span_date_left", r"^/Html/News/Articles/\d+\.html$", ("%d %Y.%m",), title_attribute="title", summary_selector=".right_xw > p"),
     "kanyijie": HtmlListProfile("div.des", "a.h2[href*='/details?id=']", ".time", r"^/details\?id=\d+$", ("%Y-%m-%d",), title_attribute="title", summary_selector=".sub"),
     "hospital_ceo": HtmlListProfile(".paging .zlist01", "a.tit[href*='/post/']", ".time", r"^/post/\d+\.html$", ("%Y年%m月%d日 %H:%M",), summary_selector=".des"),
-    "mdweekly": HtmlListProfile(".news-left .img-right, .news-left ul.mt2 > li", "a[href*='/index/article/detail']", ".time", r"^/index/article/detail\?id=\d+$", ("%Y-%m-%d",), summary_selector="p"),
+    "mdweekly": HtmlListProfile("ul.glob-list > li.img-li", "h1 a[href*='/index/article/ztdetail']", ".time", r"^/index/article/ztdetail\?id=\d+$", ("%Y-%m-%d",), summary_selector="p"),
     "bioon": HtmlListProfile(".composs-blog-list .item", "h2 a[href*='news.bioon.com/article/']", ".item-meta-item", r"^/article/[a-zA-Z0-9_-]+\.html$", ("%Y-%m-%d",), summary_selector="p.text-justify"),
 }
 

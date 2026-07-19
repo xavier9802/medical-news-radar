@@ -396,7 +396,7 @@ sources:
   - id: cn-mdweekly
     name: 医师报
     homepage_url: https://www.mdweekly.com.cn/
-    feed_url: https://www.mdweekly.com.cn/
+    feed_url: https://www.mdweekly.com.cn/index/article/zt1?id=1
     type: social_observation
     category: primary_care
     tier: b
@@ -426,7 +426,7 @@ sources:
   - id: cn-bioon
     name: 生物谷
     homepage_url: https://www.bioon.com/
-    feed_url: https://www.bioon.com/
+    feed_url: https://www.bioon.com/BioMedical
     type: social_observation
     category: pharma_device
     tier: c
@@ -435,5 +435,5 @@ sources:
     enabled: true
     featured: false
     fetch: {strategy: html_list, interval_hours: 6, max_items: 3, timeout_seconds: 20, parser_profile: bioon, allowed_hosts: [www.bioon.com, news.bioon.com]}
-    filters: {include_keywords: [创新药, 医疗器械, 医药产业, 人工智能, AI, 获批, 审批, 临床试验, 转化, 研发], exclude_keywords: [报名, 早鸟票, 招商, 招聘, 课程, 培训班, 会议通知, 直播预告, 广告]}
+    filters: {include_keywords: [创新药, 医疗器械, 医药产业, 生物医药, 细胞外囊泡, 药物, 制药, 人工智能, AI, 获批, 审批, 临床试验, 临床, 转化, 研发, NMPA, FDA, 产业, 政策, 市场, 投资], exclude_keywords: [报名, 早鸟票, 招商, 招聘, 课程, 培训班, 会议通知, 直播预告, 广告]}
     metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 生物医药新媒体公开列表}

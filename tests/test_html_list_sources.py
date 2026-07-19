@@ -15,7 +15,7 @@ CASES = [
     ("chima_news", "chima.html", "https://www.chima.org.cn/Html/News/Main/53.html", ["www.chima.org.cn"], "医院AI数据治理周报", "https://www.chima.org.cn/Html/News/Articles/18000.html", datetime(2026, 7, 13, 16, 0, tzinfo=UTC)),
     ("kanyijie", "kanyijie.html", "https://www.kanyijie.com/", ["www.kanyijie.com"], "社会办医院引入基层AI服务", "https://www.kanyijie.com/details?id=2400", datetime(2026, 7, 13, 16, 0, tzinfo=UTC)),
     ("hospital_ceo", "hospital_ceo.html", "https://www.h-ceo.com/news.html", ["www.h-ceo.com"], "医院数智化运营新实践", "https://www.h-ceo.com/post/6000.html", datetime(2026, 7, 13, 8, 58, tzinfo=UTC)),
-    ("mdweekly", "mdweekly.html", "https://www.mdweekly.com.cn/", ["www.mdweekly.com.cn"], "[深度报道] 基层医疗人工智能实践", "https://www.mdweekly.com.cn/index/article/detail?id=65000", datetime(2026, 7, 16, 16, 0, tzinfo=UTC)),
+    ("mdweekly", "mdweekly.html", "https://www.mdweekly.com.cn/index/article/zt1?id=1", ["www.mdweekly.com.cn"], "基层医疗人工智能实践", "https://www.mdweekly.com.cn/index/article/ztdetail?id=65000", datetime(2026, 7, 16, 16, 0, tzinfo=UTC)),
     ("bioon", "bioon.html", "https://www.bioon.com/", ["www.bioon.com", "news.bioon.com"], "创新药审批与产业转化观察", "http://news.bioon.com/article/demo.html", datetime(2026, 7, 11, 16, 0, tzinfo=UTC)),
 ]
 

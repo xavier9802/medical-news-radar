@@ -8,7 +8,7 @@ sources:
     tier: s
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -16,7 +16,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: official_health
-      notes: 世界卫生组织公开新闻源
+      notes: 世界卫生组织公开新闻源；2026-07-19 GitHub Actions 返回 404，暂停等待官方稳定 feed
 
   - id: cdc-newsroom
     name: CDC Newsroom
@@ -46,7 +46,7 @@ sources:
     tier: s
     language: en
     region: us
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -54,7 +54,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: official_health
-      notes: 美国食品药品监督管理局公开新闻源
+      notes: 美国食品药品监督管理局公开新闻源；2026-07-19 GitHub Actions 返回 404，暂停等待官方稳定 feed
 
   - id: nih-news
     name: NIH News
@@ -65,7 +65,7 @@ sources:
     tier: s
     language: en
     region: us
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 1, max_items: 30, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -73,7 +73,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: official_health
-      notes: 美国国立卫生研究院公开新闻源
+      notes: 美国国立卫生研究院公开新闻源；2026-07-19 GitHub Actions 返回 404，暂停等待官方稳定 feed
 
   - id: nejm
     name: NEJM
@@ -84,7 +84,7 @@ sources:
     tier: a
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -92,7 +92,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_journals
-      notes: 新英格兰医学杂志公开RSS
+      notes: 新英格兰医学杂志公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
 
   - id: the-lancet
     name: The Lancet
@@ -103,7 +103,7 @@ sources:
     tier: a
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -111,7 +111,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_journals
-      notes: 柳叶刀在线优先公开RSS
+      notes: 柳叶刀在线优先公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
 
   - id: jama
     name: JAMA
@@ -141,7 +141,7 @@ sources:
     tier: a
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 6, max_items: 10, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -149,7 +149,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_journals
-      notes: 英国医学杂志研究公开RSS
+      notes: 英国医学杂志研究公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
 
   - id: nature-medicine
     name: Nature Medicine
@@ -179,7 +179,7 @@ sources:
     tier: a
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: false
     fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -187,7 +187,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_media
-      notes: 医疗专业媒体公开RSS
+      notes: 医疗专业媒体公开RSS；2026-07-19 未解析到有效条目，暂停等待稳定 feed
 
   - id: healthcare-it-news
     name: Healthcare IT News
@@ -198,7 +198,7 @@ sources:
     tier: a
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -206,7 +206,7 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_media
-      notes: 医疗信息化媒体公开RSS
+      notes: 医疗信息化媒体公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed
 
   - id: fierce-healthcare
     name: Fierce Healthcare
@@ -236,7 +236,7 @@ sources:
     tier: a
     language: en
     region: global
-    enabled: true
+    enabled: false
     featured: true
     fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
     filters: {include_keywords: [], exclude_keywords: []}
@@ -244,4 +244,4 @@ sources:
       source_origin: builtin
       added_by: system
       legacy_site_id: medical_media
-      notes: 医疗信息化行业组织公开RSS
+      notes: 医疗信息化行业组织公开RSS；2026-07-19 GitHub Actions 返回 403，暂停等待可公开访问的稳定 feed

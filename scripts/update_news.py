@@ -58,6 +58,7 @@ BROWSER_UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 )
+CONFIGURED_FEED_UA = "MedicalNewsRadar/1.0 (+https://github.com/xavier9802/medical-news-radar)"
 SH_TZ = ZoneInfo("Asia/Shanghai")
 RSS_FEED_REPLACEMENTS: dict[str, str] = {
     "https://rsshub.app/infoq/recommend": "https://www.infoq.cn/feed",
@@ -1050,7 +1051,7 @@ def fetch_feed_as_official_items(
         feed_url,
         timeout=max(1, int(feed.get("timeout_seconds") or 20)),
         headers={
-            "User-Agent": BROWSER_UA,
+            "User-Agent": CONFIGURED_FEED_UA,
             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
             "Accept": "application/rss+xml, application/xml, text/xml, */*",
         },
@@ -1351,7 +1352,7 @@ def fetch_configured_feed(
             feed_url,
             timeout=max(1, int(feed.get("timeout_seconds") or 20)),
             headers={
-                "User-Agent": "MedicalNewsRadar/1.0 (+https://github.com/xavier9802/medical-news-radar)",
+                "User-Agent": CONFIGURED_FEED_UA,
                 "Accept": "application/json",
             },
         )
@@ -1363,7 +1364,7 @@ def fetch_configured_feed(
         str(feed["xml_url"]),
         timeout=max(1, int(feed.get("timeout_seconds") or 20)),
         headers={
-            "User-Agent": BROWSER_UA,
+            "User-Agent": CONFIGURED_FEED_UA,
             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
             "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
         },

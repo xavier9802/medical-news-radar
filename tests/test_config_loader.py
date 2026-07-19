@@ -54,6 +54,35 @@ def test_loads_categories_from_valid_yaml(tmp_path: Path):
     assert result.errors == ()
 
 
+def test_source_config_preserves_restricted_adapter_fields(tmp_path: Path):
+    path = tmp_path / "sources.yml"
+    path.write_text(
+        "sources:\n  - id: html-source\n    name: HTML source\n"
+        "    homepage_url: https://example.com/news\n    feed_url: https://example.com/news\n    type: static_page\n"
+        "    fetch:\n      strategy: html_list\n      parser_profile: hospital_ceo\n"
+        "      allowed_hosts: [EXAMPLE.com, news.example.com, EXAMPLE.com]\n",
+        encoding="utf-8",
+    )
+    source = load_config("sources", path).data["sources"][0]
+    feed = configured_feed_groups(path)[0]["medical_media"][0]
+    assert source["fetch"]["parser_profile"] == "hospital_ceo"
+    assert source["fetch"]["allowed_hosts"] == ["example.com", "news.example.com"]
+    assert feed["parser_profile"] == "hospital_ceo"
+    assert feed["allowed_hosts"] == ["example.com", "news.example.com"]
+
+
+def test_source_config_drops_invalid_host_entries(tmp_path: Path):
+    path = tmp_path / "sources.yml"
+    path.write_text(
+        "sources:\n  - id: bad-hosts\n    name: Bad hosts\n"
+        "    homepage_url: https://example.com/\n    type: static_page\n"
+        "    fetch: {strategy: html_list, parser_profile: hospital_ceo, allowed_hosts: ['https://example.com', '127.0.0.1', good.example]}\n",
+        encoding="utf-8",
+    )
+    source = load_config("sources", path).data["sources"][0]
+    assert source["fetch"]["allowed_hosts"] == ["good.example"]
+
+
 def test_missing_config_uses_safe_defaults(tmp_path: Path):
     result = load_config("categories", tmp_path / "missing.yml")
 

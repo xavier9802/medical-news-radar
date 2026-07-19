@@ -239,6 +239,8 @@ def configured_feed_groups(config_path: Path | None = None) -> tuple[dict[str, l
             "strategy": strategy,
             "max_entries": max(1, int(fetch.get("max_items") or 30)),
             "timeout_seconds": max(1, int(fetch.get("timeout_seconds") or 20)),
+            "parser_profile": str(fetch.get("parser_profile") or ""),
+            "allowed_hosts": list(fetch.get("allowed_hosts") or []),
             "include_keywords": ",".join(str(value) for value in filters.get("include_keywords", [])),
             "exclude_keywords": ",".join(str(value) for value in filters.get("exclude_keywords", [])),
             **source_meta,

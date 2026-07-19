@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime, timezone
 from pathlib import Path
+
+import pytest
+import requests
 
 from scripts import update_news
 from scripts.update_news import (
@@ -68,6 +72,47 @@ class FakeCrossrefSession:
     def get(self, url: str, **kwargs) -> FakeCrossrefResponse:
         self.calls.append((url, kwargs))
         return FakeCrossrefResponse()
+
+
+class FakeListResponse:
+    def __init__(
+        self,
+        *,
+        text="",
+        payload=None,
+        url="https://www.h-ceo.com/news.html",
+        content_type="text/html; charset=utf-8",
+    ):
+        self.text = text
+        self.content = text.encode("utf-8")
+        self.payload = payload or {}
+        self.url = url
+        self.headers = {"content-type": content_type}
+
+    def raise_for_status(self):
+        return None
+
+    def json(self):
+        return self.payload
+
+
+class FakeAdapterSession:
+    def __init__(self, response):
+        self.response = response
+        self.calls = []
+
+    def get(self, url, **kwargs):
+        self.calls.append(("GET", url, kwargs))
+        return self.response
+
+    def post(self, url, **kwargs):
+        self.calls.append(("POST", url, kwargs))
+        return self.response
+
+
+class FailingAdapterSession:
+    def get(self, url, **kwargs):
+        raise requests.ConnectionError("private network detail must not escape")
 
 
 def test_configured_metadata_survives_feed_parsing():
@@ -213,3 +258,110 @@ def test_fetch_opml_skips_urls_already_managed_by_source_config(tmp_path: Path):
     assert summary["effective_feed_count"] == 0
     assert statuses[0]["skipped"] is True
     assert statuses[0]["skip_reason"] == "configured_source_duplicate"
+
+
+def test_configured_html_list_is_filtered_capped_and_mapped():
+    html = Path("tests/fixtures/html_sources/hospital_ceo.html").read_text(encoding="utf-8")
+    feed = {
+        "title": "中国医院院长网",
+        "xml_url": "https://www.h-ceo.com/news.html",
+        "html_url": "https://www.h-ceo.com/",
+        "strategy": "html_list",
+        "parser_profile": "hospital_ceo",
+        "allowed_hosts": ["www.h-ceo.com"],
+        "max_entries": 1,
+        "include_keywords": "医院,AI",
+        "exclude_keywords": "报名,培训班",
+        "source_id": "cn-hospital-ceo",
+        "category": "company_market",
+        "source_tier": "b",
+    }
+    session = FakeAdapterSession(FakeListResponse(text=html))
+    items = update_news.fetch_configured_feed(session, NOW, "medical_media", "Medical Media", feed)
+    assert len(items) == 1
+    assert items[0].title == "医院数智化运营新实践"
+    assert items[0].meta["summary"] == "医院管理摘要"
+    assert items[0].meta["source_id"] == "cn-hospital-ceo"
+    assert session.calls[0][0] == "GET"
+
+
+def test_configured_yxj_json_uses_fixed_post_contract():
+    payload = json.loads(Path("tests/fixtures/yxj_home.json").read_text(encoding="utf-8"))
+    feed = {
+        "title": "医学界",
+        "xml_url": "https://pcapi.yxj.org.cn/ysz-content/web/home/news/getNewsModuleData",
+        "strategy": "json",
+        "parser_profile": "yxj_home_json",
+        "allowed_hosts": ["pcapi.yxj.org.cn", "www.yxj.org.cn"],
+        "max_entries": 3,
+        "include_keywords": "医院,医疗,基层,人工智能,AI,医保",
+        "exclude_keywords": "用药,病例",
+        "source_id": "cn-yxj",
+        "category": "health_it",
+        "source_tier": "c",
+    }
+    session = FakeAdapterSession(
+        FakeListResponse(payload=payload, url=feed["xml_url"], content_type="application/json")
+    )
+    items = update_news.fetch_configured_feed(session, NOW, "medical_media", "Medical Media", feed)
+    assert items[0].meta["source_id"] == "cn-yxj"
+    assert session.calls[0][0] == "POST"
+    assert session.calls[0][2]["json"] == {"categoryId": 0, "position": "HOME_PAGE_MAIN_NEWS"}
+
+
+def test_adapter_zero_valid_items_is_a_per_source_failure(tmp_path: Path):
+    config = tmp_path / "sources.yml"
+    config.write_text(
+        "sources:\n  - id: empty-html\n    name: Empty HTML\n"
+        "    feed_url: https://www.h-ceo.com/news.html\n    type: static_page\n    enabled: true\n"
+        "    fetch: {strategy: html_list, parser_profile: hospital_ceo, allowed_hosts: [www.h-ceo.com]}\n",
+        encoding="utf-8",
+    )
+    items, sites, statuses = collect_all(
+        FakeAdapterSession(FakeListResponse(text="<html></html>")),
+        NOW,
+        sources_config=config,
+    )
+    assert items == []
+    assert statuses[0]["ok"] is False
+    assert statuses[0]["error"] == "no_valid_items"
+    assert sites[0]["failed_source_count"] == 1
+
+
+def test_configured_adapter_request_failure_uses_stable_error_category():
+    feed = {
+        "title": "中国医院院长网",
+        "xml_url": "https://www.h-ceo.com/news.html",
+        "html_url": "https://www.h-ceo.com/",
+        "strategy": "html_list",
+        "parser_profile": "hospital_ceo",
+        "allowed_hosts": ["www.h-ceo.com"],
+        "max_entries": 1,
+        "source_id": "cn-hospital-ceo",
+        "category": "company_market",
+        "source_tier": "b",
+    }
+    with pytest.raises(ValueError, match="^request_failed$"):
+        update_news.fetch_configured_feed(
+            FailingAdapterSession(), NOW, "medical_media", "Medical Media", feed
+        )
+
+
+def test_configured_adapter_rejects_oversized_response():
+    feed = {
+        "title": "中国医院院长网",
+        "xml_url": "https://www.h-ceo.com/news.html",
+        "html_url": "https://www.h-ceo.com/",
+        "strategy": "html_list",
+        "parser_profile": "hospital_ceo",
+        "allowed_hosts": ["www.h-ceo.com"],
+        "max_entries": 1,
+        "source_id": "cn-hospital-ceo",
+        "category": "company_market",
+        "source_tier": "b",
+    }
+    response = FakeListResponse(text="x" * (update_news.MAX_CONFIGURED_LIST_BYTES + 1))
+    with pytest.raises(ValueError, match="^response_too_large$"):
+        update_news.fetch_configured_feed(
+            FakeAdapterSession(response), NOW, "medical_media", "Medical Media", feed
+        )

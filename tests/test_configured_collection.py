@@ -32,7 +32,11 @@ class FakeResponse:
 
 
 class FakeSession:
-    def get(self, *_args, **_kwargs) -> FakeResponse:
+    def __init__(self) -> None:
+        self.calls: list[tuple[tuple, dict]] = []
+
+    def get(self, *args, **kwargs) -> FakeResponse:
+        self.calls.append((args, kwargs))
         return FakeResponse()
 
 
@@ -108,7 +112,8 @@ def test_collect_all_uses_valid_source_config_and_emits_per_source_status(tmp_pa
         encoding="utf-8",
     )
 
-    items, sites, configured = collect_all(FakeSession(), NOW, sources_config=config)
+    session = FakeSession()
+    items, sites, configured = collect_all(session, NOW, sources_config=config)
 
     assert len(items) == 1
     assert items[0].meta["source_id"] == "configured-source"
@@ -129,6 +134,7 @@ def test_collect_all_uses_valid_source_config_and_emits_per_source_status(tmp_pa
     assert configured[0]["ok"] is True
     assert configured[0]["item_count"] == 1
     assert configured[0]["feed_url"] == "https://example.com/feed.xml"
+    assert session.calls[0][1]["headers"]["User-Agent"].startswith("MedicalNewsRadar/")
 
 
 def test_configured_crossref_strategy_is_preserved_and_parsed(tmp_path: Path):

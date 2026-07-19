@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T14:55:10.944351Z",
+  "generated_at": "2026-07-19T15:57:41.463838Z",
   "window_hours": 24,
   "total_items": 2,
   "total_items_ai_raw": 2,
@@ -46,7 +46,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T14:55:10.944351Z",
+      "last_seen_at": "2026-07-19T15:57:41.463838Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -80,12 +80,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.5975,
+      "importance_score": 0.5953,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7266,
+        "recency": 0.7121,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -114,11 +114,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.4971,
-        "policy-analyst": 0.0717,
-        "medical-ai-product-manager": 0.5423
+        "medical-editor": 0.4964,
+        "policy-analyst": 0.0714,
+        "medical-ai-product-manager": 0.5419
       },
-      "topic_value": 0.5561,
+      "topic_value": 0.5553,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -137,7 +137,7 @@
       "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
       "published_at": "2026-07-18T18:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T14:55:10.944351Z",
+      "last_seen_at": "2026-07-19T15:57:41.463838Z",
       "source_id": "medpage-today",
       "category": "health_it",
       "source_tier": "b",
@@ -174,12 +174,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6149,
+      "importance_score": 0.6127,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.77,
         "impact": 0.65,
-        "recency": 0.7094,
+        "recency": 0.695,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -211,11 +211,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
       "persona_scores": {
-        "medical-editor": 0.5192,
-        "policy-analyst": 0.0738,
-        "medical-ai-product-manager": 0.5554
+        "medical-editor": 0.5184,
+        "policy-analyst": 0.0735,
+        "medical-ai-product-manager": 0.5549
       },
-      "topic_value": 0.5703,
+      "topic_value": 0.5694,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"
@@ -237,7 +237,7 @@
       "url": "https://www.medpagetoday.com/meetingcoverage/aaic/122257",
       "published_at": "2026-07-18T19:14:12Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T14:55:10.944351Z",
+      "last_seen_at": "2026-07-19T15:57:41.463838Z",
       "source_id": "medpage-today",
       "category": "global_healthtech",
       "source_tier": "b",
@@ -271,12 +271,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.5975,
+      "importance_score": 0.5953,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.69,
         "impact": 0.65,
-        "recency": 0.7266,
+        "recency": 0.7121,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -305,11 +305,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "海外前沿：命中 syndrome",
       "persona_scores": {
-        "medical-editor": 0.4971,
-        "policy-analyst": 0.0717,
-        "medical-ai-product-manager": 0.5423
+        "medical-editor": 0.4964,
+        "policy-analyst": 0.0714,
+        "medical-ai-product-manager": 0.5419
       },
-      "topic_value": 0.5561,
+      "topic_value": 0.5553,
       "content_angles": [
         "编辑视角：围绕“海外前沿”提炼受众价值、冲突点与可核实标题方向"
       ],
@@ -328,7 +328,7 @@
       "url": "https://www.medpagetoday.com/podcasts/healthwatch/122248",
       "published_at": "2026-07-18T18:00:00Z",
       "first_seen_at": "2026-07-19T03:41:45.455939Z",
-      "last_seen_at": "2026-07-19T14:55:10.944351Z",
+      "last_seen_at": "2026-07-19T15:57:41.463838Z",
       "source_id": "medpage-today",
       "category": "health_it",
       "source_tier": "b",
@@ -365,12 +365,12 @@
         "global_healthtech": 0.2
       },
       "impact_score": 0.65,
-      "importance_score": 0.6149,
+      "importance_score": 0.6127,
       "importance_breakdown": {
         "authority": 0.62,
         "medical_relevance": 0.77,
         "impact": 0.65,
-        "recency": 0.7094,
+        "recency": 0.695,
         "multi_source_heat": 0.0,
         "bonuses": {},
         "noise_penalty": 0.0
@@ -402,11 +402,11 @@
       "source_tier_legacy": "medical_media",
       "recommendation_reason": "医疗信息化：命中 hospital / cancer / patient",
       "persona_scores": {
-        "medical-editor": 0.5192,
-        "policy-analyst": 0.0738,
-        "medical-ai-product-manager": 0.5554
+        "medical-editor": 0.5184,
+        "policy-analyst": 0.0735,
+        "medical-ai-product-manager": 0.5549
       },
-      "topic_value": 0.5703,
+      "topic_value": 0.5694,
       "content_angles": [
         "产品视角：核对其对HIS、EMR、CDSS、医保合规或运营流程的实际影响",
         "编辑视角：围绕“医疗信息化”提炼受众价值、冲突点与可核实标题方向"

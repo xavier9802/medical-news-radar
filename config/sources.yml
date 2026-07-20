@@ -227,6 +227,25 @@ sources:
       legacy_site_id: medical_media
       notes: 医疗信息化媒体公开RSS；2026-07-19 GitHub Actions 返回 403，不绕过访问控制，以 ONC Health IT Blog 替代
 
+  - id: healthcare-it-today
+    name: Healthcare IT Today
+    homepage_url: https://www.healthcareittoday.com/
+    feed_url: https://www.healthcareittoday.com/feed/
+    type: rss
+    category: health_it
+    tier: b
+    language: en
+    region: global
+    enabled: true
+    featured: false
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata:
+      source_origin: manual
+      added_by: xavier
+      legacy_site_id: medical_media
+      notes: 英文医疗 IT 行业媒体（Healthcare IT Today），2026-07-20 经 curl 服务器侧验证 feed /feed/ 返回 200、标准 RSS 2.0；日更，覆盖 AI/互操作 FHIR/远程监护/网络安全/EHR/医疗 IT 融资
+
   - id: onc-health-it
     name: ONC Health IT Blog
     homepage_url: https://healthit.gov/blog/
@@ -407,6 +426,21 @@ sources:
     fetch: {strategy: html_list, interval_hours: 3, max_items: 4, timeout_seconds: 20, parser_profile: cn_healthcare, allowed_hosts: [www.cn-healthcare.com]}
     filters: {include_keywords: [医院, 医疗, 基层, 卫生院, 医共体, 医保, 健康管理, 数字化, 信息化, 强基], exclude_keywords: [病例, 用药, 症状, 诊疗指南, 报名, 招商, 招聘, 课程, 培训班, 直播预告, 广告]}
     metadata: {source_origin: manual, added_by: system, legacy_site_id: medical_media, notes: 健康界公开医疗行业与健康号内容}
+
+  - id: healthcare-it-today
+    name: Healthcare IT Today
+    homepage_url: https://www.healthcareittoday.com/
+    feed_url: https://www.healthcareittoday.com/feed/
+    type: rss
+    category: health_it
+    tier: b
+    language: en
+    region: global
+    enabled: true
+    featured: false
+    fetch: {strategy: rss, interval_hours: 3, max_items: 8, timeout_seconds: 20}
+    filters: {include_keywords: [], exclude_keywords: []}
+    metadata: {source_origin: manual, added_by: xavier, legacy_site_id: medical_media, notes: 英文医疗 IT 行业媒体（Healthcare IT Today），2026-07-20 经 curl 服务器侧验证 feed /feed/ 返回 200、标准 RSS 2.0；日更，覆盖 AI/互操作/远程监护/网络安全/EHR/医疗 IT 融资}
 
   - id: cn-yxj
     name: 医学界

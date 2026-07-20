@@ -1,6 +1,6 @@
 # Medical News Radar｜医疗行业情报雷达
 
-一个完全运行在 GitHub 上的医疗行业信源、政策、技术与选题情报系统。GitHub Actions 定时采集并生成 `data/*.json`，GitHub Pages 直接展示静态网页；不需要 PHP、数据库、登录系统或长期运行的服务器。
+一个完全运行在 GitHub 上的医疗行业信源、政策、技术与选题情报系统。GitHub Actions 定时采集、校验并生成 `data/*.json`，随后通过 GitHub Pages Artifact 显式部署静态网站；不需要 PHP、数据库、登录系统或长期运行的服务器。
 
 - 情报首页：`/index.html`
 - 信源管理：`/sources.html`
@@ -21,18 +21,22 @@
 ## 纯 GitHub 架构
 
 ```text
-config/*.yml + public feeds / OPML
-                 ↓
-        GitHub Actions（每 30 分钟）
-                 ↓
-  采集 → 标准化 → 评分 → 去重 → 故事合并
-                 ↓
-             data/*.json
-                 ↓
-         GitHub Pages 静态页面
+config/*.yml + public feeds + optional private OPML
+                         ↓
+                GitHub Actions（每 30 分钟）
+                         ↓
+        采集 → 标准化 → 评分 → 去重 → 故事合并
+                         ↓
+             测试 + 数据完整性/新鲜度校验
+                         ↓
+                _site/ Pages Artifact
+                         ↓
+              actions/deploy-pages 显式发布
 ```
 
 `.github/workflows/update-news.yml` 的 cron 为 `*/30 * * * *`，即计划任务每 30 分钟触发一次。GitHub 对计划任务可能存在排队延迟，实际开始时间不保证精确到分钟。也可在 Actions 页面手动运行。
+
+定时任务只在临时 Runner 中生成快照，不再将每轮 `data/*.json` 提交回 `main`。`main` 保持为代码、配置、测试与本地回退数据分支，线上站点由经过校验的 Pages Artifact 发布。
 
 ## 快速开始
 
@@ -46,6 +50,7 @@ source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
 python scripts/update_news.py --output-dir data --window-hours 24
 python scripts/build_source_registry.py
+python scripts/validate_deployment.py --site-root .
 python -m http.server 8080
 ```
 
@@ -59,6 +64,7 @@ py -m venv .venv
 python -m pip install -r requirements-dev.txt
 python scripts/update_news.py --output-dir data --window-hours 24
 python scripts/build_source_registry.py
+python scripts/validate_deployment.py --site-root .
 python -m http.server 8080
 ```
 
@@ -78,7 +84,7 @@ python -m http.server 8080
 
 ## 添加和检测信源
 
-普通用户可在 `/sources.html` 点击“推荐新信源”，提交 GitHub Issue Form。Issue 不会自动修改配置、创建 PR 或合并代码；维护者检测并核验后，再手动编辑 `config/sources.yml`。
+普通用户可在 `/sources.html` 点击“推荐新信源”，提交 GitHub Issue Form。Issue 不会自动修改 `config/sources.yml`、创建 PR 或合并代码；维护者检测并核验后，再手动编辑 `config/sources.yml`。
 
 本地检测单个公开地址：
 
@@ -97,28 +103,23 @@ python scripts/source_probe.py --config config/sources.yml --output data/source-
 
 详细维护流程见 [docs/source-management.md](docs/source-management.md)。
 
-### 国内列表级信源
+## 私有 OPML、Secrets 与 Variables
 
-国内政策、协会和行业媒体使用公开 RSS、静态 HTML 列表或登记过的公开 JSON 列表接口。采集器只读取标题、原文链接、发布日期和列表已有短摘要，不执行 JavaScript、不发送 Cookie、不访问详情页，也不绕过登录、验证码、WAF 或付费墙。
-
-S/A 级来源用于政策与行业依据；B/C 级医疗媒体只作为线索发现层，并应用主题过滤和单源限流。同一事件优先展示更高等级来源。
-
-## 私有 OPML 与 Secrets
-
-公开示例位于 `feeds/follow.example.opml`。个人订阅应复制到被 Git 忽略的 `feeds/follow.opml`，不要提交到仓库：
+公开示例位于 `feeds/follow.example.opml`，仅用于本地演示。个人订阅应复制到被 Git 忽略的 `feeds/follow.opml`，不要提交到仓库：
 
 ```bash
 python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml feeds/follow.opml
 ```
 
-GitHub Actions 支持：
+生产工作流只有在配置 `FOLLOW_OPML_B64` 时才启用 OPML；未配置时不会自动加载公开示例。
 
 | 名称 | 类型 | 必需 | 作用 |
 | --- | --- | --- | --- |
-| `FOLLOW_OPML_B64` | Secret | 否 | 私有 OPML 的 Base64 内容；未设置时使用公开示例 |
+| `FOLLOW_OPML_B64` | Secret | 否 | 私有 OPML 的 Base64 内容；未设置时关闭 OPML 采集 |
 | `RSS_MAX_FEEDS` | Variable | 否 | 限制每轮 OPML feed 数，默认 10 |
-| `DEEPSEEK_API_KEY` | Secret / 本地环境变量 | 否 | 可选 Persona 排序增强 |
-| `DEEPSEEK_PERSONA_ENABLED` | 环境变量 | 否 | 设为 `1` 才启用 DeepSeek Persona 排序 |
+| `DEEPSEEK_API_KEY` | Secret | 否 | 可选 Persona 排序增强 |
+| `DEEPSEEK_PERSONA_ENABLED` | Variable | 否 | 设为 `1` 才启用 DeepSeek Persona 排序，默认 `0` |
+| `DEEPSEEK_PERSONA_MODEL` | Variable | 否 | Persona 排序模型，默认 `deepseek-v4-flash` |
 
 PowerShell 生成 OPML Base64：
 
@@ -132,7 +133,7 @@ Linux / macOS：
 base64 < feeds/follow.opml
 ```
 
-将结果保存到 **Settings → Secrets and variables → Actions → New repository secret**。不要把密钥、Cookie、Token、私有 OPML 或邮件正文写入配置、Issue、日志或前端。
+将 Secret 和 Variable 保存到 **Settings → Secrets and variables → Actions**。不要把密钥、Cookie、Token、私有 OPML 或邮件正文写入配置、Issue、日志或前端。
 
 ## 数据产物
 
@@ -147,25 +148,28 @@ base64 < feeds/follow.opml
 
 ## GitHub Pages 部署
 
-1. Fork 仓库并在 **Settings → Actions → General** 允许 Actions 写入仓库内容。
-2. 在 **Settings → Pages** 选择 **Deploy from a branch**，分支选 `main`，目录选 `/ (root)`。
-3. 按需配置 `FOLLOW_OPML_B64` 和 `RSS_MAX_FEEDS`。
-4. 在 **Actions → Update Medical News Snapshot** 手动运行一次。
-5. 确认任务提交了 `data/*.json`，然后打开 `https://<你的账号>.github.io/medical-news-radar/` 和 `/sources.html` 验收。
+1. 在 **Settings → Pages → Build and deployment** 中将 Source 选择为 **GitHub Actions**，不要再选择 `main / (root)` 分支发布。
+2. 按需配置 `FOLLOW_OPML_B64`、`RSS_MAX_FEEDS` 和 DeepSeek 相关 Secret/Variables。
+3. 在 **Actions → Update and Deploy Medical News Radar** 手动运行一次。
+4. 工作流会依次执行采集、注册表生成、Python/Node 测试、数据完整性与新鲜度校验、Pages Artifact 上传和显式部署。
+5. 打开 `https://<你的账号>.github.io/medical-news-radar/` 和 `/sources.html` 验收。
+
+发布门禁会在以下情况阻止覆盖线上版本：必需文件缺失、JSON 无法解析、条目计数不一致、快照超过 6 小时、引用的数据文件不存在，或所有内置信源组均失败。
 
 ## 测试
 
 ```bash
 python -m pytest -q
-python -m compileall scripts
+python -m compileall -q scripts
 node --test tests/js/*.test.cjs
 node --check assets/runtime-config.js
 node --check assets/app.js
 node --check assets/sources.js
 python scripts/build_source_registry.py
+python scripts/validate_deployment.py --site-root .
 ```
 
-单元测试使用 mock，不依赖真实外网。
+单元测试使用 mock，不依赖真实外网。`.github/workflows/ci.yml` 会在 Pull Request 和 `main` 代码变更时执行测试与静态回退快照结构校验；定时发布工作流会在每次部署前重新执行完整门禁。
 
 ## 安全与内容边界
 
@@ -175,6 +179,7 @@ python scripts/build_source_registry.py
 - 页面只展示标题、来源、时间、原文链接、摘要/推荐理由、分类和多源关系。
 - 不将资讯改写为诊疗建议；不虚构政策、临床结论、融资金额或 FDA/NMPA 审批。
 - Persona 输出是编辑辅助，不是医疗建议；事实不确定时必须回到官方原文核验。
+- 定时生成任务使用只读仓库权限；只有独立部署 Job 获得 `pages: write` 与 `id-token: write`。
 
 ## 来源与许可证
 

@@ -1,0 +1,42 @@
+name: Test Medical News Radar
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run tests and syntax checks
+        run: |
+          python -m pytest -q
+          python -m compileall -q scripts
+          node --test tests/js/*.test.cjs
+          node --check assets/runtime-config.js
+          node --check assets/app.js
+          node --check assets/sources.js
+
+      - name: Validate committed fallback snapshot structure
+        run: python scripts/validate_deployment.py --site-root .

@@ -1,4 +1,4 @@
-name: Update Medical News Snapshot
+name: Update and Deploy Medical News Radar
 
 on:
   workflow_dispatch:
@@ -6,55 +6,64 @@ on:
     - cron: "*/30 * * * *"
 
 concurrency:
-  group: update-medical-news-${{ github.ref }}
+  group: medical-news-pages
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  update:
-    timeout-minutes: 15
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout
+      - name: Checkout trusted default-branch code
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: "requirements.txt"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: python -m pip install -r requirements-dev.txt
 
-      - name: Prepare OPML
+      - name: Prepare optional private OPML
         env:
           FOLLOW_OPML_B64: ${{ secrets.FOLLOW_OPML_B64 }}
         run: |
           mkdir -p feeds
           if [ -n "$FOLLOW_OPML_B64" ]; then
-            echo "$FOLLOW_OPML_B64" | base64 --decode > feeds/follow.opml
-            echo "Loaded feeds/follow.opml from FOLLOW_OPML_B64 secret"
-          elif [ -f feeds/follow.example.opml ]; then
-            cp feeds/follow.example.opml feeds/follow.opml
-            echo "Loaded public demo OPML from feeds/follow.example.opml"
+            printf '%s' "$FOLLOW_OPML_B64" | base64 --decode > feeds/follow.opml
+            echo "Loaded private OPML from FOLLOW_OPML_B64"
           else
-            echo "No OPML file available; RSS OPML is optional"
+            rm -f feeds/follow.opml
+            echo "FOLLOW_OPML_B64 is not configured; OPML collection is disabled"
           fi
 
-      - name: Update data
+      - name: Generate medical news data
         env:
           RSS_MAX_FEEDS: ${{ vars.RSS_MAX_FEEDS || 10 }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_PERSONA_ENABLED: ${{ vars.DEEPSEEK_PERSONA_ENABLED || '0' }}
+          DEEPSEEK_PERSONA_MODEL: ${{ vars.DEEPSEEK_PERSONA_MODEL || 'deepseek-v4-flash' }}
         run: |
-          if [ -f feeds/follow.opml ]; then
-            python scripts/update_news.py --output-dir data --window-hours 24 --archive-days 21 --rss-opml feeds/follow.opml --rss-max-feeds "${RSS_MAX_FEEDS:-10}"
+          if [ -s feeds/follow.opml ]; then
+            python scripts/update_news.py \
+              --output-dir data \
+              --window-hours 24 \
+              --archive-days 21 \
+              --rss-opml feeds/follow.opml \
+              --rss-max-feeds "${RSS_MAX_FEEDS:-10}"
           else
-            python scripts/update_news.py --output-dir data --window-hours 24 --archive-days 21
+            python scripts/update_news.py \
+              --output-dir data \
+              --window-hours 24 \
+              --archive-days 21
           fi
 
       - name: Build source registry
@@ -65,23 +74,48 @@ jobs:
             --archive data/archive.json \
             --output data/source-registry.json
 
-      - name: Commit and push changes
+      - name: Run regression tests
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Stage the whole data dir so newly added output files can never be
-          # silently dropped again.
-          git add data/
-          # Self-check: fail loudly if anything under data/ is still unstaged,
-          # instead of green-but-stale runs.
-          if [ -n "$(git status --porcelain --untracked-files=all -- data/ | grep -v '^[MADRC]' || true)" ]; then
-            echo "::error::Generated files under data/ were not staged:"
-            git status --porcelain --untracked-files=all -- data/ | grep -v '^[MADRC]'
-            exit 1
-          fi
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
-          git commit -m "chore: update medical news snapshot"
-          git push
+          python -m pytest -q
+          python -m compileall -q scripts
+          node --test tests/js/*.test.cjs
+          node --check assets/runtime-config.js
+          node --check assets/app.js
+          node --check assets/sources.js
+
+      - name: Validate generated deployment data
+        run: python scripts/validate_deployment.py --site-root . --max-age-hours 6
+
+      - name: Assemble Pages site
+        run: |
+          rm -rf _site
+          mkdir -p _site
+          find . -maxdepth 1 -type f \( \
+            -name '*.html' -o \
+            -name '*.webmanifest' -o \
+            -name 'CNAME' -o \
+            -name 'robots.txt' \
+          \) -exec cp {} _site/ \;
+          cp -R assets data _site/
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
